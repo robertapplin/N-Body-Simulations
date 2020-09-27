@@ -2,36 +2,24 @@
 # Authored by Robert Applin, 2020
 from PyQt5 import QtWidgets
 
+from qt.ui.add_body_dialog_ui import Ui_AddBodyDialog
 
-class AddBodyDialog(QtWidgets.QDialog):
 
-    def __init__(self, parent=None):
-        super(AddBodyDialog, self).__init__(parent)
+class AddBodyDialog(Ui_AddBodyDialog, QtWidgets.QDialog):
 
-        self.setWindowTitle("Add Body Dialog")
-
-        self.lbBodyName = QtWidgets.QLabel("Body name: ")
-        self.leBodyName = QtWidgets.QLineEdit()
-        self.pbCancel = QtWidgets.QPushButton("Cancel")
-        self.pbAdd = QtWidgets.QPushButton("Add")
-
-        layout = QtWidgets.QGridLayout()
-        layout.addWidget(self.lbBodyName, 1, 0)
-        layout.addWidget(self.leBodyName, 1, 1)
-        layout.addWidget(self.pbCancel, 2, 0)
-        layout.addWidget(self.pbAdd, 2, 1)
-
-        self.setLayout(layout)
+    def __init__(self):
+        super(AddBodyDialog, self).__init__()
+        self.setupUi(self)
 
         self.pbCancel.clicked.connect(self.handle_cancel_clicked)
         self.pbAdd.clicked.connect(self.handle_add_clicked)
 
         self._new_body_name = None
 
-    def handle_cancel_clicked(self):
+    def handle_cancel_clicked(self) -> None:
         self.close()
 
-    def handle_add_clicked(self) -> str:
+    def handle_add_clicked(self) -> None:
         if self.leBodyName.text():
             self._new_body_name = self.leBodyName.text()
             self.close()

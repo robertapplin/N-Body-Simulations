@@ -4,7 +4,9 @@ from PyQt5 import QtCore
 
 from plotting.interactive_plot import InteractivePlot
 from qt.add_body_dialog import AddBodyDialog
-from qt.ui.mainwindow_ui import Ui_MainWindow
+from qt.ui.main_window_ui import Ui_MainWindow
+
+from qt.error_reporter import ErrorReporter
 
 
 class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
