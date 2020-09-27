@@ -1,6 +1,8 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from qt.model import NBodySimulationsModel
+import unit_test_setup
+from model import NBodySimulationsModel
+
 import pytest
 
 
