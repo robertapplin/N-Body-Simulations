@@ -8,6 +8,8 @@ class InteractivePlot:
 
     def __init__(self):
         self._figure = Figure()
+        # Modify margins around a figure
+        self._figure.subplots_adjust(left=0.2, bottom=0.05, right=0.95, top=0.95, wspace=0, hspace=0)
         self._figure.patch.set_facecolor('#f0f0f0')
         self._ax = self._figure.add_subplot(111)
         self._canvas = FigureCanvas(self._figure)

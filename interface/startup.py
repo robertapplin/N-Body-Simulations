@@ -2,7 +2,6 @@
 # Authored by Robert Applin, 2020
 from PyQt5 import QtWidgets
 
-from qt.ui.mainwindow_ui import Ui_MainWindow
 from qt.presenter import NBodySimulationsPresenter
 from qt.view import NBodySimulationsView
 
@@ -14,10 +13,7 @@ class MainGUI(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainGUI, self).__init__(parent)
 
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-
-        view = NBodySimulationsView(self.ui)
+        view = NBodySimulationsView(self)
         self.presenter = NBodySimulationsPresenter(view)
 
 
