@@ -5,5 +5,5 @@ import sys
 
 THIS_DIRECTORY = dirname(__file__)
 
-directory = abspath(join(THIS_DIRECTORY, '..', '..', '..', '..', 'interface', 'qt'))
+directory = abspath(join(THIS_DIRECTORY, '..', '..', '..', '..', 'python', 'qt'))
 sys.path.append(directory)

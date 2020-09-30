@@ -1,0 +1,6 @@
+#ifndef NBODYSIMULATIONS_LIBRARY_H
+#define NBODYSIMULATIONS_LIBRARY_H
+
+#include "inc/NBodySimulator.h"
+
+#endif
