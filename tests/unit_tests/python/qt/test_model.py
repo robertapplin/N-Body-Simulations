@@ -3,8 +3,6 @@
 import unit_test_setup
 from model import NBodySimulationsModel
 
-import pytest
-
 
 def test_number_of_bodies_returns_expected_value():
     model = NBodySimulationsModel()
