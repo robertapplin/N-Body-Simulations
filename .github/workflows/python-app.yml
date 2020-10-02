@@ -31,7 +31,7 @@ jobs:
         cc: gcc
         cxx: g++
         build-type: Release
-        configure-options: -DCMAKE_C_FLAGS=-w32 -DPNG_INCLUDE=OFF
+        configure-options: -DCMAKE_C_FLAGS=-w32 -DPNG_INCLUDE=OFF -DPYTHON_LIBRARY_DIR="C:/Miniconda/Lib/site-packages"
         install-build: true  
     - name: Lint with flake8
       run: |
