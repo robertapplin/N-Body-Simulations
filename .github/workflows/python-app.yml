@@ -14,16 +14,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: s-weigand/setup-conda@v1
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+    #- name: Set up Python 3.8
+    #  uses: actions/setup-python@v2
+    #  with:
+    #    python-version: 3.8
+    - name: Set up Miniconda Environment
+      uses: s-weigand/setup-conda@v1
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        conda install pybind11 -c conda-forge
+        #python -m pip install --upgrade pip
+        #pip install flake8 pytest
+        conda install -c anaconda flake8
+        conda install -c conda-forge pybind11 pytest
         conda info -a
     - name: Build Project
       uses: ashutoshvarma/action-cmake-build@master
@@ -32,7 +34,7 @@ jobs:
         cc: gcc
         cxx: g++
         build-type: Release
-        configure-options: -DCMAKE_C_FLAGS=-w32 -DPYTHON_LIBRARY_DIR=C:/Miniconda/pkgs/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
+        configure-options: -DCMAKE_C_FLAGS=-w32 -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
         install-build: true  
     - name: Lint with flake8
       run: |
