@@ -1,3 +1,5 @@
+// Project Repository : https://github.com/robertapplin/N-Body-Simulations
+// Authored by Robert Applin, 2020
 #include "../../cpp/simulator/inc/inc/NBodySimulator.h"
 
 #include <pybind11/pybind11.h>
