@@ -24,6 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         conda install pybind11 -c conda-forge
+        conda info -a
     - name: Build Project
       uses: ashutoshvarma/action-cmake-build@master
       with:
@@ -31,7 +32,7 @@ jobs:
         cc: gcc
         cxx: g++
         build-type: Release
-        configure-options: -DCMAKE_C_FLAGS=-w32 -DPNG_INCLUDE=OFF -DPYTHON_LIBRARY_DIR="C:/Miniconda/Lib/site-packages"
+        configure-options: -DCMAKE_C_FLAGS=-w32 -DPYTHON_LIBRARY_DIR=C:/Miniconda/pkgs/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
         install-build: true  
     - name: Lint with flake8
       run: |
