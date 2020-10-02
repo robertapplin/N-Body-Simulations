@@ -1,6 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import unit_test_setup
+import sys
+from directory_helper import PYTHON_QT_DIRECTORY
+
+# Required to find python modules in parent directories
+sys.path.append(PYTHON_QT_DIRECTORY)
+
 from model import NBodySimulationsModel
 
 
