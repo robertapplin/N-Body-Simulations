@@ -1,10 +1,6 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-name: python
+name: python unit tests
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -19,7 +15,6 @@ jobs:
       uses: s-weigand/setup-conda@v1
     - name: Install dependencies
       run: |
-        conda install -c anaconda flake8
         conda install -c conda-forge pybind11 pytest
     - name: Build and Install Packages
       uses: ashutoshvarma/action-cmake-build@master
@@ -30,13 +25,6 @@ jobs:
         build-type: Release
         configure-options: -DCMAKE_C_FLAGS=-w32 -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
         install-build: true  
-    #- name: Flake8
-    #  run: |
-    #    flake8 --ignore=F401 python/qt/ui/
-    #    # Stop the build if there are Python syntax errors or undefined names
-    #    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-    #    # The GitHub editor is 127 chars wide
-    #    flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Python Unit Tests
       run: |
         pytest tests/unit_tests/python/
