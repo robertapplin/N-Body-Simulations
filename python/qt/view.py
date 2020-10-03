@@ -8,6 +8,7 @@ from qt.ui.main_window_ui import Ui_MainWindow
 
 
 class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
+    selectedBodyChanged = QtCore.pyqtSignal(str)
     removeBodySignal = QtCore.pyqtSignal()
     addBodySignal = QtCore.pyqtSignal()
     playPauseSignal = QtCore.pyqtSignal()
@@ -20,9 +21,13 @@ class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
 
         self.plotLayout.addWidget(self.interactive_plot.canvas())
 
+        self.cbBodyNames.currentTextChanged.connect(lambda text: self.emit_selected_body_changed(text))
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
+
+    def emit_selected_body_changed(self, text: str) -> None:
+        self.selectedBodyChanged.emit(text)
 
     def emit_remove_body_clicked(self) -> None:
         self.removeBodySignal.emit()
@@ -48,15 +53,22 @@ class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
     def add_bodies(self, body_parameters: dict) -> None:
         for body_name, parameters in body_parameters.items():
             self.cbBodyNames.addItem(body_name)
-            self.interactive_plot.draw_body(body_name, parameters[0], parameters[1])
+            self.interactive_plot.draw_body(body_name, parameters[1], parameters[2])
 
         self.cbBodyNames.setCurrentIndex(0)
 
-    def add_body(self, body_name: str, position: tuple) -> None:
+    def add_body(self, body_name: str, parameters: tuple) -> None:
         self.cbBodyNames.addItem(body_name)
         self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
 
-        self.interactive_plot.draw_body(body_name, position[0], position[1])
+        self.interactive_plot.draw_body(body_name, parameters[1], parameters[2])
+
+    def set_mass(self, mass: float) -> None:
+        self.dsbMass.setValue(mass)
+
+    def set_position(self, x: float, y: float) -> None:
+        self.dsbXPosition.setValue(x)
+        self.dsbYPosition.setValue(y)
 
     def selected_body(self) -> str:
         return self.cbBodyNames.currentText()
@@ -68,7 +80,7 @@ class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
         return self.pbPlayPause.text() != "Play"
 
     @staticmethod
-    def open_add_body_dialog() -> str:
+    def open_add_body_dialog() -> tuple:
         dialog = AddBodyDialog()
         dialog.exec_()
-        return dialog.new_body_name()
+        return dialog.new_body_data()

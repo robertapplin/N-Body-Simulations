@@ -15,6 +15,7 @@ jobs:
       uses: s-weigand/setup-conda@v1
     - name: Install dependencies
       run: |
+        conda install -c anaconda pyqt
         conda install -c conda-forge pybind11 pytest
     - name: Build and Install Packages
       uses: ashutoshvarma/action-cmake-build@master

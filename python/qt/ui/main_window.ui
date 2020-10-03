@@ -18,17 +18,164 @@
     <item>
      <widget class="QFrame" name="fSetup">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="0" colspan="3">
-        <widget class="QPushButton" name="pbPlayPause">
-         <property name="toolTip">
-          <string>Play/Pause</string>
+       <item row="0" column="5">
+        <widget class="QPushButton" name="pbAddBody">
+         <property name="minimumSize">
+          <size>
+           <width>23</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>23</width>
+           <height>23</height>
+          </size>
          </property>
          <property name="text">
-          <string>Play</string>
+          <string>+</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item row="2" column="0" colspan="6">
+        <widget class="QFrame" name="frame">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lbXPosition">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="dsbXPosition">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="suffix">
+             <string> au</string>
+            </property>
+            <property name="minimum">
+             <double>-100.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbYPosition">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="dsbYPosition">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="suffix">
+             <string> au</string>
+            </property>
+            <property name="minimum">
+             <double>-100.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="5">
+        <widget class="QDoubleSpinBox" name="dsbMass">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="suffix">
+          <string> M*</string>
+         </property>
+         <property name="minimum">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.100000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="pbRemoveBody">
+         <property name="minimumSize">
+          <size>
+           <width>23</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>23</width>
+           <height>23</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Bin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="4">
         <widget class="QComboBox" name="cbBodyNames">
          <property name="minimumSize">
           <size>
@@ -49,43 +196,47 @@
          </item>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pbAddBody">
-         <property name="minimumSize">
-          <size>
-           <width>23</width>
-           <height>23</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>23</width>
-           <height>23</height>
-          </size>
+       <item row="5" column="1" colspan="5">
+        <widget class="QPushButton" name="pbPlayPause">
+         <property name="toolTip">
+          <string>Play/Pause</string>
          </property>
          <property name="text">
-          <string>+</string>
+          <string>Play</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="pbRemoveBody">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lbMass">
          <property name="minimumSize">
           <size>
-           <width>23</width>
-           <height>23</height>
+           <width>30</width>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>23</width>
-           <height>23</height>
+           <width>30</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="text">
-          <string>Bin</string>
+          <string>Mass:</string>
          </property>
         </widget>
+       </item>
+       <item row="3" column="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

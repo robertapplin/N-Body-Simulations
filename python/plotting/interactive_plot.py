@@ -12,6 +12,7 @@ class InteractivePlot:
         self._figure.subplots_adjust(left=0.2, bottom=0.05, right=0.95, top=0.95, wspace=0, hspace=0)
         self._figure.patch.set_facecolor('#f0f0f0')
         self._ax = self._figure.add_subplot(111)
+        self._ax.set_autoscale_on(True)
         self._canvas = FigureCanvas(self._figure)
 
         self._lines = dict()
@@ -21,8 +22,6 @@ class InteractivePlot:
 
     def clear(self) -> None:
         self._ax.clear()
-        self._ax.set_xlim(-1, 1)
-        self._ax.set_ylim(-1, 1)
 
     def draw_body(self, body_name: str, x: int, y: int) -> None:
         lines = self._ax.plot(x, y, '*-')
