@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from nbodysimulations import NBodySimulator
+from nbodysimulations import NBodySimulator, Vector2D
 
 
 class NBodySimulationsModel:
@@ -21,6 +21,7 @@ class NBodySimulationsModel:
         self._number_of_bodies -= 1
 
     def add_body(self, body_name: str, mass: float, x: float, y: float) -> None:
+        self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(0.0, 0.0))
         self._initial_body_parameters[body_name] = tuple([mass, x, y, 0.0, 0.0])
         self._number_of_bodies += 1
 

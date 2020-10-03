@@ -9,10 +9,17 @@
 
 namespace py = pybind11;
 
-void export_nbodysimulator(py::module &m) {
+void export_NBodySimulator(py::module &m) {
 
   py::class_<simulator::NBodySimulator>(m, "NBodySimulator")
       .def(py::init<>())
+      .def("addBody",
+           py::overload_cast<std::string const &, double,
+                             simulator::Vector2D const &,
+                             simulator::Vector2D const &>(
+               &simulator::NBodySimulator::addBody),
+           py::arg("name"), py::arg("mass"), py::arg("position"),
+           py::arg("velocity"))
       .def("setName",
            py::overload_cast<std::string const &>(
                &simulator::NBodySimulator::setName),

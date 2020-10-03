@@ -25,6 +25,7 @@ pybind11_add_module(nbodysimulations
 	${PYTHON_FILES}
 )
 
+
 target_link_libraries(nbodysimulations PUBLIC)
 
 install(TARGETS nbodysimulations

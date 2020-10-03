@@ -4,10 +4,14 @@
 
 namespace py = pybind11;
 
-void export_nbodysimulator(py::module &);
+void export_Vector2D(py::module &);
+void export_NBodySimulator(py::module &);
 
 namespace mcl {
 
-PYBIND11_MODULE(nbodysimulations, m) { export_nbodysimulator(m); }
+PYBIND11_MODULE(nbodysimulations, m) {
+  export_Vector2D(m);
+  export_NBodySimulator(m);
+}
 
 } // namespace mcl
