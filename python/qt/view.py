@@ -61,9 +61,6 @@ class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
         self.cbBodyNames.addItem(body_name)
         self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
 
-        self.set_mass(parameters[0])
-        self.set_position(parameters[1], parameters[2])
-
         self.interactive_plot.draw_body(body_name, parameters[1], parameters[2])
 
     def set_mass(self, mass: float) -> None:
