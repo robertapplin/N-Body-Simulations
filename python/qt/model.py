@@ -1,12 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import random
 
 
 class NBodySimulationsModel:
 
     def __init__(self):
-        self._initial_body_parameters = {"Sun": tuple([0, 0, 0, 0])}
+        self._initial_body_parameters = {"Sun": tuple([1.0, 0.0, 0.0, 0.0, 0.0])}
         self._number_of_bodies = 1
 
     def initial_body_parameters(self) -> dict:
@@ -19,10 +18,11 @@ class NBodySimulationsModel:
         del self._initial_body_parameters[body_name]
         self._number_of_bodies -= 1
 
-    def add_body(self, body_name: str) -> None:
-        self._initial_body_parameters[body_name] = tuple([random.uniform(-1, 1), random.uniform(-1, 1), 0, 0])
+    def add_body(self, body_name: str, mass: float, x: float, y: float) -> None:
+        self._initial_body_parameters[body_name] = tuple([mass, x, y, 0.0, 0.0])
         self._number_of_bodies += 1
 
-    def position(self, body_name: str) -> tuple:
-        parameters = self._initial_body_parameters[body_name]
-        return tuple([parameters[0], parameters[1]])
+    def parameters(self, body_name: str) -> tuple:
+        if body_name in self._initial_body_parameters:
+            return self._initial_body_parameters[body_name]
+        return None
