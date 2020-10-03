@@ -3,4 +3,4 @@
 from os.path import dirname, abspath, join
 
 THIS_DIRECTORY = dirname(__file__)
-PYTHON_DIRECTORY = abspath(join(THIS_DIRECTORY, '..', '..', '..', '..', 'python'))
+PYTHON_DIRECTORY = abspath(join(THIS_DIRECTORY, '..', '..', '..', 'python'))

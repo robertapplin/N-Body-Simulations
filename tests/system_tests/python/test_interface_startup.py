@@ -1,18 +1,20 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import sys
-from os.path import dirname, abspath, join
 import pytest
+import sys
+from directory_helper import PYTHON_DIRECTORY
+
 from PyQt5.QtCore import QCoreApplication
 
-THIS_DIRECTORY = dirname(__file__)
-STARTUP_SCRIPT = abspath(join(THIS_DIRECTORY, '..', '..', '..', 'python', 'startup.py'))
+# Required to find python modules in parent directories
+sys.path.append(PYTHON_DIRECTORY)
 
-llll = abspath(join(THIS_DIRECTORY, '..', '..', '..', 'python'))
-sys.path.append(llll)
-from startup import qapp, MainGUI
+from qt.main_gui import start_gui
 
 
 def test_that_the_interface_opens_without_an_error():
-    #QCoreApplication.setApplicationName("testing")
-    exec(open(STARTUP_SCRIPT).read())
+    # Required for the main interface to close after it opens
+    QCoreApplication.setApplicationName("test")
+
+    # Attempts to open the main interface
+    start_gui()
