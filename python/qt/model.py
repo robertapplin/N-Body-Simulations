@@ -1,10 +1,12 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from nbodysimulations import NBodySimulator
 
 
 class NBodySimulationsModel:
 
     def __init__(self):
+        self._simulator = NBodySimulator()
         self._initial_body_parameters = {"Sun": tuple([1.0, 0.0, 0.0, 0.0, 0.0])}
         self._number_of_bodies = 1
 

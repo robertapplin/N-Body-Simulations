@@ -4,7 +4,9 @@
 
 namespace simulator {
 
-NBodySimulator::NBodySimulator(std::string const &name) { m_name = name; }
+NBodySimulator::NBodySimulator() {}
+
+void NBodySimulator::setName(std::string const &name) { m_name = name; }
 
 std::string NBodySimulator::getName() const { return m_name; }
 
