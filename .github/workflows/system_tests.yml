@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: |
         conda install -c anaconda pyqt
-        conda install -c conda-forge pytest
+        conda install -c conda-forge matplotlib pytest
     - name: Run Python System Tests
       run: |
         pytest tests/system_tests/python/
