@@ -2,12 +2,12 @@
 # Authored by Robert Applin, 2020
 import pytest
 import sys
-from directory_helper import PYTHON_QT_DIRECTORY
+from directory_helper import PYTHON_DIRECTORY
 
 # Required to find python modules in parent directories
-sys.path.append(PYTHON_QT_DIRECTORY)
+sys.path.append(PYTHON_DIRECTORY)
 
-from error_catcher import catch_errors
+from qt.error_catcher import catch_errors
 
 
 class ErrorCauser:

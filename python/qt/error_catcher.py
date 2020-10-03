@@ -1,11 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 
 from functools import wraps
 
 
-class ErrorReporter(QtWidgets.QMessageBox):
+class ErrorReporter(QMessageBox):
     """A class for displaying an error message using a QMessageBox."""
 
     def __init__(self, message: str = ""):
@@ -13,8 +13,8 @@ class ErrorReporter(QtWidgets.QMessageBox):
         super(ErrorReporter, self).__init__()
 
         self.setWindowTitle("Warning!")
-        self.setIcon(QtWidgets.QMessageBox.Warning)
-        self.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        self.setIcon(QMessageBox.Warning)
+        self.setStandardButtons(QMessageBox.Ok)
 
         self._error_message = message
 

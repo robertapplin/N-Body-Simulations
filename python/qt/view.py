@@ -1,17 +1,17 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal, QObject
 
 from plotting.interactive_plot import InteractivePlot
 from qt.add_body_dialog import AddBodyDialog
 from qt.ui.main_window_ui import Ui_MainWindow
 
 
-class NBodySimulationsView(Ui_MainWindow, QtCore.QObject):
-    selectedBodyChanged = QtCore.pyqtSignal(str)
-    removeBodySignal = QtCore.pyqtSignal()
-    addBodySignal = QtCore.pyqtSignal()
-    playPauseSignal = QtCore.pyqtSignal()
+class NBodySimulationsView(Ui_MainWindow, QObject):
+    selectedBodyChanged = pyqtSignal(str)
+    removeBodySignal = pyqtSignal()
+    addBodySignal = pyqtSignal()
+    playPauseSignal = pyqtSignal()
 
     def __init__(self, parent=None):
         super(NBodySimulationsView, self).__init__()
