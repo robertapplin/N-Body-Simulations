@@ -1,11 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog
 
 from qt.ui.add_body_dialog_ui import Ui_AddBodyDialog
 
 
-class AddBodyDialog(Ui_AddBodyDialog, QtWidgets.QDialog):
+class AddBodyDialog(Ui_AddBodyDialog, QDialog):
     """A class for displaying a QDialog to retrieve data for a new body."""
 
     def __init__(self):

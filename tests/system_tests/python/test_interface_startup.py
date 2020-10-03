@@ -1,6 +1,5 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import pytest
 import sys
 from directory_helper import PYTHON_DIRECTORY
 

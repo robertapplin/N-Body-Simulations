@@ -2,14 +2,14 @@
 # Authored by Robert Applin, 2020
 import sys
 
-from PyQt5 import QtWidgets
 from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from qt.presenter import NBodySimulationsPresenter
 from qt.view import NBodySimulationsView
 
 
-class MainGUI(QtWidgets.QMainWindow):
+class MainGUI(QMainWindow):
     """Wrapper class for setting the main window."""
 
     def __init__(self, parent=None):
@@ -22,9 +22,9 @@ class MainGUI(QtWidgets.QMainWindow):
 
 def qapp():
     """Create or get a QApplication instance."""
-    if QtWidgets.QApplication.instance():
-        return QtWidgets.QApplication.instance()
-    return QtWidgets.QApplication(sys.argv)
+    if QApplication.instance():
+        return QApplication.instance()
+    return QApplication(sys.argv)
 
 
 def start_gui():
