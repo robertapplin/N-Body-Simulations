@@ -11,6 +11,8 @@ from error_catcher import catch_errors
 
 
 class ErrorCauser:
+    """A class used for testing the error catcher by causing various errors and exceptions."""
+
     def __init__(self):
         pass
 
