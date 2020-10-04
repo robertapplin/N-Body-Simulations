@@ -2,6 +2,8 @@
 // Authored by Robert Applin, 2020
 #include "../inc/inc/SpaceTimeBodyCoords.h"
 
+#include <stdexcept>
+
 namespace simulator {
 
 SpaceTimeCoord::SpaceTimeCoord(double time, double x, double y, double vx,

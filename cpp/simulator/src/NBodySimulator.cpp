@@ -3,6 +3,7 @@
 #include "../inc/inc/NBodySimulator.h"
 
 #include <algorithm>
+#include <stdexcept>
 
 namespace simulator {
 
