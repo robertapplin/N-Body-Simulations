@@ -10,6 +10,8 @@ class NBodySimulationsModel:
         self._simulator = NBodySimulator()
         self.add_body("Sun", 1.0, 0.0, 0.0)
 
+        self._simulation_results = None
+
     def initial_body_parameters(self) -> dict:
         initial_body_parameters = dict()
 
@@ -23,10 +25,12 @@ class NBodySimulationsModel:
 
     @catch_errors()
     def remove_body(self, body_name: str) -> None:
+        self.reset_simulation()
         self._simulator.removeBody(body_name)
 
     @catch_errors()
     def add_body(self, body_name: str, mass: float, x: float, y: float) -> bool:
+        self.reset_simulation()
         self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(0.0, 0.0))
 
         # If this point is reached, the body has been added successfully
@@ -77,7 +81,14 @@ class NBodySimulationsModel:
         return self._simulator.initialVelocity(body_name)
 
     def run_simulation(self):
-        pass
+        if self._simulator.hasDataChanged():
+            success = self._simulator.runSimulation()
+            self._simulation_results = self.simulation_results() if success else None
+        return success
+
+    def simulation_results(self):
+        # Construct simulation results
+        return dict()
 
     def start_simulation(self):
         pass

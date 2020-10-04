@@ -8,11 +8,12 @@
 namespace simulator {
 
 NBodySimulator::NBodySimulator()
-    : m_timeStep(1.0), m_duration(500.0), m_bodyData() {}
+    : m_timeStep(1.0), m_duration(500.0), m_bodyData(), m_dataChanged(true) {}
 
 void NBodySimulator::removeBody(std::string const &name) {
   auto const bodyIndex = findBodyIndex(name);
   m_bodyData.erase(m_bodyData.begin() + bodyIndex);
+  m_dataChanged = true;
 }
 
 void NBodySimulator::addBody(std::string const &name, double mass,
@@ -23,19 +24,20 @@ void NBodySimulator::addBody(std::string const &name, double mass,
 
   m_bodyData.emplace_back(std::make_unique<SpaceTimeBodyCoords>(
       std::make_unique<Body>(name, mass), 0.0, position, velocity));
+  m_dataChanged = true;
 }
 
-bool NBodySimulator::hasBody(std::string const &name) const {
-  auto const names = bodyNames();
-  auto const iter = std::find(names.begin(), names.end(), name);
-  return iter != names.end();
+void NBodySimulator::setTimeStep(double timeStep) {
+  m_timeStep = timeStep;
+  m_dataChanged = true;
 }
-
-void NBodySimulator::setTimeStep(double timeStep) { m_timeStep = timeStep; }
 
 double NBodySimulator::timeStep() const { return m_timeStep; }
 
-void NBodySimulator::setDuration(double duration) { m_duration = duration; }
+void NBodySimulator::setDuration(double duration) {
+  m_duration = duration;
+  m_dataChanged = true;
+}
 
 double NBodySimulator::duration() const { return m_duration; }
 
@@ -53,6 +55,7 @@ std::vector<std::string> NBodySimulator::bodyNames() const {
 void NBodySimulator::setMass(std::string const &bodyName, double mass) {
   auto const bodyIndex = findBodyIndex(bodyName);
   m_bodyData[bodyIndex]->body().setMass(mass);
+  m_dataChanged = true;
 }
 
 double NBodySimulator::mass(std::string const &bodyName) const {
@@ -63,21 +66,25 @@ double NBodySimulator::mass(std::string const &bodyName) const {
 void NBodySimulator::setXPosition(std::string const &bodyName, double x) {
   auto const bodyIndex = findBodyIndex(bodyName);
   m_bodyData[bodyIndex]->initialPosition().m_x = x;
+  m_dataChanged = true;
 }
 
 void NBodySimulator::setYPosition(std::string const &bodyName, double y) {
   auto const bodyIndex = findBodyIndex(bodyName);
   m_bodyData[bodyIndex]->initialPosition().m_y = y;
+  m_dataChanged = true;
 }
 
 void NBodySimulator::setXVelocity(std::string const &bodyName, double vx) {
   auto const bodyIndex = findBodyIndex(bodyName);
   m_bodyData[bodyIndex]->initialVelocity().m_x = vx;
+  m_dataChanged = true;
 }
 
 void NBodySimulator::setYVelocity(std::string const &bodyName, double vy) {
   auto const bodyIndex = findBodyIndex(bodyName);
   m_bodyData[bodyIndex]->initialVelocity().m_y = vy;
+  m_dataChanged = true;
 }
 
 Vector2D NBodySimulator::initialPosition(std::string const &bodyName) const {
@@ -88,6 +95,26 @@ Vector2D NBodySimulator::initialPosition(std::string const &bodyName) const {
 Vector2D NBodySimulator::initialVelocity(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
   return m_bodyData[bodyIndex]->initialVelocity();
+}
+
+bool NBodySimulator::hasDataChanged() const { return m_dataChanged; }
+
+bool NBodySimulator::runSimulation() {
+  if (m_dataChanged)
+    resetSimulation();
+  m_dataChanged = false;
+  return true;
+}
+
+void NBodySimulator::resetSimulation() {
+  for (auto const &data : m_bodyData)
+    data->resetCoords();
+}
+
+bool NBodySimulator::hasBody(std::string const &name) const {
+  auto const names = bodyNames();
+  auto const iter = std::find(names.begin(), names.end(), name);
+  return iter != names.end();
 }
 
 std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {

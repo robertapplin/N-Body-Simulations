@@ -44,7 +44,13 @@ public:
   Vector2D initialPosition(std::string const &bodyName) const;
   Vector2D initialVelocity(std::string const &bodyName) const;
 
+  bool hasDataChanged() const;
+
+  bool runSimulation();
+
 private:
+  void resetSimulation();
+
   bool hasBody(std::string const &name) const;
 
   std::size_t findBodyIndex(std::string const &name) const;
@@ -52,6 +58,8 @@ private:
   double m_timeStep;
   double m_duration;
   std::vector<std::unique_ptr<SpaceTimeBodyCoords>> m_bodyData;
+  // Has the initial data changed since the last simulation
+  bool m_dataChanged;
 };
 
 } // namespace simulator

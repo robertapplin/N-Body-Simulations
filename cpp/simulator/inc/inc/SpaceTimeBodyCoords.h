@@ -36,6 +36,8 @@ public:
                       Vector2D const &position, Vector2D const &velocity);
   ~SpaceTimeBodyCoords();
 
+  void resetCoords();
+
   Body &body() const;
 
   Vector2D &initialPosition() const;

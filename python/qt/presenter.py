@@ -64,14 +64,12 @@ class NBodySimulationsPresenter:
         play_clicked = not self.view.is_simulating()
         self.view.set_as_simulating(play_clicked)
 
-        first_run = True
-        if play_clicked and first_run:
+        if play_clicked:
             self.view.enable_play_pause(False)
-            self.model.run_simulation()
+            success = self.model.run_simulation()
             self.view.enable_play_pause(True)
-            self.model.start_simulation()
-        elif play_clicked:
-            self.model.start_simulation()
+            if success:
+                self.model.start_simulation()
         else:
             self.model.pause_simulation()
 

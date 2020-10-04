@@ -32,6 +32,8 @@ SpaceTimeBodyCoords::~SpaceTimeBodyCoords() {
   m_spaceTimeCoords.clear();
 }
 
+void SpaceTimeBodyCoords::resetCoords() { m_spaceTimeCoords.resize(1); }
+
 Body &SpaceTimeBodyCoords::body() const { return *m_body.get(); }
 
 Vector2D &SpaceTimeBodyCoords::initialPosition() const {
