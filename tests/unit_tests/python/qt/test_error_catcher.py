@@ -2,12 +2,17 @@
 # Authored by Robert Applin, 2020
 import pytest
 import sys
+
+from PyQt5.QtCore import QCoreApplication
 from directory_helper import PYTHON_DIRECTORY
 
 # Required to find python modules in parent directories
 sys.path.append(PYTHON_DIRECTORY)
 
 from qt.error_catcher import catch_errors
+
+# Required to allow silent error catching
+QCoreApplication.setApplicationName("test")
 
 
 class DummyClass:
@@ -19,24 +24,24 @@ class DummyClass:
     def cause_an_uncaught_exception(self):
         raise RuntimeError("This is a RuntimeError.")
 
-    @catch_errors(silent=True)
+    @catch_errors()
     def cause_an_exception(self):
         raise RuntimeError("This is a RuntimeError.")
 
-    @catch_errors(silent=True)
+    @catch_errors()
     def divide_by_zero(self):
         return 10 / 0
 
-    @catch_errors(silent=True)
+    @catch_errors()
     def index_out_of_range(self):
         test_list = [0, 1, 2, 3]
         return test_list[4]
 
-    @catch_errors(silent=True)
+    @catch_errors()
     def function_that_returns_nothing(self):
         _ = 1 + 2
 
-    @catch_errors(silent=True)
+    @catch_errors()
     def function_that_returns_a_value(self):
         return 1.0
 

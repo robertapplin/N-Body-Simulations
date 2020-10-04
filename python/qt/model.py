@@ -25,8 +25,12 @@ class NBodySimulationsModel:
     def remove_body(self, body_name: str) -> None:
         self._simulator.removeBody(body_name)
 
+    @catch_errors()
     def add_body(self, body_name: str, mass: float, x: float, y: float) -> None:
         self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(0.0, 0.0))
+
+        # If this point is reached, the body has been added successfully
+        return True
 
     def set_time_step(self, time_step: float) -> None:
         self._simulator.setTimeStep(time_step)
@@ -48,9 +52,11 @@ class NBodySimulationsModel:
     def mass(self, body_name: str) -> float:
         return self._simulator.mass(body_name)
 
+    @catch_errors()
     def set_x_position(self, body_name: str, x: float) -> None:
         self._simulator.setXPosition(body_name, x)
 
+    @catch_errors()
     def set_y_position(self, body_name: str, y: float) -> None:
         self._simulator.setYPosition(body_name, y)
 
@@ -58,9 +64,11 @@ class NBodySimulationsModel:
     def initial_position(self, body_name: str) -> Vector2D:
         return self._simulator.initialPosition(body_name)
 
+    @catch_errors()
     def set_x_velocity(self, body_name: str, vx: float) -> None:
         self._simulator.setXVelocity(body_name, vx)
 
+    @catch_errors()
     def set_y_velocity(self, body_name: str, vy: float) -> None:
         self._simulator.setYVelocity(body_name, vy)
 

@@ -45,6 +45,8 @@ public:
   Vector2D initialVelocity(std::string const &bodyName) const;
 
 private:
+  bool hasBody(std::string const &name) const;
+
   std::size_t findBodyIndex(std::string const &name) const;
 
   double m_timeStep;

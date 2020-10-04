@@ -17,8 +17,17 @@ void NBodySimulator::removeBody(std::string const &name) {
 void NBodySimulator::addBody(std::string const &name, double mass,
                              Vector2D const &position,
                              Vector2D const &velocity) {
+  if (hasBody(name))
+    throw std::runtime_error("The body '" + name + "' already exists.");
+
   m_bodyData.emplace_back(std::make_unique<SpaceTimeBodyCoords>(
       std::make_unique<Body>(name, mass), 0.0, position, velocity));
+}
+
+bool NBodySimulator::hasBody(std::string const &name) const {
+  auto const names = bodyNames();
+  auto const iter = std::find(names.begin(), names.end(), name);
+  return iter != names.end();
 }
 
 void NBodySimulator::setTimeStep(double timeStep) { m_timeStep = timeStep; }

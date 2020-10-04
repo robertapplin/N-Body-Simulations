@@ -78,5 +78,6 @@ class NBodySimulationsPresenter:
     def _add_new_body(self) -> None:
         body_name, mass, x, y = self.view.open_add_body_dialog()
         if body_name is not None:
-            self.model.add_body(body_name, mass, x, y)
-            self.view.add_body(body_name, self.model.initial_position(body_name))
+            success = self.model.add_body(body_name, mass, x, y)
+            if success:
+                self.view.add_body(body_name, self.model.initial_position(body_name))
