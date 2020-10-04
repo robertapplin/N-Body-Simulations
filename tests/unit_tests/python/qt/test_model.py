@@ -166,5 +166,5 @@ def test_that_set_x_velocity_fails_silently_if_an_invalid_body_name_is_provided(
     model.set_x_velocity("Not a body", 5.0)
 
 
-def test_that_set_x_position_fails_silently_if_an_invalid_body_name_is_provided(model):
+def test_that_set_y_velocity_fails_silently_if_an_invalid_body_name_is_provided(model):
     model.set_y_velocity("Not a body", 5.0)
