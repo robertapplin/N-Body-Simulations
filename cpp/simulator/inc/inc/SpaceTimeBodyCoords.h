@@ -16,6 +16,9 @@ class SpaceTimeCoord {
 
 public:
   SpaceTimeCoord(double time, double x, double y, double vx, double vy);
+  SpaceTimeCoord(double time, Vector2D const &position,
+                 Vector2D const &velocity);
+  ~SpaceTimeCoord() = default;
 
   Vector2D position() const;
   Vector2D velocity() const;
@@ -29,10 +32,17 @@ private:
 class SpaceTimeBodyCoords {
 
 public:
-  SpaceTimeBodyCoords(std::shared_ptr<Body> const &body);
+  SpaceTimeBodyCoords(std::unique_ptr<Body> body, double time,
+                      Vector2D const &position, Vector2D const &velocity);
+  ~SpaceTimeBodyCoords();
+
+  Body const &body() const;
+
+  Vector2D initialPosition() const;
+  Vector2D initialVelocity() const;
 
 private:
-  std::shared_ptr<Body> m_body;
+  std::unique_ptr<Body> m_body;
   std::vector<std::unique_ptr<SpaceTimeCoord>> m_spaceTimeCoords;
 };
 

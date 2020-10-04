@@ -13,6 +13,7 @@ class Body {
 
 public:
   Body(std::string const &name, double mass);
+  ~Body() = default;
 
   std::string name() const;
   double mass() const;

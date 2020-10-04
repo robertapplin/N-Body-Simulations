@@ -2,20 +2,60 @@
 // Authored by Robert Applin, 2020
 #include "../inc/inc/NBodySimulator.h"
 
+#include <algorithm>
+
 namespace simulator {
 
-NBodySimulator::NBodySimulator() : m_bodyNames(), m_bodyCoords() {}
+NBodySimulator::NBodySimulator() : m_bodyData() {}
 
 void NBodySimulator::addBody(std::string const &name, double mass,
                              Vector2D const &position,
                              Vector2D const &velocity) {
-  auto const body = std::make_shared<Body>(name, mass);
-  m_bodyNames.emplace_back(body);
-  m_bodyCoords.emplace_back(std::make_unique<SpaceTimeBodyCoords>(body));
+  m_bodyData.emplace_back(std::make_unique<SpaceTimeBodyCoords>(
+      std::make_unique<Body>(name, mass), 0.0, position, velocity));
 }
 
-void NBodySimulator::setName(std::string const &name) { m_name = name; }
+void NBodySimulator::removeBody(std::string const &name) {
+  auto const bodyIndex = findBodyIndex(name);
+  m_bodyData.erase(m_bodyData.begin() + bodyIndex);
+}
 
-std::string NBodySimulator::getName() const { return m_name; }
+std::size_t NBodySimulator::numberOfBodies() const { return m_bodyData.size(); }
+
+std::vector<std::string> NBodySimulator::bodyNames() const {
+  std::vector<std::string> names;
+  names.reserve(numberOfBodies());
+
+  for (auto const &data : m_bodyData)
+    names.emplace_back(data->body().name());
+  return names;
+}
+
+double NBodySimulator::mass(std::string const &bodyName) const {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  return m_bodyData[bodyIndex]->body().mass();
+}
+
+Vector2D NBodySimulator::initialPosition(std::string const &bodyName) const {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  return m_bodyData[bodyIndex]->initialPosition();
+}
+
+Vector2D NBodySimulator::initialVelocity(std::string const &bodyName) const {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  return m_bodyData[bodyIndex]->initialVelocity();
+}
+
+std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
+  auto const hasName = [&](std::unique_ptr<SpaceTimeBodyCoords> const &coords) {
+    return coords->body().name() == name;
+  };
+
+  auto const iter = std::find_if(m_bodyData.begin(), m_bodyData.end(), hasName);
+  if (iter == m_bodyData.end())
+    std::runtime_error("The body '" + name + "' could not be found.");
+
+  return iter - m_bodyData.begin();
+}
 
 } // namespace simulator

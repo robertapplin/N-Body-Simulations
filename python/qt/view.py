@@ -6,6 +6,8 @@ from plotting.interactive_plot import InteractivePlot
 from qt.add_body_dialog import AddBodyDialog
 from qt.ui.main_window_ui import Ui_MainWindow
 
+from nbodysimulations import Vector2D
+
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
     selectedBodyChanged = pyqtSignal(str)
@@ -53,22 +55,22 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def add_bodies(self, body_parameters: dict) -> None:
         for body_name, parameters in body_parameters.items():
             self.cbBodyNames.addItem(body_name)
-            self.interactive_plot.draw_body(body_name, parameters[1], parameters[2])
+            self.interactive_plot.draw_body(body_name, parameters[1].x, parameters[1].y)
 
         self.cbBodyNames.setCurrentIndex(0)
 
-    def add_body(self, body_name: str, parameters: tuple) -> None:
+    def add_body(self, body_name: str, position: Vector2D) -> None:
         self.cbBodyNames.addItem(body_name)
         self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
 
-        self.interactive_plot.draw_body(body_name, parameters[1], parameters[2])
+        self.interactive_plot.draw_body(body_name, position.x, position.y)
 
     def set_mass(self, mass: float) -> None:
         self.dsbMass.setValue(mass)
 
-    def set_position(self, x: float, y: float) -> None:
-        self.dsbXPosition.setValue(x)
-        self.dsbYPosition.setValue(y)
+    def set_position(self, position: Vector2D) -> None:
+        self.dsbXPosition.setValue(position.x)
+        self.dsbYPosition.setValue(position.y)
 
     def selected_body(self) -> str:
         return self.cbBodyNames.currentText()

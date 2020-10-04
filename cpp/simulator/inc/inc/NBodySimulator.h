@@ -20,14 +20,21 @@ public:
 
   void addBody(std::string const &name, double mass, Vector2D const &position,
                Vector2D const &velocity);
+  void removeBody(std::string const &name);
 
-  void setName(std::string const &name);
-  std::string getName() const;
+  std::size_t numberOfBodies() const;
+
+  std::vector<std::string> bodyNames() const;
+
+  double mass(std::string const &bodyName) const;
+
+  Vector2D initialPosition(std::string const &bodyName) const;
+  Vector2D initialVelocity(std::string const &bodyName) const;
 
 private:
-  std::string m_name;
-  std::vector<std::shared_ptr<Body>> m_bodyNames;
-  std::vector<std::unique_ptr<SpaceTimeBodyCoords>> m_bodyCoords;
+  std::size_t findBodyIndex(std::string const &name) const;
+
+  std::vector<std::unique_ptr<SpaceTimeBodyCoords>> m_bodyData;
 };
 
 } // namespace simulator

@@ -20,10 +20,25 @@ void export_NBodySimulator(py::module &m) {
                &simulator::NBodySimulator::addBody),
            py::arg("name"), py::arg("mass"), py::arg("position"),
            py::arg("velocity"))
-      .def("setName",
+      .def("removeBody",
            py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::setName),
+               &simulator::NBodySimulator::removeBody),
            py::arg("name"))
-      .def("getName", py::overload_cast<>(&simulator::NBodySimulator::getName,
-                                          py::const_));
+      .def("numberOfBodies",
+           py::overload_cast<>(&simulator::NBodySimulator::numberOfBodies,
+                               py::const_))
+      .def("bodyNames", py::overload_cast<>(
+                            &simulator::NBodySimulator::bodyNames, py::const_))
+      .def("mass",
+           py::overload_cast<std::string const &>(
+               &simulator::NBodySimulator::mass, py::const_),
+           py::arg("bodyName"))
+      .def("initialPosition",
+           py::overload_cast<std::string const &>(
+               &simulator::NBodySimulator::initialPosition, py::const_),
+           py::arg("bodyName"))
+      .def("initialVelocity",
+           py::overload_cast<std::string const &>(
+               &simulator::NBodySimulator::initialVelocity, py::const_),
+           py::arg("bodyName"));
 }
