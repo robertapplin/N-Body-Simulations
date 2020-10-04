@@ -26,7 +26,7 @@ class NBodySimulationsModel:
         self._simulator.removeBody(body_name)
 
     @catch_errors()
-    def add_body(self, body_name: str, mass: float, x: float, y: float) -> None:
+    def add_body(self, body_name: str, mass: float, x: float, y: float) -> bool:
         self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(0.0, 0.0))
 
         # If this point is reached, the body has been added successfully
