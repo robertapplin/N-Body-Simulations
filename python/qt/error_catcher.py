@@ -32,7 +32,7 @@ def catch_errors(silent: bool = False):
         @wraps(function)
         def wrapper(self, *args, **kwargs):
             try:
-                function(self, *args, **kwargs)
+                return function(self, *args, **kwargs)
             except Exception as ex:
                 if not silent:
                     ErrorReporter(str(ex))

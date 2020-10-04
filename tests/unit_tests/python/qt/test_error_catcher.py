@@ -10,7 +10,7 @@ sys.path.append(PYTHON_DIRECTORY)
 from qt.error_catcher import catch_errors
 
 
-class ErrorCauser:
+class DummyClass:
     """A class used for testing the error catcher by causing various errors and exceptions."""
 
     def __init__(self):
@@ -32,27 +32,43 @@ class ErrorCauser:
         test_list = [0, 1, 2, 3]
         return test_list[4]
 
+    @catch_errors(silent=True)
+    def function_that_returns_nothing(self):
+        _ = 1 + 2
+
+    @catch_errors(silent=True)
+    def function_that_returns_a_value(self):
+        return 1.0
+
 
 @pytest.fixture(scope='module')
-def error_causer():
-    return ErrorCauser()
+def dummy_class():
+    return DummyClass()
 
 
-def test_that_the_error_causer_causes_an_error_when_not_using_the_error_catcher(error_causer):
+def test_that_the_error_causer_causes_an_error_when_not_using_the_error_catcher(dummy_class):
     try:
-        error_causer.cause_an_uncaught_exception()
+        dummy_class.cause_an_uncaught_exception()
     except RuntimeError:
         return
     pytest.fail("The ErrorCauser class did not cause an exception when expected.")
 
 
-def test_that_an_exception_is_caught_by_the_error_catcher(error_causer):
-    error_causer.cause_an_exception()
+def test_that_an_exception_is_caught_by_the_error_catcher(dummy_class):
+    dummy_class.cause_an_exception()
 
 
-def test_that_a_divide_by_zero_error_is_caught_by_the_error_catcher(error_causer):
-    error_causer.divide_by_zero()
+def test_that_a_divide_by_zero_error_is_caught_by_the_error_catcher(dummy_class):
+    dummy_class.divide_by_zero()
 
 
-def test_that_an_index_out_of_range_error_is_caught_by_the_error_catcher(error_causer):
-    error_causer.index_out_of_range()
+def test_that_an_index_out_of_range_error_is_caught_by_the_error_catcher(dummy_class):
+    dummy_class.index_out_of_range()
+
+
+def test_that_a_function_returning_nothing_will_not_cause_an_error_when_decorated_by_the_error_catcher(dummy_class):
+    dummy_class.function_that_returns_nothing()
+
+
+def test_that_a_function_will_return_the_correct_value_when_decorated_by_the_error_catcher(dummy_class):
+    assert dummy_class.function_that_returns_a_value() == 1.0
