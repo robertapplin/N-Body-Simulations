@@ -13,6 +13,10 @@ void export_NBodySimulator(py::module &m) {
 
   py::class_<simulator::NBodySimulator>(m, "NBodySimulator")
       .def(py::init<>())
+      .def("removeBody",
+           py::overload_cast<std::string const &>(
+               &simulator::NBodySimulator::removeBody),
+           py::arg("name"))
       .def("addBody",
            py::overload_cast<std::string const &, double,
                              simulator::Vector2D const &,
@@ -20,10 +24,16 @@ void export_NBodySimulator(py::module &m) {
                &simulator::NBodySimulator::addBody),
            py::arg("name"), py::arg("mass"), py::arg("position"),
            py::arg("velocity"))
-      .def("removeBody",
-           py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::removeBody),
-           py::arg("name"))
+      .def("setTimeStep",
+           py::overload_cast<double>(&simulator::NBodySimulator::setTimeStep),
+           py::arg("timeStep"))
+      .def("timeStep", py::overload_cast<>(&simulator::NBodySimulator::timeStep,
+                                           py::const_))
+      .def("setDuration",
+           py::overload_cast<double>(&simulator::NBodySimulator::setDuration),
+           py::arg("duration"))
+      .def("duration", py::overload_cast<>(&simulator::NBodySimulator::duration,
+                                           py::const_))
       .def("numberOfBodies",
            py::overload_cast<>(&simulator::NBodySimulator::numberOfBodies,
                                py::const_))

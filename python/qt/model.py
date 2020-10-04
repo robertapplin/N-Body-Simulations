@@ -8,7 +8,7 @@ class NBodySimulationsModel:
 
     def __init__(self):
         self._simulator = NBodySimulator()
-        self._simulator.addBody("Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+        self.add_body("Sun", 1.0, 0.0, 0.0)
 
     def initial_body_parameters(self) -> dict:
         initial_body_parameters = dict()
@@ -28,6 +28,18 @@ class NBodySimulationsModel:
     def add_body(self, body_name: str, mass: float, x: float, y: float) -> None:
         self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(0.0, 0.0))
 
+    def set_time_step(self, time_step: float) -> None:
+        self._simulator.setTimeStep(time_step)
+
+    def time_step(self) -> float:
+        return self._simulator.timeStep()
+
+    def set_duration(self, duration: float) -> None:
+        self._simulator.setDuration(duration)
+
+    def duration(self) -> float:
+        return self._simulator.duration()
+
     @catch_errors()
     def mass(self, body_name: str) -> float:
         return self._simulator.mass(body_name)
@@ -39,3 +51,12 @@ class NBodySimulationsModel:
     @catch_errors()
     def initial_velocity(self, body_name: str) -> Vector2D:
         return self._simulator.initialVelocity(body_name)
+
+    def run_simulation(self):
+        pass
+
+    def start_simulation(self):
+        pass
+
+    def pause_simulation(self):
+        pass

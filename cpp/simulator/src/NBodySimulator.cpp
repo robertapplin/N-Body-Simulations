@@ -6,7 +6,13 @@
 
 namespace simulator {
 
-NBodySimulator::NBodySimulator() : m_bodyData() {}
+NBodySimulator::NBodySimulator()
+    : m_timeStep(1.0), m_duration(500.0), m_bodyData() {}
+
+void NBodySimulator::removeBody(std::string const &name) {
+  auto const bodyIndex = findBodyIndex(name);
+  m_bodyData.erase(m_bodyData.begin() + bodyIndex);
+}
 
 void NBodySimulator::addBody(std::string const &name, double mass,
                              Vector2D const &position,
@@ -15,10 +21,13 @@ void NBodySimulator::addBody(std::string const &name, double mass,
       std::make_unique<Body>(name, mass), 0.0, position, velocity));
 }
 
-void NBodySimulator::removeBody(std::string const &name) {
-  auto const bodyIndex = findBodyIndex(name);
-  m_bodyData.erase(m_bodyData.begin() + bodyIndex);
-}
+void NBodySimulator::setTimeStep(double timeStep) { m_timeStep = timeStep; }
+
+double NBodySimulator::timeStep() const { return m_timeStep; }
+
+void NBodySimulator::setDuration(double duration) { m_duration = duration; }
+
+double NBodySimulator::duration() const { return m_duration; }
 
 std::size_t NBodySimulator::numberOfBodies() const { return m_bodyData.size(); }
 

@@ -18,9 +18,15 @@ class NBodySimulator {
 public:
   NBodySimulator();
 
+  void removeBody(std::string const &name);
   void addBody(std::string const &name, double mass, Vector2D const &position,
                Vector2D const &velocity);
-  void removeBody(std::string const &name);
+
+  void setTimeStep(double timeStep);
+  double timeStep() const;
+
+  void setDuration(double duration);
+  double duration() const;
 
   std::size_t numberOfBodies() const;
 
@@ -34,6 +40,8 @@ public:
 private:
   std::size_t findBodyIndex(std::string const &name) const;
 
+  double m_timeStep;
+  double m_duration;
   std::vector<std::unique_ptr<SpaceTimeBodyCoords>> m_bodyData;
 };
 
