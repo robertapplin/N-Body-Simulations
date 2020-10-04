@@ -12,9 +12,9 @@ SpaceTimeCoord::SpaceTimeCoord(double time, Vector2D const &position,
                                Vector2D const &velocity)
     : m_time(time), m_position(position), m_velocity(velocity) {}
 
-Vector2D SpaceTimeCoord::position() const { return m_position; }
+Vector2D &SpaceTimeCoord::position() { return m_position; }
 
-Vector2D SpaceTimeCoord::velocity() const { return m_velocity; }
+Vector2D &SpaceTimeCoord::velocity() { return m_velocity; }
 
 SpaceTimeBodyCoords::SpaceTimeBodyCoords(std::unique_ptr<Body> body,
                                          double time, Vector2D const &position,
@@ -30,9 +30,9 @@ SpaceTimeBodyCoords::~SpaceTimeBodyCoords() {
   m_spaceTimeCoords.clear();
 }
 
-Body const &SpaceTimeBodyCoords::body() const { return *m_body.get(); }
+Body &SpaceTimeBodyCoords::body() const { return *m_body.get(); }
 
-Vector2D SpaceTimeBodyCoords::initialPosition() const {
+Vector2D &SpaceTimeBodyCoords::initialPosition() const {
   if (m_spaceTimeCoords.size() > 0)
     return m_spaceTimeCoords[0]->position();
 
@@ -40,7 +40,7 @@ Vector2D SpaceTimeBodyCoords::initialPosition() const {
                            " could not be found.");
 }
 
-Vector2D SpaceTimeBodyCoords::initialVelocity() const {
+Vector2D &SpaceTimeBodyCoords::initialVelocity() const {
   if (m_spaceTimeCoords.size() > 0)
     return m_spaceTimeCoords[0]->velocity();
 

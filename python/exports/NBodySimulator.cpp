@@ -39,10 +39,30 @@ void export_NBodySimulator(py::module &m) {
                                py::const_))
       .def("bodyNames", py::overload_cast<>(
                             &simulator::NBodySimulator::bodyNames, py::const_))
+      .def("setMass",
+           py::overload_cast<std::string const &, double>(
+               &simulator::NBodySimulator::setMass),
+           py::arg("bodyName"), py::arg("mass"))
       .def("mass",
            py::overload_cast<std::string const &>(
                &simulator::NBodySimulator::mass, py::const_),
            py::arg("bodyName"))
+      .def("setXPosition",
+           py::overload_cast<std::string const &, double>(
+               &simulator::NBodySimulator::setXPosition),
+           py::arg("bodyName"), py::arg("x"))
+      .def("setYPosition",
+           py::overload_cast<std::string const &, double>(
+               &simulator::NBodySimulator::setYPosition),
+           py::arg("bodyName"), py::arg("y"))
+      .def("setXVelocity",
+           py::overload_cast<std::string const &, double>(
+               &simulator::NBodySimulator::setXVelocity),
+           py::arg("bodyName"), py::arg("vx"))
+      .def("setYVelocity",
+           py::overload_cast<std::string const &, double>(
+               &simulator::NBodySimulator::setYVelocity),
+           py::arg("bodyName"), py::arg("vy"))
       .def("initialPosition",
            py::overload_cast<std::string const &>(
                &simulator::NBodySimulator::initialPosition, py::const_),

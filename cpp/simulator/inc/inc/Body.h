@@ -16,6 +16,8 @@ public:
   ~Body() = default;
 
   std::string name() const;
+
+  void setMass(double mass);
   double mass() const;
 
 private:

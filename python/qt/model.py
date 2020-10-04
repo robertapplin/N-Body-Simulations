@@ -41,12 +41,28 @@ class NBodySimulationsModel:
         return self._simulator.duration()
 
     @catch_errors()
+    def set_mass(self, body_name: str, mass: float) -> None:
+        self._simulator.setMass(body_name, mass)
+
+    @catch_errors()
     def mass(self, body_name: str) -> float:
         return self._simulator.mass(body_name)
+
+    def set_x_position(self, body_name: str, x: float) -> None:
+        self._simulator.setXPosition(body_name, x)
+
+    def set_y_position(self, body_name: str, y: float) -> None:
+        self._simulator.setYPosition(body_name, y)
 
     @catch_errors()
     def initial_position(self, body_name: str) -> Vector2D:
         return self._simulator.initialPosition(body_name)
+
+    def set_x_velocity(self, body_name: str, vx: float) -> None:
+        self._simulator.setXVelocity(body_name, vx)
+
+    def set_y_velocity(self, body_name: str, vy: float) -> None:
+        self._simulator.setYVelocity(body_name, vy)
 
     @catch_errors()
     def initial_velocity(self, body_name: str) -> Vector2D:

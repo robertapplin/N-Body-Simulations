@@ -40,9 +40,34 @@ std::vector<std::string> NBodySimulator::bodyNames() const {
   return names;
 }
 
+void NBodySimulator::setMass(std::string const &bodyName, double mass) {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  m_bodyData[bodyIndex]->body().setMass(mass);
+}
+
 double NBodySimulator::mass(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
   return m_bodyData[bodyIndex]->body().mass();
+}
+
+void NBodySimulator::setXPosition(std::string const &bodyName, double x) {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  m_bodyData[bodyIndex]->initialPosition().m_x = x;
+}
+
+void NBodySimulator::setYPosition(std::string const &bodyName, double y) {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  m_bodyData[bodyIndex]->initialPosition().m_y = y;
+}
+
+void NBodySimulator::setXVelocity(std::string const &bodyName, double vx) {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  m_bodyData[bodyIndex]->initialVelocity().m_x = vx;
+}
+
+void NBodySimulator::setYVelocity(std::string const &bodyName, double vy) {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  m_bodyData[bodyIndex]->initialVelocity().m_y = vy;
 }
 
 Vector2D NBodySimulator::initialPosition(std::string const &bodyName) const {

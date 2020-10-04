@@ -20,8 +20,8 @@ public:
                  Vector2D const &velocity);
   ~SpaceTimeCoord() = default;
 
-  Vector2D position() const;
-  Vector2D velocity() const;
+  Vector2D &position();
+  Vector2D &velocity();
 
 private:
   double m_time;
@@ -36,10 +36,10 @@ public:
                       Vector2D const &position, Vector2D const &velocity);
   ~SpaceTimeBodyCoords();
 
-  Body const &body() const;
+  Body &body() const;
 
-  Vector2D initialPosition() const;
-  Vector2D initialVelocity() const;
+  Vector2D &initialPosition() const;
+  Vector2D &initialVelocity() const;
 
 private:
   std::unique_ptr<Body> m_body;

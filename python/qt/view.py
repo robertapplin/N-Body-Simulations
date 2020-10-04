@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from PyQt5.QtCore import pyqtSignal, QObject, QSignalBlocker
+from PyQt5.QtCore import pyqtSignal, QObject
 
 from plotting.interactive_plot import InteractivePlot
 from qt.add_body_dialog import AddBodyDialog
@@ -13,6 +13,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     selectedBodyChangedSignal = pyqtSignal(str)
     removeBodySignal = pyqtSignal()
     addBodySignal = pyqtSignal()
+    massChangedSignal = pyqtSignal(str, float)
+    xPositionChangedSignal = pyqtSignal(str, float)
+    yPositionChangedSignal = pyqtSignal(str, float)
+    xVelocityChangedSignal = pyqtSignal(str, float)
+    yVelocityChangedSignal = pyqtSignal(str, float)
     timeStepChangedSignal = pyqtSignal(float)
     durationChangedSignal = pyqtSignal(float)
     playPauseSignal = pyqtSignal()
@@ -28,6 +33,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.cbBodyNames.currentTextChanged.connect(lambda text: self.emit_selected_body_changed(text))
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
+        self.dsbMass.valueChanged.connect(lambda value: self.emit_mass_changed(value))
+        self.dsbXPosition.valueChanged.connect(lambda value: self.emit_x_position_changed(value))
+        self.dsbYPosition.valueChanged.connect(lambda value: self.emit_y_position_changed(value))
+        self.dsbXVelocity.valueChanged.connect(lambda value: self.emit_x_velocity_changed(value))
+        self.dsbYVelocity.valueChanged.connect(lambda value: self.emit_y_velocity_changed(value))
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
@@ -40,6 +50,21 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def emit_add_body_clicked(self) -> None:
         self.addBodySignal.emit()
+
+    def emit_mass_changed(self, value: float) -> None:
+        self.massChangedSignal.emit(self.selected_body(), value)
+
+    def emit_x_position_changed(self, value: float) -> None:
+        self.xPositionChangedSignal.emit(self.selected_body(), value)
+
+    def emit_y_position_changed(self, value: float) -> None:
+        self.yPositionChangedSignal.emit(self.selected_body(), value)
+
+    def emit_x_velocity_changed(self, value: float) -> None:
+        self.xVelocityChangedSignal.emit(self.selected_body(), value)
+
+    def emit_y_velocity_changed(self, value: float) -> None:
+        self.yVelocityChangedSignal.emit(self.selected_body(), value)
 
     def emit_time_step_changed(self, value: float) -> None:
         self.timeStepChangedSignal.emit(value)
@@ -78,20 +103,35 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw_body(body_name, position.x, position.y)
 
     def set_time_step(self, time_step: float) -> None:
-        QSignalBlocker(self.dsbTimeStep)
+        self.dsbTimeStep.blockSignals(True)
         self.dsbTimeStep.setValue(time_step)
+        self.dsbTimeStep.blockSignals(False)
 
     def set_duration(self, duration: float) -> None:
-        QSignalBlocker(self.dsbDuration)
+        self.dsbDuration.blockSignals(True)
         self.dsbDuration.setValue(duration)
+        self.dsbDuration.blockSignals(False)
 
     def set_mass(self, mass: float) -> None:
-        QSignalBlocker(self.dsbMass)
+        self.dsbMass.blockSignals(True)
         self.dsbMass.setValue(mass)
+        self.dsbMass.blockSignals(False)
 
     def set_position(self, position: Vector2D) -> None:
+        self.dsbXPosition.blockSignals(True)
+        self.dsbYPosition.blockSignals(True)
         self.dsbXPosition.setValue(position.x)
         self.dsbYPosition.setValue(position.y)
+        self.dsbXPosition.blockSignals(False)
+        self.dsbYPosition.blockSignals(False)
+
+    def set_velocity(self, velocity: Vector2D) -> None:
+        self.dsbXVelocity.blockSignals(True)
+        self.dsbYVelocity.blockSignals(True)
+        self.dsbXVelocity.setValue(velocity.x)
+        self.dsbYVelocity.setValue(velocity.y)
+        self.dsbXVelocity.blockSignals(False)
+        self.dsbYVelocity.blockSignals(False)
 
     def selected_body(self) -> str:
         return self.cbBodyNames.currentText()

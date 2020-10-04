@@ -8,6 +8,8 @@ Body::Body(std::string const &name, double mass) : m_name(name), m_mass(mass) {}
 
 std::string Body::name() const { return m_name; }
 
+void Body::setMass(double mass) { m_mass = mass; }
+
 double Body::mass() const { return m_mass; }
 
 } // namespace simulator

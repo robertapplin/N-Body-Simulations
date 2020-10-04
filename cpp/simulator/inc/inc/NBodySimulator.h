@@ -32,7 +32,14 @@ public:
 
   std::vector<std::string> bodyNames() const;
 
+  void setMass(std::string const &bodyName, double mass);
   double mass(std::string const &bodyName) const;
+
+  void setXPosition(std::string const &bodyName, double x);
+  void setYPosition(std::string const &bodyName, double y);
+
+  void setXVelocity(std::string const &bodyName, double vx);
+  void setYVelocity(std::string const &bodyName, double vy);
 
   Vector2D initialPosition(std::string const &bodyName) const;
   Vector2D initialVelocity(std::string const &bodyName) const;
