@@ -61,10 +61,10 @@ std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
   };
 
   auto const iter = std::find_if(m_bodyData.begin(), m_bodyData.end(), hasName);
-  if (iter == m_bodyData.end())
-    std::runtime_error("The body '" + name + "' could not be found.");
+  if (iter != m_bodyData.end())
+    return iter - m_bodyData.begin();
 
-  return iter - m_bodyData.begin();
+  throw std::runtime_error("The body '" + name + "' could not be found.");
 }
 
 } // namespace simulator
