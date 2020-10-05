@@ -1,15 +1,18 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
 #include "../inc/inc/NBodySimulator.h"
+#include "../inc/inc/SimulationConstants.h"
 
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
 namespace simulator {
+using namespace constants;
 
 NBodySimulator::NBodySimulator()
-    : m_timeStep(1.0), m_duration(500.0), m_bodyData(), m_dataChanged(true) {}
+    : m_timeStep(1.0), m_duration(500.0), m_bodyData(), m_dataChanged(true),
+      m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)) {}
 
 void NBodySimulator::removeBody(std::string const &name) {
   m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));
@@ -20,7 +23,7 @@ void NBodySimulator::addBody(std::string const &name, double mass,
                              Vector2D const &position,
                              Vector2D const &velocity) {
   if (hasBody(name))
-    throw std::runtime_error("The body '" + name + "' already exists.");
+    throw std::invalid_argument("The body '" + name + "' already exists.");
 
   m_bodyData.emplace_back(std::make_unique<SpaceTimeBodyCoords>(
       std::make_unique<Body>(name, mass, position, velocity), 0.0, position));
@@ -92,6 +95,8 @@ Vector2D NBodySimulator::initialVelocity(std::string const &bodyName) const {
 bool NBodySimulator::hasDataChanged() const { return m_dataChanged; }
 
 void NBodySimulator::runSimulation() {
+  m_gravitationalConstant = gravitationalConstant(TimeUnit::Days);
+
   if (m_dataChanged)
     resetSimulation();
 
@@ -133,20 +138,12 @@ Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) const {
 
   for (auto const &data : m_bodyData)
     calculateAcceleration(acceleration, targetBody, data->body());
-
   return acceleration;
 }
 
 void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
                                            Body &targetBody,
                                            Body &otherBody) const {
-  double G_CONSTANT(6.67408e-11); // m3 kg-1 s-2
-  double M_solar(1.989e+30);      // kg
-  double au(1.496e+11);           // m
-  double day(60 * 60 * 24);       // s
-  double G(G_CONSTANT * M_solar * pow(day, 2) *
-           (1 / pow(au, 3))); // au3 M_solar-1 days-2
-
   if (targetBody != otherBody) {
     auto relativePosition = otherBody.position() - targetBody.position();
     auto const r = relativePosition.magnitude();
@@ -155,7 +152,8 @@ void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
                                " and " + otherBody.name() +
                                " have the same position.");
 
-    acceleration += relativePosition * (G * otherBody.mass() / pow(r, 3));
+    acceleration += relativePosition *
+                    (m_gravitationalConstant * otherBody.mass() / pow(r, 3));
   }
 }
 
@@ -187,7 +185,7 @@ std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
   if (iter != m_bodyData.end())
     return iter - m_bodyData.begin();
 
-  throw std::runtime_error("The body '" + name + "' could not be found.");
+  throw std::invalid_argument("The body '" + name + "' could not be found.");
 }
 
 } // namespace simulator

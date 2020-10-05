@@ -10,7 +10,7 @@ class NBodySimulationsPresenter:
         self.model = NBodySimulationsModel()
         self.model.add_body("Sun", 1.0, 0.0, 0.0)
         self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
-        self.model.add_body("Venus", 0.000003, 1.0, 0.0, 0.0, 0.015)
+
         self.view.selectedBodyChangedSignal.connect(lambda body_name: self.handle_selected_body_changed(body_name))
         self.view.removeBodySignal.connect(self.handle_remove_body_clicked)
         self.view.addBodySignal.connect(self.handle_add_body_clicked)
@@ -84,5 +84,4 @@ class NBodySimulationsPresenter:
         self.view.enable_view(True)
         if success:
             self.view.start_simulation(self.model.simulation_results())
-        else:
-            self.view.set_as_simulating(False)
+        self.view.set_as_simulating(False)

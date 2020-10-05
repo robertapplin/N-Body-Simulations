@@ -69,6 +69,7 @@ private:
 
   double m_timeStep;
   double m_duration;
+  double m_gravitationalConstant;
   std::vector<std::unique_ptr<SpaceTimeBodyCoords>> m_bodyData;
   // Has the initial data changed since the last simulation
   bool m_dataChanged;
