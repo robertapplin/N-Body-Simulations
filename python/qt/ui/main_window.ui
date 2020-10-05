@@ -147,6 +147,9 @@
             <property name="suffix">
              <string> au</string>
             </property>
+            <property name="decimals">
+             <number>6</number>
+            </property>
             <property name="minimum">
              <double>-100.000000000000000</double>
             </property>
@@ -184,6 +187,9 @@
             </property>
             <property name="suffix">
              <string> au</string>
+            </property>
+            <property name="decimals">
+             <number>6</number>
             </property>
             <property name="minimum">
              <double>-100.000000000000000</double>
@@ -247,6 +253,9 @@
             <property name="suffix">
              <string> au/d</string>
             </property>
+            <property name="decimals">
+             <number>6</number>
+            </property>
             <property name="minimum">
              <double>-100.000000000000000</double>
             </property>
@@ -285,6 +294,9 @@
             <property name="suffix">
              <string> au/d</string>
             </property>
+            <property name="decimals">
+             <number>6</number>
+            </property>
             <property name="minimum">
              <double>-100.000000000000000</double>
             </property>
@@ -306,6 +318,9 @@
          </property>
          <property name="suffix">
           <string> M*</string>
+         </property>
+         <property name="decimals">
+          <number>6</number>
          </property>
          <property name="minimum">
           <double>0.010000000000000</double>
@@ -341,7 +356,7 @@
           <string> d</string>
          </property>
          <property name="decimals">
-          <number>1</number>
+          <number>2</number>
          </property>
          <property name="value">
           <double>1.000000000000000</double>
@@ -361,7 +376,7 @@
           <string> d</string>
          </property>
          <property name="decimals">
-          <number>1</number>
+          <number>2</number>
          </property>
          <property name="minimum">
           <double>1.000000000000000</double>
