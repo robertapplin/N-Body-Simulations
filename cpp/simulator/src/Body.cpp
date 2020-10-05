@@ -24,6 +24,11 @@ Vector2D &Body::position() { return m_position; }
 
 Vector2D &Body::velocity() { return m_velocity; }
 
+void Body::resetBody() {
+  m_position = m_initialPosition;
+  m_velocity = m_initialVelocity;
+}
+
 bool Body::operator!=(Body const &otherBody) {
   return m_name != otherBody.name();
 }

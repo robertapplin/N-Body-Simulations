@@ -3,6 +3,8 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+MARKER = '.'
+
 
 class InteractivePlot:
 
@@ -24,7 +26,7 @@ class InteractivePlot:
         self._ax.clear()
 
     def draw_body(self, body_name: str, x: int, y: int) -> None:
-        lines = self._ax.plot(x, y, '*-')
+        lines = self._ax.plot(x, y, MARKER)
         self._lines[body_name] = lines[0]
         self.draw()
 
@@ -39,7 +41,11 @@ class InteractivePlot:
             xs.append(position.x)
             ys.append(position.y)
 
-        self._ax.plot(xs, ys, label=body_name)
+        if body_name in self._lines.keys():
+            self.remove_body(body_name)
+
+        lines = self._ax.plot(xs, ys, MARKER, label=body_name)
+        self._lines[body_name] = lines[0]
 
     def show_legend(self) -> None:
         self._ax.legend()

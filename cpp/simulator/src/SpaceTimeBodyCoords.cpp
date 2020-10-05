@@ -22,7 +22,10 @@ SpaceTimeBodyCoords::~SpaceTimeBodyCoords() {
   m_spaceTimeCoords.clear();
 }
 
-void SpaceTimeBodyCoords::resetCoords() { m_spaceTimeCoords.resize(1); }
+void SpaceTimeBodyCoords::resetCoords() {
+  m_spaceTimeCoords.resize(1);
+  m_body->resetBody();
+}
 
 Body &SpaceTimeBodyCoords::body() const { return *m_body.get(); }
 

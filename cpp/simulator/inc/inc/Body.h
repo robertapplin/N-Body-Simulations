@@ -27,6 +27,8 @@ public:
   Vector2D &position();
   Vector2D &velocity();
 
+  void resetBody();
+
   bool operator!=(Body const &otherBody);
 
 private:
