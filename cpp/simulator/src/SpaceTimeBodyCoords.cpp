@@ -4,11 +4,13 @@
 
 namespace Simulator {
 
+// Methods for the SpaceTimeCoord class.
 SpaceTimeCoord::SpaceTimeCoord(double time, Vector2D const &position)
     : m_time(time), m_position(position) {}
 
 Vector2D &SpaceTimeCoord::position() { return m_position; }
 
+// Methods for the SpaceTimeBodyCoords class.
 SpaceTimeBodyCoords::SpaceTimeBodyCoords(std::unique_ptr<Body> body,
                                          double time, Vector2D const &position)
     : m_body(std::move(body)), m_spaceTimeCoords() {

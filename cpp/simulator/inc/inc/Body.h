@@ -9,6 +9,7 @@
 
 namespace Simulator {
 
+// A class used to store data about a Body in a simulation.
 class Body {
 
 public:
@@ -16,17 +17,25 @@ public:
        Vector2D const &initialVelocity);
   ~Body() = default;
 
+  // Returns the name of the body.
   std::string name() const;
 
+  // Sets the mass of the body.
   void setMass(double mass);
+  // Returns the mass of the body.
   double mass() const;
 
+  // Returns the initial position of the body.
   Vector2D &initialPosition();
+  // Returns the initial velocity of the body.
   Vector2D &initialVelocity();
 
+  // Returns the current position of the body.
   Vector2D &position();
+  // Returns the current velocity of the body.
   Vector2D &velocity();
 
+  // Reset the position and velocity of the body to the initial values.
   void resetBody();
 
   bool operator!=(Body const &otherBody);

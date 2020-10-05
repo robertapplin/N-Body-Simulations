@@ -20,13 +20,9 @@ class NBodySimulationsModel:
                                                         self.initial_velocity(body_name)])
         return initial_body_parameters
 
-    def number_of_bodies(self) -> int:
-        """Return the number of bodies in the simulation setup."""
-        return self._simulator.numberOfBodies()
-
     @catch_errors()
     def remove_body(self, body_name: str) -> None:
-        """Remove a body from the simulator."""
+        """Removes the body with the specified name from the simulator."""
         self._simulator.removeBody(body_name)
 
     @catch_errors()
@@ -52,6 +48,10 @@ class NBodySimulationsModel:
     def duration(self) -> float:
         """Return the simulation duration stored by the simulator."""
         return self._simulator.duration()
+
+    def number_of_bodies(self) -> int:
+        """Return the number of bodies in the simulation setup."""
+        return self._simulator.numberOfBodies()
 
     @catch_errors()
     def set_mass(self, body_name: str, mass: float) -> None:

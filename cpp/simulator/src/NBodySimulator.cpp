@@ -11,8 +11,9 @@ namespace Simulator {
 using namespace Constants;
 
 NBodySimulator::NBodySimulator()
-    : m_timeStep(1.0), m_duration(500.0), m_bodyData(), m_dataChanged(true),
-      m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)) {}
+    : m_timeStep(1.0), m_duration(500.0),
+      m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)),
+      m_bodyData(), m_dataChanged(true) {}
 
 void NBodySimulator::removeBody(std::string const &name) {
   m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));
