@@ -47,4 +47,4 @@ private:
 
 } // namespace Simulator
 
-#endif
+#endif // SpaceTimeBodyCoords_H

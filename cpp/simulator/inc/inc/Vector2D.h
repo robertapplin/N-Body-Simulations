@@ -19,4 +19,4 @@ struct Vector2D {
 
 } // namespace Simulator
 
-#endif
+#endif // Vector2D_H

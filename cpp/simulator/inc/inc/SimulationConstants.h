@@ -19,4 +19,4 @@ double gravitationalConstant(TimeUnit const &timeUnit);
 } // namespace Constants
 } // namespace Simulator
 
-#endif
+#endif // SimulationConstants_H

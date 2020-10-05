@@ -42,4 +42,4 @@ private:
 
 } // namespace Simulator
 
-#endif
+#endif // Body_H
