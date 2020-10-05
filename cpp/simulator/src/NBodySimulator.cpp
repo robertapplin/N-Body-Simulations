@@ -7,8 +7,8 @@
 #include <cmath>
 #include <stdexcept>
 
-namespace simulator {
-using namespace constants;
+namespace Simulator {
+using namespace Constants;
 
 NBodySimulator::NBodySimulator()
     : m_timeStep(1.0), m_duration(500.0), m_bodyData(), m_dataChanged(true),
@@ -188,4 +188,4 @@ std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
   throw std::invalid_argument("The body '" + name + "' could not be found.");
 }
 
-} // namespace simulator
+} // namespace Simulator

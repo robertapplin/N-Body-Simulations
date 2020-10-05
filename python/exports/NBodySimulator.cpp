@@ -11,73 +11,73 @@ namespace py = pybind11;
 
 void export_NBodySimulator(py::module &m) {
 
-  py::class_<simulator::NBodySimulator>(m, "NBodySimulator")
+  py::class_<Simulator::NBodySimulator>(m, "NBodySimulator")
       .def(py::init<>())
       .def("removeBody",
            py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::removeBody),
+               &Simulator::NBodySimulator::removeBody),
            py::arg("name"))
       .def("addBody",
            py::overload_cast<std::string const &, double,
-                             simulator::Vector2D const &,
-                             simulator::Vector2D const &>(
-               &simulator::NBodySimulator::addBody),
+                             Simulator::Vector2D const &,
+                             Simulator::Vector2D const &>(
+               &Simulator::NBodySimulator::addBody),
            py::arg("name"), py::arg("mass"), py::arg("position"),
            py::arg("velocity"))
       .def("setTimeStep",
-           py::overload_cast<double>(&simulator::NBodySimulator::setTimeStep),
+           py::overload_cast<double>(&Simulator::NBodySimulator::setTimeStep),
            py::arg("timeStep"))
-      .def("timeStep", py::overload_cast<>(&simulator::NBodySimulator::timeStep,
+      .def("timeStep", py::overload_cast<>(&Simulator::NBodySimulator::timeStep,
                                            py::const_))
       .def("setDuration",
-           py::overload_cast<double>(&simulator::NBodySimulator::setDuration),
+           py::overload_cast<double>(&Simulator::NBodySimulator::setDuration),
            py::arg("duration"))
-      .def("duration", py::overload_cast<>(&simulator::NBodySimulator::duration,
+      .def("duration", py::overload_cast<>(&Simulator::NBodySimulator::duration,
                                            py::const_))
       .def("numberOfBodies",
-           py::overload_cast<>(&simulator::NBodySimulator::numberOfBodies,
+           py::overload_cast<>(&Simulator::NBodySimulator::numberOfBodies,
                                py::const_))
       .def("bodyNames", py::overload_cast<>(
-                            &simulator::NBodySimulator::bodyNames, py::const_))
+                            &Simulator::NBodySimulator::bodyNames, py::const_))
       .def("setMass",
            py::overload_cast<std::string const &, double>(
-               &simulator::NBodySimulator::setMass),
+               &Simulator::NBodySimulator::setMass),
            py::arg("bodyName"), py::arg("mass"))
       .def("mass",
            py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::mass, py::const_),
+               &Simulator::NBodySimulator::mass, py::const_),
            py::arg("bodyName"))
       .def("setXPosition",
            py::overload_cast<std::string const &, double>(
-               &simulator::NBodySimulator::setXPosition),
+               &Simulator::NBodySimulator::setXPosition),
            py::arg("bodyName"), py::arg("x"))
       .def("setYPosition",
            py::overload_cast<std::string const &, double>(
-               &simulator::NBodySimulator::setYPosition),
+               &Simulator::NBodySimulator::setYPosition),
            py::arg("bodyName"), py::arg("y"))
       .def("setXVelocity",
            py::overload_cast<std::string const &, double>(
-               &simulator::NBodySimulator::setXVelocity),
+               &Simulator::NBodySimulator::setXVelocity),
            py::arg("bodyName"), py::arg("vx"))
       .def("setYVelocity",
            py::overload_cast<std::string const &, double>(
-               &simulator::NBodySimulator::setYVelocity),
+               &Simulator::NBodySimulator::setYVelocity),
            py::arg("bodyName"), py::arg("vy"))
       .def("initialPosition",
            py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::initialPosition, py::const_),
+               &Simulator::NBodySimulator::initialPosition, py::const_),
            py::arg("bodyName"))
       .def("initialVelocity",
            py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::initialVelocity, py::const_),
+               &Simulator::NBodySimulator::initialVelocity, py::const_),
            py::arg("bodyName"))
       .def("hasDataChanged",
-           py::overload_cast<>(&simulator::NBodySimulator::hasDataChanged,
+           py::overload_cast<>(&Simulator::NBodySimulator::hasDataChanged,
                                py::const_))
       .def("runSimulation",
-           py::overload_cast<>(&simulator::NBodySimulator::runSimulation))
+           py::overload_cast<>(&Simulator::NBodySimulator::runSimulation))
       .def("simulatedPositions",
            py::overload_cast<std::string const &>(
-               &simulator::NBodySimulator::simulatedPositions, py::const_),
+               &Simulator::NBodySimulator::simulatedPositions, py::const_),
            py::arg("bodyName"));
 }

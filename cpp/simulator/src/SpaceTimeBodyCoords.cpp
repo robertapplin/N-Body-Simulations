@@ -2,7 +2,7 @@
 // Authored by Robert Applin, 2020
 #include "../inc/inc/SpaceTimeBodyCoords.h"
 
-namespace simulator {
+namespace Simulator {
 
 SpaceTimeCoord::SpaceTimeCoord(double time, Vector2D const &position)
     : m_time(time), m_position(position) {}
@@ -40,4 +40,4 @@ std::vector<Vector2D> SpaceTimeBodyCoords::simulatedPositions() const {
   return positions;
 }
 
-} // namespace simulator
+} // namespace Simulator

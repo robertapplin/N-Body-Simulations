@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace simulator {
+namespace Simulator {
 
 double Vector2D::magnitude() const {
   return pow(pow(m_x, 2) + pow(m_y, 2), 0.5);
@@ -27,4 +27,4 @@ bool Vector2D::operator==(Vector2D const &otherVector) {
   return m_x == otherVector.m_x && m_y == otherVector.m_y;
 }
 
-} // namespace simulator
+} // namespace Simulator

@@ -2,7 +2,7 @@
 // Authored by Robert Applin, 2020
 #include "../inc/inc/Body.h"
 
-namespace simulator {
+namespace Simulator {
 
 Body::Body(std::string const &name, double mass,
            Vector2D const &initialPosition, Vector2D const &initialVelocity)
@@ -28,4 +28,4 @@ bool Body::operator!=(Body const &otherBody) {
   return m_name != otherBody.name();
 }
 
-} // namespace simulator
+} // namespace Simulator

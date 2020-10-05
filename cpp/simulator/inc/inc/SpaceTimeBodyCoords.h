@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-namespace simulator {
+namespace Simulator {
 
 class SpaceTimeCoord {
 
@@ -45,6 +45,6 @@ private:
   std::vector<std::unique_ptr<SpaceTimeCoord>> m_spaceTimeCoords;
 };
 
-} // namespace simulator
+} // namespace Simulator
 
 #endif

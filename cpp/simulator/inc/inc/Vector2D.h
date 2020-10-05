@@ -3,7 +3,7 @@
 #ifndef Vector2D_H
 #define Vector2D_H
 
-namespace simulator {
+namespace Simulator {
 
 struct Vector2D {
   double m_x;
@@ -17,6 +17,6 @@ struct Vector2D {
   bool operator==(Vector2D const &otherVector);
 };
 
-} // namespace simulator
+} // namespace Simulator
 
 #endif

@@ -5,8 +5,8 @@
 #include <cmath>
 #include <stdexcept>
 
-namespace simulator {
-namespace constants {
+namespace Simulator {
+namespace Constants {
 
 double gravitationalConstant(TimeUnit const &timeUnit) {
   switch (timeUnit) {
@@ -17,5 +17,5 @@ double gravitationalConstant(TimeUnit const &timeUnit) {
   throw std::invalid_argument("An invalid time unit has been provided.");
 }
 
-} // namespace constants
-} // namespace simulator
+} // namespace Constants
+} // namespace Simulator

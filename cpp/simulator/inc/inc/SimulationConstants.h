@@ -3,8 +3,8 @@
 #ifndef SimulationConstants_H
 #define SimulationConstants_H
 
-namespace simulator {
-namespace constants {
+namespace Simulator {
+namespace Constants {
 
 enum TimeUnit { Days } const;
 
@@ -16,7 +16,7 @@ static double DAY(60 * 60 * 24); // Day (s)
 
 double gravitationalConstant(TimeUnit const &timeUnit);
 
-} // namespace constants
-} // namespace simulator
+} // namespace Constants
+} // namespace Simulator
 
 #endif

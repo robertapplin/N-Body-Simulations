@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace simulator {
+namespace Simulator {
 
 class Body {
 
@@ -40,6 +40,6 @@ private:
   Vector2D m_velocity;
 };
 
-} // namespace simulator
+} // namespace Simulator
 
 #endif

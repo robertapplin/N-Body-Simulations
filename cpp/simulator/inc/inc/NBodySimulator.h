@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace simulator {
+namespace Simulator {
 
 class NBodySimulator {
 
@@ -75,6 +75,6 @@ private:
   bool m_dataChanged;
 };
 
-} // namespace simulator
+} // namespace Simulator
 
 #endif
