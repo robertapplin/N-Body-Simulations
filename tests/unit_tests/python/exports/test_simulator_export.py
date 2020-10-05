@@ -111,3 +111,19 @@ def test_that_setYVelocity_is_exposed_to_python(simulator):
     velocity = simulator.initialVelocity("Sun")
 
     assert velocity.y == 1.0
+
+
+def test_that_hasDataChanged_is_exposed_to_python(simulator):
+    assert simulator.hasDataChanged()
+
+
+def test_that_runSimulation_is_exposed_to_python(simulator):
+    simulator.runSimulation()
+    assert not simulator.hasDataChanged()
+
+
+def test_that_simulatedPositions_is_exposed_to_python(simulator):
+    simulator.runSimulation()
+    results = simulator.simulatedPositions("Sun")
+
+    assert results[:4] == [Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), Vector2D(0.0, 0.0)]

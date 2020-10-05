@@ -26,9 +26,23 @@ class InteractivePlot:
     def draw_body(self, body_name: str, x: int, y: int) -> None:
         lines = self._ax.plot(x, y, '*-')
         self._lines[body_name] = lines[0]
-        self._canvas.draw()
+        self.draw()
 
     def remove_body(self, body_name: str) -> None:
         self._lines[body_name].remove()
         del self._lines[body_name]
+        self.draw()
+
+    def plot_trail(self, body_name: str, positions: list) -> None:
+        xs, ys = [], []
+        for position in positions:
+            xs.append(position.x)
+            ys.append(position.y)
+
+        self._ax.plot(xs, ys, label=body_name)
+
+    def show_legend(self) -> None:
+        self._ax.legend()
+
+    def draw(self) -> None:
         self._canvas.draw()

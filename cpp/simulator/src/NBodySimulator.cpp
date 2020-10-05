@@ -3,6 +3,7 @@
 #include "../inc/inc/NBodySimulator.h"
 
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 
 namespace simulator {
@@ -11,8 +12,7 @@ NBodySimulator::NBodySimulator()
     : m_timeStep(1.0), m_duration(500.0), m_bodyData(), m_dataChanged(true) {}
 
 void NBodySimulator::removeBody(std::string const &name) {
-  auto const bodyIndex = findBodyIndex(name);
-  m_bodyData.erase(m_bodyData.begin() + bodyIndex);
+  m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));
   m_dataChanged = true;
 }
 
@@ -23,7 +23,7 @@ void NBodySimulator::addBody(std::string const &name, double mass,
     throw std::runtime_error("The body '" + name + "' already exists.");
 
   m_bodyData.emplace_back(std::make_unique<SpaceTimeBodyCoords>(
-      std::make_unique<Body>(name, mass), 0.0, position, velocity));
+      std::make_unique<Body>(name, mass, position, velocity), 0.0, position));
   m_dataChanged = true;
 }
 
@@ -53,57 +53,110 @@ std::vector<std::string> NBodySimulator::bodyNames() const {
 }
 
 void NBodySimulator::setMass(std::string const &bodyName, double mass) {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  m_bodyData[bodyIndex]->body().setMass(mass);
+  findBody(bodyName).setMass(mass);
   m_dataChanged = true;
 }
 
 double NBodySimulator::mass(std::string const &bodyName) const {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->body().mass();
+  return findBody(bodyName).mass();
 }
 
 void NBodySimulator::setXPosition(std::string const &bodyName, double x) {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  m_bodyData[bodyIndex]->initialPosition().m_x = x;
+  findBody(bodyName).initialPosition().m_x = x;
   m_dataChanged = true;
 }
 
 void NBodySimulator::setYPosition(std::string const &bodyName, double y) {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  m_bodyData[bodyIndex]->initialPosition().m_y = y;
+  findBody(bodyName).initialPosition().m_y = y;
   m_dataChanged = true;
 }
 
 void NBodySimulator::setXVelocity(std::string const &bodyName, double vx) {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  m_bodyData[bodyIndex]->initialVelocity().m_x = vx;
+  findBody(bodyName).initialVelocity().m_x = vx;
   m_dataChanged = true;
 }
 
 void NBodySimulator::setYVelocity(std::string const &bodyName, double vy) {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  m_bodyData[bodyIndex]->initialVelocity().m_y = vy;
+  findBody(bodyName).initialVelocity().m_y = vy;
   m_dataChanged = true;
 }
 
 Vector2D NBodySimulator::initialPosition(std::string const &bodyName) const {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->initialPosition();
+  return findBody(bodyName).initialPosition();
 }
 
 Vector2D NBodySimulator::initialVelocity(std::string const &bodyName) const {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->initialVelocity();
+  return findBody(bodyName).initialVelocity();
 }
 
 bool NBodySimulator::hasDataChanged() const { return m_dataChanged; }
 
-bool NBodySimulator::runSimulation() {
+void NBodySimulator::runSimulation() {
   if (m_dataChanged)
     resetSimulation();
+
+  for (auto i = 1u; i < numberOfSteps(); ++i)
+    calculateNewPositions(i);
+
   m_dataChanged = false;
-  return true;
+}
+
+std::vector<Vector2D>
+NBodySimulator::simulatedPositions(std::string const &bodyName) const {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  return m_bodyData[bodyIndex]->simulatedPositions();
+}
+
+void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
+
+  for (auto const &targetBodyName : bodyNames())
+    calculateNewPositions(stepNumber, findBodyIndex(targetBodyName),
+                          findBody(targetBodyName));
+}
+
+void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
+                                           std::size_t const &bodyIndex,
+                                           Body &targetBody) {
+  auto acceleration = calculateAcceleration(targetBody);
+
+  auto &velocity = targetBody.velocity();
+  velocity += acceleration * m_timeStep;
+
+  auto &position = targetBody.position();
+  position += velocity * m_timeStep;
+
+  m_bodyData[bodyIndex]->addPosition(stepNumber * m_timeStep, position);
+}
+
+Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) const {
+  Vector2D acceleration = {0.0, 0.0};
+
+  for (auto const &data : m_bodyData)
+    calculateAcceleration(acceleration, targetBody, data->body());
+
+  return acceleration;
+}
+
+void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
+                                           Body &targetBody,
+                                           Body &otherBody) const {
+  double G_CONSTANT(6.67408e-11); // m3 kg-1 s-2
+  double M_solar(1.989e+30);      // kg
+  double au(1.496e+11);           // m
+  double day(60 * 60 * 24);       // s
+  double G(G_CONSTANT * M_solar * pow(day, 2) *
+           (1 / pow(au, 3))); // au3 M_solar-1 days-2
+
+  if (targetBody != otherBody) {
+    auto relativePosition = otherBody.position() - targetBody.position();
+    auto const r = relativePosition.magnitude();
+    if (r == 0.0)
+      throw std::runtime_error("Cannot divide by zero: " + targetBody.name() +
+                               " and " + otherBody.name() +
+                               " have the same position.");
+
+    acceleration += relativePosition * (G * otherBody.mass() / pow(r, 3));
+  }
 }
 
 void NBodySimulator::resetSimulation() {
@@ -111,10 +164,18 @@ void NBodySimulator::resetSimulation() {
     data->resetCoords();
 }
 
+std::size_t NBodySimulator::numberOfSteps() const {
+  return static_cast<std::size_t>(std::llround(m_duration / m_timeStep));
+}
+
 bool NBodySimulator::hasBody(std::string const &name) const {
   auto const names = bodyNames();
   auto const iter = std::find(names.begin(), names.end(), name);
   return iter != names.end();
+}
+
+Body &NBodySimulator::findBody(std::string const &name) const {
+  return m_bodyData[findBodyIndex(name)]->body();
 }
 
 std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {

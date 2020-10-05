@@ -142,7 +142,18 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def is_simulating(self) -> bool:
         return self.pbPlayPause.text() != "Play"
 
-    def enable_play_pause(self, enable: bool) -> None:
+    def enable_view(self, enable: bool) -> None:
+        self.cbBodyNames.setEnabled(enable)
+        self.pbRemoveBody.setEnabled(enable)
+        self.pbAddBody.setEnabled(enable)
+        self.dsbMass.setEnabled(enable)
+        self.dsbXPosition.setEnabled(enable)
+        self.dsbYPosition.setEnabled(enable)
+        self.dsbXVelocity.setEnabled(enable)
+        self.dsbYVelocity.setEnabled(enable)
+        self.dsbTimeStep.setEnabled(enable)
+        self.dsbDuration.setEnabled(enable)
+        self.pbReset.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
 
     @staticmethod
@@ -150,3 +161,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         dialog = AddBodyDialog()
         dialog.exec_()
         return dialog.new_body_data()
+
+    def start_simulation(self, simulation_results: dict) -> None:
+        for body_name, positions in simulation_results.items():
+            self.interactive_plot.plot_trail(body_name, positions)
+        self.interactive_plot.show_legend()
+        self.interactive_plot.draw()
+
+    def pause_simulation(self):
+        pass

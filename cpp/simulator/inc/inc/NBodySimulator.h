@@ -46,13 +46,25 @@ public:
 
   bool hasDataChanged() const;
 
-  bool runSimulation();
+  void runSimulation();
+
+  std::vector<Vector2D> simulatedPositions(std::string const &bodyName) const;
 
 private:
+  void calculateNewPositions(std::size_t const &stepNumber);
+  void calculateNewPositions(std::size_t const &stepNumber,
+                             std::size_t const &bodyIndex, Body &targetBody);
+  Vector2D calculateAcceleration(Body &targetBody) const;
+  void calculateAcceleration(Vector2D &acceleration, Body &targetBody,
+                             Body &otherBody) const;
+
   void resetSimulation();
+
+  std::size_t numberOfSteps() const;
 
   bool hasBody(std::string const &name) const;
 
+  Body &findBody(std::string const &name) const;
   std::size_t findBodyIndex(std::string const &name) const;
 
   double m_timeStep;

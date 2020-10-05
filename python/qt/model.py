@@ -8,9 +8,6 @@ class NBodySimulationsModel:
 
     def __init__(self):
         self._simulator = NBodySimulator()
-        self.add_body("Sun", 1.0, 0.0, 0.0)
-
-        self._simulation_results = None
 
     def initial_body_parameters(self) -> dict:
         initial_body_parameters = dict()
@@ -25,13 +22,11 @@ class NBodySimulationsModel:
 
     @catch_errors()
     def remove_body(self, body_name: str) -> None:
-        self.reset_simulation()
         self._simulator.removeBody(body_name)
 
     @catch_errors()
-    def add_body(self, body_name: str, mass: float, x: float, y: float) -> bool:
-        self.reset_simulation()
-        self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(0.0, 0.0))
+    def add_body(self, body_name: str, mass: float, x: float, y: float, vx: float = 0.0, vy: float = 0.0) -> bool:
+        self._simulator.addBody(body_name, mass, Vector2D(x, y), Vector2D(vx, vy))
 
         # If this point is reached, the body has been added successfully
         return True
@@ -80,18 +75,17 @@ class NBodySimulationsModel:
     def initial_velocity(self, body_name: str) -> Vector2D:
         return self._simulator.initialVelocity(body_name)
 
-    def run_simulation(self):
+    @catch_errors()
+    def run_simulation(self) -> bool:
         if self._simulator.hasDataChanged():
-            success = self._simulator.runSimulation()
-            self._simulation_results = self.simulation_results() if success else None
-        return success
+            self._simulator.runSimulation()
 
-    def simulation_results(self):
-        # Construct simulation results
-        return dict()
+        # If this point is reached, the simulation has been successfully
+        return True
 
-    def start_simulation(self):
-        pass
-
-    def pause_simulation(self):
-        pass
+    @catch_errors()
+    def simulation_results(self) -> dict:
+        results = dict()
+        for body_name in self._simulator.bodyNames():
+            results[body_name] = self._simulator.simulatedPositions(body_name)
+        return results

@@ -15,33 +15,30 @@ namespace simulator {
 class SpaceTimeCoord {
 
 public:
-  SpaceTimeCoord(double time, double x, double y, double vx, double vy);
-  SpaceTimeCoord(double time, Vector2D const &position,
-                 Vector2D const &velocity);
+  SpaceTimeCoord(double time, Vector2D const &position);
   ~SpaceTimeCoord() = default;
 
   Vector2D &position();
-  Vector2D &velocity();
 
 private:
   double m_time;
   Vector2D m_position;
-  Vector2D m_velocity;
 };
 
 class SpaceTimeBodyCoords {
 
 public:
   SpaceTimeBodyCoords(std::unique_ptr<Body> body, double time,
-                      Vector2D const &position, Vector2D const &velocity);
+                      Vector2D const &position);
   ~SpaceTimeBodyCoords();
 
   void resetCoords();
 
   Body &body() const;
 
-  Vector2D &initialPosition() const;
-  Vector2D &initialVelocity() const;
+  void addPosition(double time, Vector2D const &position);
+
+  std::vector<Vector2D> simulatedPositions() const;
 
 private:
   std::unique_ptr<Body> m_body;

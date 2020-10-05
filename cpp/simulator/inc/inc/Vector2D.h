@@ -8,6 +8,13 @@ namespace simulator {
 struct Vector2D {
   double m_x;
   double m_y;
+
+  double magnitude() const;
+
+  Vector2D operator-(Vector2D const &otherVector);
+  Vector2D operator*(double value);
+  void operator+=(Vector2D const &otherVector);
+  bool operator==(Vector2D const &otherVector);
 };
 
 } // namespace simulator

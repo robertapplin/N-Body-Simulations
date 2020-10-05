@@ -8,7 +8,9 @@ class NBodySimulationsPresenter:
     def __init__(self, view):
         self.view = view
         self.model = NBodySimulationsModel()
-
+        self.model.add_body("Sun", 1.0, 0.0, 0.0)
+        self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
+        self.model.add_body("Venus", 0.000003, 1.0, 0.0, 0.0, 0.015)
         self.view.selectedBodyChangedSignal.connect(lambda body_name: self.handle_selected_body_changed(body_name))
         self.view.removeBodySignal.connect(self.handle_remove_body_clicked)
         self.view.addBodySignal.connect(self.handle_add_body_clicked)
@@ -54,10 +56,10 @@ class NBodySimulationsPresenter:
     def handle_y_velocity_changed(self, body_name: str, vy: float) -> None:
         self.model.set_y_velocity(body_name, vy)
 
-    def handle_time_step_changed(self, time_step) -> None:
+    def handle_time_step_changed(self, time_step: float) -> None:
         self.model.set_time_step(time_step)
 
-    def handle_duration_changed(self, duration) -> None:
+    def handle_duration_changed(self, duration: float) -> None:
         self.model.set_duration(duration)
 
     def handle_play_pause_clicked(self) -> None:
@@ -65,13 +67,9 @@ class NBodySimulationsPresenter:
         self.view.set_as_simulating(play_clicked)
 
         if play_clicked:
-            self.view.enable_play_pause(False)
-            success = self.model.run_simulation()
-            self.view.enable_play_pause(True)
-            if success:
-                self.model.start_simulation()
+            self._run_simulation()
         else:
-            self.model.pause_simulation()
+            self.view.pause_simulation()
 
     def _add_new_body(self) -> None:
         body_name, mass, x, y = self.view.open_add_body_dialog()
@@ -79,3 +77,12 @@ class NBodySimulationsPresenter:
             success = self.model.add_body(body_name, mass, x, y)
             if success:
                 self.view.add_body(body_name, self.model.initial_position(body_name))
+
+    def _run_simulation(self) -> None:
+        self.view.enable_view(False)
+        success = self.model.run_simulation()
+        self.view.enable_view(True)
+        if success:
+            self.view.start_simulation(self.model.simulation_results())
+        else:
+            self.view.set_as_simulating(False)
