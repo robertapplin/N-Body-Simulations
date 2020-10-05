@@ -165,6 +165,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def start_simulation(self, simulation_results: dict) -> None:
         for body_name, positions in simulation_results.items():
             self.interactive_plot.plot_trail(body_name, positions)
+        self.interactive_plot.update_axes_limits()
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 

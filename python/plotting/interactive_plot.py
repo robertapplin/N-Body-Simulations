@@ -4,6 +4,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 MARKER = '.'
+from qt.error_catcher import catch_errors
 
 
 class InteractivePlot:
@@ -26,7 +27,7 @@ class InteractivePlot:
         self._ax.clear()
 
     def draw_body(self, body_name: str, x: int, y: int) -> None:
-        lines = self._ax.plot(x, y, MARKER)
+        lines = self._ax.plot(x, y, marker=MARKER, label=body_name)
         self._lines[body_name] = lines[0]
         self.draw()
 
@@ -44,7 +45,7 @@ class InteractivePlot:
         if body_name in self._lines.keys():
             self.remove_body(body_name)
 
-        lines = self._ax.plot(xs, ys, MARKER, label=body_name)
+        lines = self._ax.plot(xs, ys, marker=MARKER, label=body_name)
         self._lines[body_name] = lines[0]
 
     def show_legend(self) -> None:
@@ -52,3 +53,17 @@ class InteractivePlot:
 
     def draw(self) -> None:
         self._canvas.draw()
+
+    def update_axes_limits(self):
+        xs, ys = [], []
+        for line in self._lines.values():
+            xs.extend(list(line.get_xdata()))
+            ys.extend(list(line.get_ydata()))
+
+        x_min, x_max = min(xs), max(xs)
+        y_min, y_max = min(ys), max(ys)
+        x_space = (x_max-x_min)*0.05
+        y_space = (y_max-y_min)*0.05
+
+        self._ax.set_xlim(x_min - x_space, x_max + x_space)
+        self._ax.set_ylim(y_min - y_space, y_max + y_space)
