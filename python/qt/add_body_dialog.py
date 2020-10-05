@@ -1,5 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from PyQt5.QtCore import QRegExp
+from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtWidgets import QDialog
 
 from qt.ui.add_body_dialog_ui import Ui_AddBodyDialog
@@ -12,6 +14,8 @@ class AddBodyDialog(Ui_AddBodyDialog, QDialog):
         """Initialize the AddBodyDialog with empty body parameters."""
         super(AddBodyDialog, self).__init__()
         self.setupUi(self)
+
+        self.leBodyName.setValidator(QRegExpValidator(QRegExp("[a-zA-Z][a-zA-Z0-9]*(?:[-])[a-zA-Z0-9]*")))
 
         self.pbCancel.clicked.connect(self.handle_cancel_clicked)
         self.pbAdd.clicked.connect(self.handle_add_clicked)
