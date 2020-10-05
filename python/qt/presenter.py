@@ -8,6 +8,8 @@ class NBodySimulationsPresenter:
     def __init__(self, view):
         self.view = view
         self.model = NBodySimulationsModel()
+
+        # Temporarily here for development
         self.model.add_body("Sun", 1.0, 0.0, 0.0)
         self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 

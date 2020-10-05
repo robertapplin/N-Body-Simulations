@@ -190,15 +190,3 @@ def test_that_simulation_results_contains_the_initial_positions_of_the_bodies(mo
 
     assert results["Sun"][0] == Vector2D(0.0, 0.0)
     assert results["Earth"][0] == Vector2D(1.0, 0.0)
-
-
-def test_that_run_simulation_returns_the_expected_simulated_positions(model):
-    model.run_simulation()
-    results = model.simulation_results()
-
-    assert results["Sun"][:4] == [Vector2D(0.0, 0.0), Vector2D(8.879329048949847e-10, 0.0),
-                                  Vector2D(2.66402461827637e-09, 1.332632643371652e-11),
-                                  Vector2D(5.328427060758636e-09, 5.33217111694112e-11)]
-    assert results["Earth"][:4] == [Vector2D(1.0, 0.0), Vector2D(0.9997040223645094, 0.015),
-                                    Vector2D(0.9991119917918049, 0.029995557891169033),
-                                    Vector2D(0.9982238576411552, 0.04498222609617818)]

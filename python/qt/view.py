@@ -169,5 +169,5 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
-    def pause_simulation(self):
+    def pause_simulation(self) -> None:
         pass

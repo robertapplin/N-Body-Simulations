@@ -4,7 +4,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 MARKER = '.'
-from qt.error_catcher import catch_errors
+AXIS_MARGIN = 0.05  # 5% axis margin
 
 
 class InteractivePlot:
@@ -36,6 +36,7 @@ class InteractivePlot:
         del self._lines[body_name]
         self.draw()
 
+    # Temporarily in place of a simulation
     def plot_trail(self, body_name: str, positions: list) -> None:
         xs, ys = [], []
         for position in positions:
@@ -54,16 +55,18 @@ class InteractivePlot:
     def draw(self) -> None:
         self._canvas.draw()
 
-    def update_axes_limits(self):
+    def update_axes_limits(self) -> None:
+        x_min, x_max, y_min, y_max = self._calculate_axes_min_max()
+
+        x_margin = (x_max-x_min)*AXIS_MARGIN
+        y_margin = (y_max-y_min)*AXIS_MARGIN
+
+        self._ax.set_xlim(x_min - x_margin, x_max + x_margin)
+        self._ax.set_ylim(y_min - y_margin, y_max + y_margin)
+
+    def _calculate_axes_min_max(self) -> None:
         xs, ys = [], []
         for line in self._lines.values():
             xs.extend(list(line.get_xdata()))
             ys.extend(list(line.get_ydata()))
-
-        x_min, x_max = min(xs), max(xs)
-        y_min, y_max = min(ys), max(ys)
-        x_space = (x_max-x_min)*0.05
-        y_space = (y_max-y_min)*0.05
-
-        self._ax.set_xlim(x_min - x_space, x_max + x_space)
-        self._ax.set_ylim(y_min - y_space, y_max + y_space)
+        return min(xs), max(xs), min(ys), max(ys)

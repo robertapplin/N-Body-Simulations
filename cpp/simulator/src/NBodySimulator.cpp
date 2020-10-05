@@ -95,10 +95,12 @@ Vector2D NBodySimulator::initialVelocity(std::string const &bodyName) const {
 bool NBodySimulator::hasDataChanged() const { return m_dataChanged; }
 
 void NBodySimulator::runSimulation() {
+  if (!m_dataChanged)
+    return;
+
   m_gravitationalConstant = gravitationalConstant(TimeUnit::Days);
 
-  if (m_dataChanged)
-    resetSimulation();
+  resetSimulation();
 
   for (auto i = 1u; i < numberOfSteps(); ++i)
     calculateNewPositions(i);

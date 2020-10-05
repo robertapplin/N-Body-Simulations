@@ -7,7 +7,6 @@
 #include "Vector2D.h"
 
 #include <memory>
-#include <string>
 #include <vector>
 
 namespace Simulator {
