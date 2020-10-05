@@ -16,7 +16,16 @@ jobs:
     - name: Install dependencies
       run: |
         conda install -c anaconda pyqt
-        conda install -c conda-forge matplotlib pytest
+        conda install -c conda-forge matplotlib pybind11 pytest
+    - name: Build and Install Packages
+      uses: ashutoshvarma/action-cmake-build@master
+      with:
+        build-dir: ${{ runner.workspace }}/build
+        cc: gcc
+        cxx: g++
+        build-type: Release
+        configure-options: -DCMAKE_C_FLAGS=-w32 -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
+        install-build: true  
     - name: Run Python System Tests
       run: |
         pytest tests/system_tests/python/

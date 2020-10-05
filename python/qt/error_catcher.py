@@ -1,5 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QMessageBox
 
 from functools import wraps
@@ -25,16 +26,16 @@ class ErrorReporter(QMessageBox):
             self.exec_()
 
 
-def catch_errors(silent: bool = False):
+def catch_errors():
     """A decorator function used to catch errors or exceptions in class member functions."""
 
     def decorator(function):
         @wraps(function)
         def wrapper(self, *args, **kwargs):
             try:
-                function(self, *args, **kwargs)
+                return function(self, *args, **kwargs)
             except Exception as ex:
-                if not silent:
+                if QCoreApplication.applicationName() != "test":
                     ErrorReporter(str(ex))
         return wrapper
     return decorator
