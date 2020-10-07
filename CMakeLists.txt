@@ -12,18 +12,13 @@ endif()
 
 project(NBodySimulations)
 
-include_directories("${CMAKE_SOURCE_DIR}/cpp/inc/inc")
+set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc/inc)
+
+include_directories(${HEADER_DIRECTORY})
 
 file(GLOB SOURCE_FILES "cpp/simulator/src/*.cpp")
 file(GLOB HEADER_FILES "cpp/simulator/inc/inc/*.h")
 file(GLOB EXPORT_FILES "python/exports/*.cpp")
-file(GLOB SYSTEM_TEST_SOURCE_FILES "tests/system_tests/cpp/*.cpp")
-file(GLOB SYSTEM_TEST_HEADER_FILES "tests/system_tests/cpp/*.h")
-
-add_library(NBodySimulationsSystemTests
-            ${SYSTEM_TEST_SOURCE_FILES}
-            ${SYSTEM_TEST_HEADER_FILES}
-)
 
 find_package(pybind11 REQUIRED)
 pybind11_add_module(NBodySimulations
@@ -38,3 +33,5 @@ install(TARGETS NBodySimulations
         COMPONENT python
         LIBRARY DESTINATION "${PYTHON_LIBRARY_DIR}"
 )
+
+add_subdirectory(tests)
