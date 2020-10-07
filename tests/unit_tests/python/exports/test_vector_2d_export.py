@@ -1,7 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 import pytest
-from nbodysimulations import Vector2D
+from NBodySimulations import Vector2D
 
 
 @pytest.fixture

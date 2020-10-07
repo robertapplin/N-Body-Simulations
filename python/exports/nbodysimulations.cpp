@@ -9,7 +9,7 @@ void export_NBodySimulator(py::module &);
 
 namespace mcl {
 
-PYBIND11_MODULE(nbodysimulations, m) {
+PYBIND11_MODULE(NBodySimulations, m) {
   export_Vector2D(m);
   export_NBodySimulator(m);
 }

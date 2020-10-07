@@ -19,15 +19,15 @@ file(GLOB HEADER_FILES "cpp/simulator/inc/inc/*.h")
 file(GLOB PYTHON_FILES "python/exports/*.cpp")
 
 find_package(pybind11 REQUIRED)
-pybind11_add_module(nbodysimulations
+pybind11_add_module(NBodySimulations
 	${SOURCE_FILES}
 	${HEADER_FILES}
 	${PYTHON_FILES}
 )
 
-target_link_libraries(nbodysimulations PUBLIC)
+target_link_libraries(NBodySimulations PUBLIC)
 
-install(TARGETS nbodysimulations
+install(TARGETS NBodySimulations
   COMPONENT python
   LIBRARY DESTINATION "${PYTHON_LIBRARY_DIR}"
   )

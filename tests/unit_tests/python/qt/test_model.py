@@ -5,7 +5,7 @@ import sys
 
 from PyQt5.QtCore import QCoreApplication
 from directory_helper import PYTHON_DIRECTORY
-from nbodysimulations import Vector2D
+from NBodySimulations import Vector2D
 
 # Required to find python modules in parent directories
 sys.path.append(PYTHON_DIRECTORY)

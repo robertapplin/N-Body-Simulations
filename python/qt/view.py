@@ -6,7 +6,7 @@ from plotting.interactive_plot import InteractivePlot
 from qt.add_body_dialog import AddBodyDialog
 from qt.ui.main_window_ui import Ui_MainWindow
 
-from nbodysimulations import Vector2D
+from NBodySimulations import Vector2D
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
