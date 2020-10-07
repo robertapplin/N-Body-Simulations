@@ -1,7 +1,7 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#include "../inc/inc/NBodySimulator.h"
-#include "../inc/inc/SimulationConstants.h"
+#include "NBodySimulator.h"
+#include "SimulationConstants.h"
 
 #include <algorithm>
 #include <cmath>

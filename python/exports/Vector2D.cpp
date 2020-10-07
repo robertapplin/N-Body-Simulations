@@ -1,6 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#include "../../cpp/simulator/inc/inc/Vector2D.h"
+#include "Vector2D.h"
 
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>

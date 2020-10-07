@@ -12,12 +12,12 @@ endif()
 
 project(NBodySimulations)
 
-set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc/inc)
+set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc)
 
 include_directories(${HEADER_DIRECTORY})
 
 file(GLOB SOURCE_FILES "cpp/simulator/src/*.cpp")
-file(GLOB HEADER_FILES "cpp/simulator/inc/inc/*.h")
+file(GLOB HEADER_FILES "cpp/simulator/inc/*.h")
 file(GLOB EXPORT_FILES "python/exports/*.cpp")
 
 find_package(pybind11 REQUIRED)

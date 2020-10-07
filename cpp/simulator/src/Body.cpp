@@ -1,6 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#include "../inc/inc/Body.h"
+#include "Body.h"
 
 namespace Simulator {
 
