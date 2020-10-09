@@ -24,6 +24,7 @@ set(EXPORT_FILES
 
 find_package(pybind11 REQUIRED)
 pybind11_add_module(NBodySimulations
+                    OBJECT
                     ${SOURCE_FILES}
                     ${HEADER_FILES}
                     ${EXPORT_FILES}

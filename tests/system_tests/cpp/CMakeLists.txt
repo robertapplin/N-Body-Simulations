@@ -16,4 +16,5 @@ target_include_directories(NBodySimulationsSystemTests
 target_link_libraries(NBodySimulationsSystemTests 
                       PRIVATE
                       GTest::GTest
+                      NBodySimulations
 )

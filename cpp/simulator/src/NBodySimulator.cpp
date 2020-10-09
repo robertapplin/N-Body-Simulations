@@ -15,6 +15,8 @@ NBodySimulator::NBodySimulator()
       m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)),
       m_bodyData(), m_dataChanged(true) {}
 
+NBodySimulator::~NBodySimulator() { m_bodyData.clear(); }
+
 void NBodySimulator::removeBody(std::string const &name) {
   m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));
   m_dataChanged = true;
