@@ -6,28 +6,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-
 project(NBodySimulations)
 
-include_directories("${CMAKE_SOURCE_DIR}/cpp/inc/inc")
+set(SOURCE_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/src)
+set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc)
+set(EXPORT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/exports)
 
-file(GLOB SOURCE_FILES "cpp/simulator/src/*.cpp")
-file(GLOB HEADER_FILES "cpp/simulator/inc/inc/*.h")
-file(GLOB PYTHON_FILES "python/exports/*.cpp")
+include_directories(${HEADER_DIRECTORY})
 
-find_package(pybind11 REQUIRED)
-pybind11_add_module(nbodysimulations
-	${SOURCE_FILES}
-	${HEADER_FILES}
-	${PYTHON_FILES}
-)
+add_subdirectory(external)
 
-target_link_libraries(nbodysimulations PUBLIC)
-
-install(TARGETS nbodysimulations
-  COMPONENT python
-  LIBRARY DESTINATION "${PYTHON_LIBRARY_DIR}"
-  )
+add_subdirectory(cpp)
+add_subdirectory(tests)

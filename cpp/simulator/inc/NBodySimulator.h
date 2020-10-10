@@ -18,6 +18,7 @@ class NBodySimulator {
 
 public:
   NBodySimulator();
+  ~NBodySimulator();
 
   // Removes the body with the specified name from the simulator.
   void removeBody(std::string const &name);

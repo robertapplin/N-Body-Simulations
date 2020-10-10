@@ -1,7 +1,7 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#include "../inc/inc/NBodySimulator.h"
-#include "../inc/inc/SimulationConstants.h"
+#include "NBodySimulator.h"
+#include "SimulationConstants.h"
 
 #include <algorithm>
 #include <cmath>
@@ -14,6 +14,8 @@ NBodySimulator::NBodySimulator()
     : m_timeStep(1.0), m_duration(500.0),
       m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)),
       m_bodyData(), m_dataChanged(true) {}
+
+NBodySimulator::~NBodySimulator() { m_bodyData.clear(); }
 
 void NBodySimulator::removeBody(std::string const &name) {
   m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));

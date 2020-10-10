@@ -13,19 +13,24 @@ jobs:
       uses: actions/checkout@v2
     - name: Setup Miniconda
       uses: s-weigand/setup-conda@v1
-    - name: Install dependencies
+    - name: Install Dependencies
       run: |
         conda install -c anaconda pyqt
         conda install -c conda-forge matplotlib pybind11 pytest
-    - name: Build and Install Packages
-      uses: ashutoshvarma/action-cmake-build@master
-      with:
-        build-dir: ${{ runner.workspace }}/build
-        cc: gcc
-        cxx: g++
-        build-type: Release
-        configure-options: -DCMAKE_C_FLAGS=-w32 -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
-        install-build: true  
+    - name: Build Project
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
+        cmake --build . --config Release
+    - name: Install NBodySimulations as a Python Module
+      run: |
+        cd build
+        cmake --install .
+    - name: Run Cpp System Tests
+      run: |
+        cd build/tests/system_tests/cpp/Release
+        ./NBodySimulationsSystemTests.exe
     - name: Run Python System Tests
       run: |
         pytest tests/system_tests/python/
