@@ -24,13 +24,6 @@ protected:
 
 TEST_F(
     NBodySimulatorTest,
-    test_that_a_one_body_simulation_with_a_stationary_body_returns_the_expected_body_positions2) {
-
-  ASSERT_EQ(1, 2);
-}
-
-TEST_F(
-    NBodySimulatorTest,
     test_that_a_one_body_simulation_with_a_stationary_body_returns_the_expected_body_positions) {
 
   m_simulator->addBody("Sun", 1.0, {1.0, 2.0}, {0.0, 0.0});
