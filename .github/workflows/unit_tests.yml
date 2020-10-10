@@ -22,7 +22,7 @@ jobs:
         mkdir build
         cd build
         cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe -G "Visual Studio 15 2017 Win64"
-        cmake --build .
+        cmake --build . --config Release
     - name: Install NBodySimulations
       run: |
         dir
