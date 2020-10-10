@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Setup Miniconda
       uses: s-weigand/setup-conda@v1
-    - name: Install dependencies
+    - name: Install Dependencies
       run: |
         conda install -c anaconda pyqt
         conda install -c conda-forge pybind11 pytest
@@ -23,9 +23,9 @@ jobs:
         cd build
         cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
         cmake --build . --config Release
-    - name: Install NBodySimulations
+    - name: Install NBodySimulations as a Python Module
       run: |
-        dir
+        cd build
         cmake --install .
     - name: Run Python Unit Tests
       run: |
