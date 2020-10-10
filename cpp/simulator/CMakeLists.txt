@@ -22,15 +22,24 @@ set(EXPORT_FILES
     ${EXPORT_DIRECTORY}/Vector2D.cpp
 )
 
+# Creates a MODULE library which cannot be target-linked, but can be installed for python.
 find_package(pybind11 REQUIRED)
 pybind11_add_module(NBodySimulations
-                    OBJECT
+                    MODULE
                     ${SOURCE_FILES}
                     ${HEADER_FILES}
                     ${EXPORT_FILES}
 )
 
+# Creates a STATIC library which can be target-linked, and therefore tested.
+add_library(NBodySimulationsTestable
+            STATIC
+            ${SOURCE_FILES}
+            ${HEADER_FILES}
+)
+
 target_link_libraries(NBodySimulations PUBLIC)
+target_link_libraries(NBodySimulationsTestable PUBLIC)
 
 install(TARGETS NBodySimulations
         COMPONENT python

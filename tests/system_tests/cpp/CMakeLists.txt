@@ -9,5 +9,5 @@ add_executable(NBodySimulationsSystemTests main.cpp ${TEST_FILES})
 target_link_libraries(NBodySimulationsSystemTests 
                       PRIVATE
                       gtest
-                      NBodySimulations
+                      NBodySimulationsTestable
 )
