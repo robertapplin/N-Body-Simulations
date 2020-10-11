@@ -2,6 +2,7 @@
 # Authored by Robert Applin, 2020
 set(TEST_FILES
     BodyTest.cpp
+    SimulationConstantsTest.cpp
     Vector2DTest.cpp
 )
 
