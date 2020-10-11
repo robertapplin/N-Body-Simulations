@@ -4,7 +4,7 @@
 #define NBodySimulator_H
 
 #include "Body.h"
-#include "SpaceTimeBodyCoords.h"
+#include "BodyPositions.h"
 #include "Vector2D.h"
 
 #include <map>

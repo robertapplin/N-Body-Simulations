@@ -1,6 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#include "SpaceTimeBodyCoords.h"
+#include "BodyPositions.h"
 
 namespace Simulator {
 

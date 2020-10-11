@@ -2,17 +2,17 @@
 # Authored by Robert Applin, 2020
 set(SOURCE_FILES
     ${SOURCE_DIRECTORY}/Body.cpp
+    ${SOURCE_DIRECTORY}/BodyPositions.cpp
     ${SOURCE_DIRECTORY}/NBodySimulator.cpp
     ${SOURCE_DIRECTORY}/SimulationConstants.cpp
-    ${SOURCE_DIRECTORY}/SpaceTimeBodyCoords.cpp
     ${SOURCE_DIRECTORY}/Vector2D.cpp
 )
 
 set(HEADER_FILES
     ${HEADER_DIRECTORY}/Body.h
+    ${HEADER_DIRECTORY}/BodyPositions.h
     ${HEADER_DIRECTORY}/NBodySimulator.h
     ${HEADER_DIRECTORY}/SimulationConstants.h
-    ${HEADER_DIRECTORY}/SpaceTimeBodyCoords.h
     ${HEADER_DIRECTORY}/Vector2D.h
 )
 
