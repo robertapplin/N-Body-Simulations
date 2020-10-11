@@ -27,6 +27,10 @@ jobs:
       run: |
         cd build
         cmake --install .
+    - name: Run Cpp Unit Tests
+      run: |
+        cd build/tests/unit_tests/cpp/Release
+        ./NBodySimulationsUnitTests.exe
     - name: Run Python Unit Tests
       run: |
         pytest tests/unit_tests/python/
