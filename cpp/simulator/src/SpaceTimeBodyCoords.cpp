@@ -4,45 +4,34 @@
 
 namespace Simulator {
 
-// Methods for the SpaceTimeCoord class.
-SpaceTimeCoord::SpaceTimeCoord(double time, Vector2D const &position)
-    : m_time(time), m_position(position) {}
-
-Vector2D &SpaceTimeCoord::position() { return m_position; }
-
-// Methods for the SpaceTimeBodyCoords class.
-SpaceTimeBodyCoords::SpaceTimeBodyCoords(std::unique_ptr<Body> body,
-                                         double time, Vector2D const &position)
-    : m_body(std::move(body)), m_spaceTimeCoords() {
-  m_spaceTimeCoords = std::vector<std::unique_ptr<SpaceTimeCoord>>();
-  m_spaceTimeCoords.emplace_back(
-      std::make_unique<SpaceTimeCoord>(time, position));
+BodyPositions::BodyPositions(std::unique_ptr<Body> body, double time,
+                             Vector2D const &position)
+    : m_body(std::move(body)), m_positions() {
+  m_positions[time] = position;
 }
 
-SpaceTimeBodyCoords::~SpaceTimeBodyCoords() {
+BodyPositions::~BodyPositions() {
   m_body.reset();
-  m_spaceTimeCoords.clear();
+  m_positions.clear();
 }
 
-void SpaceTimeBodyCoords::resetCoords() {
-  m_spaceTimeCoords.resize(1);
+void BodyPositions::resetCoords() {
+  m_positions.erase(std::next(m_positions.begin()), m_positions.end());
   m_body->resetBody();
 }
 
-Body &SpaceTimeBodyCoords::body() const { return *m_body.get(); }
+Body &BodyPositions::body() const { return *m_body.get(); }
 
-void SpaceTimeBodyCoords::addPosition(double time, Vector2D const &position) {
-  m_spaceTimeCoords.emplace_back(
-      std::make_unique<SpaceTimeCoord>(time, position));
+void BodyPositions::addPosition(double time, Vector2D const &position) {
+  if (m_positions.find(time) != m_positions.end())
+    throw std::runtime_error("A position for " + m_body->name() + " at time " +
+                             std::to_string(time) + " already exists.");
+
+  m_positions[time] = position;
 }
 
-std::vector<Vector2D> SpaceTimeBodyCoords::simulatedPositions() const {
-  std::vector<Vector2D> positions;
-  positions.reserve(m_spaceTimeCoords.size());
-
-  for (auto const &coord : m_spaceTimeCoords)
-    positions.emplace_back(coord->position());
-  return positions;
+std::map<double, Vector2D> BodyPositions::positions() const {
+  return m_positions;
 }
 
 } // namespace Simulator

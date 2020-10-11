@@ -28,7 +28,7 @@ void NBodySimulator::addBody(std::string const &name, double mass,
   if (hasBody(name))
     throw std::invalid_argument("The body '" + name + "' already exists.");
 
-  m_bodyData.emplace_back(std::make_unique<SpaceTimeBodyCoords>(
+  m_bodyData.emplace_back(std::make_unique<BodyPositions>(
       std::make_unique<Body>(name, mass, position, velocity), 0.0, position));
   m_dataChanged = true;
 }
@@ -105,16 +105,16 @@ void NBodySimulator::runSimulation() {
 
   resetSimulation();
 
-  for (auto i = 1u; i < numberOfSteps(); ++i)
+  for (auto i = 1u; i <= numberOfSteps(); ++i)
     calculateNewPositions(i);
 
   m_dataChanged = false;
 }
 
-std::vector<Vector2D>
+std::map<double, Vector2D>
 NBodySimulator::simulatedPositions(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->simulatedPositions();
+  return m_bodyData[bodyIndex]->positions();
 }
 
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
@@ -182,8 +182,8 @@ Body &NBodySimulator::findBody(std::string const &name) const {
 }
 
 std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
-  auto const hasName = [&](std::unique_ptr<SpaceTimeBodyCoords> const &coords) {
-    return coords->body().name() == name;
+  auto const hasName = [&](std::unique_ptr<BodyPositions> const &positions) {
+    return positions->body().name() == name;
   };
 
   auto const iter = std::find_if(m_bodyData.begin(), m_bodyData.end(), hasName);
