@@ -2,6 +2,8 @@
 // Authored by Robert Applin, 2020
 #include "BodyPositions.h"
 
+#include <stdexcept>
+
 namespace Simulator {
 
 BodyPositions::BodyPositions(std::unique_ptr<Body> body, double time,
