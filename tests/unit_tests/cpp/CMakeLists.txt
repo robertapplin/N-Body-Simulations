@@ -3,6 +3,7 @@
 set(TEST_FILES
     BodyPositionsTest.cpp
     BodyTest.cpp
+    NBodySimulatorTest.cpp
     SimulationConstantsTest.cpp
     Vector2DTest.cpp
 )
