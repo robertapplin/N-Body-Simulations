@@ -126,4 +126,6 @@ def test_that_simulatedPositions_is_exposed_to_python(simulator):
     simulator.runSimulation()
     results = simulator.simulatedPositions("Sun")
 
-    assert results[:4] == [Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), Vector2D(0.0, 0.0)]
+    assert results[0.0] == Vector2D(0.0, 0.0)
+    assert results[1.0] == Vector2D(0.0, 0.0)
+    assert results[2.0] == Vector2D(0.0, 0.0)

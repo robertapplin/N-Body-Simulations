@@ -178,7 +178,7 @@ def test_that_simulation_results_returns_a_dict_with_the_correct_number_of_bodie
     model.run_simulation()
     results = model.simulation_results()
 
-    number_of_steps = int(model.duration() / model.time_step())
+    number_of_steps = int(model.duration() / model.time_step()) + 1
     assert len(results) == model.number_of_bodies()
     assert len(results["Sun"]) == number_of_steps
     assert len(results["Earth"]) == number_of_steps
