@@ -29,7 +29,7 @@ void NBodySimulator::addBody(std::string const &name, double mass,
     throw std::invalid_argument("The body '" + name + "' already exists.");
 
   m_bodyData.emplace_back(std::make_unique<BodyPositions>(
-      std::make_unique<Body>(name, mass, position, velocity), 0.0, position));
+      std::make_unique<Body>(name, mass, position, velocity)));
   m_dataChanged = true;
 }
 
@@ -164,7 +164,7 @@ void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
 
 void NBodySimulator::resetSimulation() {
   for (auto const &data : m_bodyData)
-    data->resetCoords();
+    data->resetPositions();
 }
 
 std::size_t NBodySimulator::numberOfSteps() const {

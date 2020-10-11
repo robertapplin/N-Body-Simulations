@@ -15,12 +15,11 @@ namespace Simulator {
 class BodyPositions {
 
 public:
-  BodyPositions(std::unique_ptr<Body> body, double time,
-                Vector2D const &position);
+  BodyPositions(std::unique_ptr<Body> body);
   ~BodyPositions();
 
   // Removes the positions calculated during previous simulations.
-  void resetCoords();
+  void resetPositions();
 
   // Return the body associated with the position coordinates.
   Body &body() const;

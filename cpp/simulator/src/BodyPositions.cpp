@@ -6,10 +6,9 @@
 
 namespace Simulator {
 
-BodyPositions::BodyPositions(std::unique_ptr<Body> body, double time,
-                             Vector2D const &position)
+BodyPositions::BodyPositions(std::unique_ptr<Body> body)
     : m_body(std::move(body)), m_positions() {
-  m_positions[time] = position;
+  m_positions[0.0] = m_body->initialPosition();
 }
 
 BodyPositions::~BodyPositions() {
@@ -17,7 +16,7 @@ BodyPositions::~BodyPositions() {
   m_positions.clear();
 }
 
-void BodyPositions::resetCoords() {
+void BodyPositions::resetPositions() {
   m_positions.erase(std::next(m_positions.begin()), m_positions.end());
   m_body->resetBody();
 }
