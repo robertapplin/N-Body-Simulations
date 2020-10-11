@@ -4,9 +4,10 @@
 #define NBodySimulator_H
 
 #include "Body.h"
-#include "SpaceTimeBodyCoords.h"
+#include "BodyPositions.h"
 #include "Vector2D.h"
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -69,7 +70,8 @@ public:
   void runSimulation();
 
   // Return the simulated locations of the specified body.
-  std::vector<Vector2D> simulatedPositions(std::string const &bodyName) const;
+  std::map<double, Vector2D>
+  simulatedPositions(std::string const &bodyName) const;
 
 private:
   // Calculates the new positions of the bodies at the next time step.
@@ -102,7 +104,7 @@ private:
   double m_gravitationalConstant;
 
   // The vector containing each body and their simulated positions.
-  std::vector<std::unique_ptr<SpaceTimeBodyCoords>> m_bodyData;
+  std::vector<std::unique_ptr<BodyPositions>> m_bodyData;
   // A flag to notify when the data changes in-between simulations.
   bool m_dataChanged;
 };

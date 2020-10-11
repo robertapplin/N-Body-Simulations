@@ -6,33 +6,18 @@
 #include "Body.h"
 #include "Vector2D.h"
 
+#include <map>
 #include <memory>
-#include <vector>
 
 namespace Simulator {
 
-// A class used to store a spacial coordinate for a given time.
-class SpaceTimeCoord {
-
-public:
-  SpaceTimeCoord(double time, Vector2D const &position);
-  ~SpaceTimeCoord() = default;
-
-  // Returns the stored position.
-  Vector2D &position();
-
-private:
-  double m_time;
-  Vector2D m_position;
-};
-
 // A class used to store the positions of a body over a period of time.
-class SpaceTimeBodyCoords {
+class BodyPositions {
 
 public:
-  SpaceTimeBodyCoords(std::unique_ptr<Body> body, double time,
-                      Vector2D const &position);
-  ~SpaceTimeBodyCoords();
+  BodyPositions(std::unique_ptr<Body> body, double time,
+                Vector2D const &position);
+  ~BodyPositions();
 
   // Removes the positions calculated during previous simulations.
   void resetCoords();
@@ -44,11 +29,11 @@ public:
   void addPosition(double time, Vector2D const &position);
 
   // Returns the body locations calculated during a simulation.
-  std::vector<Vector2D> simulatedPositions() const;
+  std::map<double, Vector2D> positions() const;
 
 private:
   std::unique_ptr<Body> m_body;
-  std::vector<std::unique_ptr<SpaceTimeCoord>> m_spaceTimeCoords;
+  std::map<double, Vector2D> m_positions;
 };
 
 } // namespace Simulator

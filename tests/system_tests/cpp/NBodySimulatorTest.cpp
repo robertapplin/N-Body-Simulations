@@ -32,13 +32,13 @@ TEST_F(
 
   auto const sunPosition = m_simulator->simulatedPositions("Sun");
 
-  assertEqualVectors({1.0, 2.0}, sunPosition[0]);
-  assertEqualVectors({1.0, 2.0}, sunPosition[1]);
-  assertEqualVectors({1.0, 2.0}, sunPosition[2]);
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(0.0));
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(1.0));
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(2.0));
 
-  assertEqualVectors({1.0, 2.0}, sunPosition[497]);
-  assertEqualVectors({1.0, 2.0}, sunPosition[498]);
-  assertEqualVectors({1.0, 2.0}, sunPosition[499]);
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(498.0));
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(499.0));
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(500.0));
 }
 
 TEST_F(
@@ -51,13 +51,13 @@ TEST_F(
 
   auto const sunPosition = m_simulator->simulatedPositions("Sun");
 
-  assertEqualVectors({1.0, 2.0}, sunPosition[0]);
-  assertEqualVectors({2.0, 3.0}, sunPosition[1]);
-  assertEqualVectors({3.0, 4.0}, sunPosition[2]);
+  assertEqualVectors({1.0, 2.0}, sunPosition.at(0.0));
+  assertEqualVectors({2.0, 3.0}, sunPosition.at(1.0));
+  assertEqualVectors({3.0, 4.0}, sunPosition.at(2.0));
 
-  assertEqualVectors({498.0, 499.0}, sunPosition[497]);
-  assertEqualVectors({499.0, 500.0}, sunPosition[498]);
-  assertEqualVectors({500.0, 501.0}, sunPosition[499]);
+  assertEqualVectors({499.0, 500.0}, sunPosition.at(498.0));
+  assertEqualVectors({500.0, 501.0}, sunPosition.at(499.0));
+  assertEqualVectors({501.0, 502.0}, sunPosition.at(500.0));
 }
 
 TEST_F(NBodySimulatorTest,
@@ -70,29 +70,29 @@ TEST_F(NBodySimulatorTest,
 
   auto const sunPosition = m_simulator->simulatedPositions("Sun");
 
-  assertEqualVectors({0.0000000000, 0.0000000000}, sunPosition[0]);
-  assertEqualVectors({0.0000000009, 0.0000000000}, sunPosition[1]);
-  assertEqualVectors({0.0000000027, 0.0000000000}, sunPosition[2]);
-  assertEqualVectors({0.0000000053, 0.0000000000}, sunPosition[3]);
-  assertEqualVectors({0.0000000089, 0.0000000001}, sunPosition[4]);
+  assertEqualVectors({0.0000000000, 0.0000000000}, sunPosition.at(0.0));
+  assertEqualVectors({0.0000000009, 0.0000000000}, sunPosition.at(1.0));
+  assertEqualVectors({0.0000000027, 0.0000000000}, sunPosition.at(2.0));
+  assertEqualVectors({0.0000000053, 0.0000000000}, sunPosition.at(3.0));
+  assertEqualVectors({0.0000000089, 0.0000000001}, sunPosition.at(4.0));
 
-  assertEqualVectors({0.0000005045, 0.0000237340}, sunPosition[495]);
-  assertEqualVectors({0.0000004755, 0.0000237419}, sunPosition[496]);
-  assertEqualVectors({0.0000004473, 0.0000237492}, sunPosition[497]);
-  assertEqualVectors({0.0000004200, 0.0000237562}, sunPosition[498]);
-  assertEqualVectors({0.0000003935, 0.0000237627}, sunPosition[499]);
+  assertEqualVectors({0.0000004755, 0.0000237419}, sunPosition.at(496.0));
+  assertEqualVectors({0.0000004473, 0.0000237492}, sunPosition.at(497.0));
+  assertEqualVectors({0.0000004200, 0.0000237562}, sunPosition.at(498.0));
+  assertEqualVectors({0.0000003935, 0.0000237627}, sunPosition.at(499.0));
+  assertEqualVectors({0.0000003679, 0.0000237687}, sunPosition.at(500.0));
 
   auto const earthPosition = m_simulator->simulatedPositions("Earth");
 
-  assertEqualVectors({1.0000000000, 0.0000000000}, earthPosition[0]);
-  assertEqualVectors({0.9997040894, 0.0149999999}, earthPosition[1]);
-  assertEqualVectors({0.9991121928, 0.0299955589}, earthPosition[2]);
-  assertEqualVectors({0.9982242599, 0.0449822301}, earthPosition[3]);
-  assertEqualVectors({0.9970402648, 0.0599555601}, earthPosition[4]);
+  assertEqualVectors({1.0000000000, 0.0000000000}, earthPosition.at(0.0));
+  assertEqualVectors({0.9997040894, 0.0149999999}, earthPosition.at(1.0));
+  assertEqualVectors({0.9991121928, 0.0299955589}, earthPosition.at(2.0));
+  assertEqualVectors({0.9982242599, 0.0449822301}, earthPosition.at(3.0));
+  assertEqualVectors({0.9970402648, 0.0599555601}, earthPosition.at(4.0));
 
-  assertEqualVectors({0.8318481788, -0.4863409689}, earthPosition[495]);
-  assertEqualVectors({0.8415090939, -0.4739573920}, earthPosition[496]);
-  assertEqualVectors({0.8508936079, -0.4614181317}, earthPosition[497]);
-  assertEqualVectors({0.8600004944, -0.4487283131}, earthPosition[498]);
-  assertEqualVectors({0.8688285829, -0.4358930165}, earthPosition[499]);
+  assertEqualVectors({0.8415090939, -0.4739573920}, earthPosition.at(496.0));
+  assertEqualVectors({0.8508936079, -0.4614181317}, earthPosition.at(497.0));
+  assertEqualVectors({0.8600004944, -0.4487283131}, earthPosition.at(498.0));
+  assertEqualVectors({0.8688285829, -0.4358930165}, earthPosition.at(499.0));
+  assertEqualVectors({0.8773767570, -0.4229172785}, earthPosition.at(500.0));
 }

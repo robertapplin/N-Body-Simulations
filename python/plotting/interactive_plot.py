@@ -39,7 +39,7 @@ class InteractivePlot:
     # Temporarily in place of a simulation
     def plot_trail(self, body_name: str, positions: list) -> None:
         xs, ys = [], []
-        for position in positions:
+        for position in positions.values():
             xs.append(position.x)
             ys.append(position.y)
 
