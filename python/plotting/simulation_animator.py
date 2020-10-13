@@ -47,6 +47,7 @@ class SimulationAnimator:
         return self._lines
 
     def _time(self) -> float:
+        self.t = 0.0
         t_max = self._duration()
         time_step = self._time_step()
 
