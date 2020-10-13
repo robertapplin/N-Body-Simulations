@@ -14,6 +14,7 @@ class SimulationAnimator:
         self._animation = None
         self._simulation_data = None
         self._playing = False
+        self.t = 0.0
 
     def set_simulation_data(self, simulation_data: dict) -> None:
         self._simulation_data = simulation_data
@@ -22,12 +23,11 @@ class SimulationAnimator:
         return self._simulation_data
 
     def is_animating(self) -> bool:
-        return self._playing
+        return self._animation is not None
 
     def stop(self) -> None:
-        self.pause()
-        if self._animation is not None:
-            self._animation.event_source.stop()
+        self.t = 0.0
+        self._playing = False
 
     def pause(self) -> None:
         self._playing = False
@@ -47,13 +47,13 @@ class SimulationAnimator:
         return self._lines
 
     def _time(self) -> float:
-        t, t_max = 0.0, self._duration()
+        t_max = self._duration()
         time_step = self._time_step()
 
-        while t < t_max:
+        while self.t < t_max:
             if self._playing:
-                t += time_step
-            yield t
+                self.t += time_step
+            yield self.t
 
     def _time_step(self):
         times = list(list(self._simulation_data.values())[0].keys())

@@ -41,6 +41,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbYVelocity.valueChanged.connect(lambda value: self.emit_y_velocity_changed(value))
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+        self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
 
     def emit_selected_body_changed(self, text: str) -> None:
@@ -75,6 +76,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def emit_play_pause_clicked(self) -> None:
         self.playPauseClickedSignal.emit()
+
+    def handle_stop_clicked(self) -> None:
+        self.set_as_playing(False)
+        self.interactive_plot.stop_animation()
 
     def clear(self) -> None:
         self.interactive_plot.clear()
@@ -158,7 +163,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbYVelocity.setEnabled(enable)
         self.dsbTimeStep.setEnabled(enable)
         self.dsbDuration.setEnabled(enable)
-        self.pbReset.setEnabled(enable)
+        self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
 
     @staticmethod
