@@ -12,8 +12,8 @@ from qt.error_catcher import catch_errors
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
     selectedBodyChangedSignal = pyqtSignal(str)
-    removeBodySignal = pyqtSignal()
-    addBodySignal = pyqtSignal()
+    removeBodyClickedSignal = pyqtSignal()
+    addBodyClickedSignal = pyqtSignal()
     massChangedSignal = pyqtSignal(str, float)
     xPositionChangedSignal = pyqtSignal(str, float)
     yPositionChangedSignal = pyqtSignal(str, float)
@@ -21,7 +21,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     yVelocityChangedSignal = pyqtSignal(str, float)
     timeStepChangedSignal = pyqtSignal(float)
     durationChangedSignal = pyqtSignal(float)
-    playPauseSignal = pyqtSignal()
+    playPauseClickedSignal = pyqtSignal()
 
     def __init__(self, parent=None):
         super(NBodySimulationsView, self).__init__()
@@ -47,10 +47,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.selectedBodyChangedSignal.emit(text)
 
     def emit_remove_body_clicked(self) -> None:
-        self.removeBodySignal.emit()
+        self.removeBodyClickedSignal.emit()
 
     def emit_add_body_clicked(self) -> None:
-        self.addBodySignal.emit()
+        self.addBodyClickedSignal.emit()
 
     def emit_mass_changed(self, value: float) -> None:
         self.massChangedSignal.emit(self.selected_body(), value)
@@ -74,7 +74,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.durationChangedSignal.emit(value)
 
     def emit_play_pause_clicked(self) -> None:
-        self.playPauseSignal.emit()
+        self.playPauseClickedSignal.emit()
 
     def clear(self) -> None:
         self.interactive_plot.clear()
@@ -88,20 +88,24 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def remove_body(self, body_name: str) -> None:
         self.cbBodyNames.removeItem(self.cbBodyNames.currentIndex())
-        self.interactive_plot.remove_body(body_name)
+        if not self.interactive_plot.is_animating():
+            self.interactive_plot.remove_body(body_name)
+            self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
         for body_name, parameters in body_parameters.items():
             self.cbBodyNames.addItem(body_name)
-            self.interactive_plot.draw_body(body_name, parameters[1].x, parameters[1].y)
+            self.interactive_plot.add_body(body_name, parameters[1].x, parameters[1].y)
 
+        self.interactive_plot.draw()
         self.cbBodyNames.setCurrentIndex(0)
 
     def add_body(self, body_name: str, position: Vector2D) -> None:
         self.cbBodyNames.addItem(body_name)
         self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
 
-        self.interactive_plot.draw_body(body_name, position.x, position.y)
+        self.interactive_plot.add_body(body_name, position.x, position.y)
+        self.interactive_plot.draw()
 
     def set_time_step(self, time_step: float) -> None:
         self.dsbTimeStep.blockSignals(True)

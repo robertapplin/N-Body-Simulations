@@ -13,7 +13,7 @@ class SimulationAnimator:
 
         self._animation = None
         self._simulation_data = None
-        self._pause = False
+        self._playing = False
 
     def set_simulation_data(self, simulation_data: dict) -> None:
         self._simulation_data = simulation_data
@@ -21,17 +21,22 @@ class SimulationAnimator:
     def simulation_data(self) -> dict:
         return self._simulation_data
 
+    def is_animating(self) -> bool:
+        return self._playing
+
     def stop(self) -> None:
+        self.pause()
         if self._animation is not None:
             self._animation.event_source.stop()
 
     def pause(self) -> None:
-        self._pause = True
+        self._playing = False
 
     def play(self) -> None:
-        self._pause = False
+        self._playing = True
 
     def start(self, figure: FigureCanvas, lines: dict) -> None:
+        self.play()
         self._lines = lines
         self._animation = FuncAnimation(figure, self._update_body_positions, self._time, interval=3)
 
@@ -46,7 +51,7 @@ class SimulationAnimator:
         time_step = self._time_step()
 
         while t < t_max:
-            if not self._pause:
+            if self._playing:
                 t += time_step
             yield t
 

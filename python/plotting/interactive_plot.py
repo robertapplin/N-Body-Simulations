@@ -30,19 +30,29 @@ class InteractivePlot:
 
     def clear(self) -> None:
         self._ax.clear()
-
-    def draw_body(self, body_name: str, x: int, y: int) -> None:
-        lines = self._ax.plot(x, y, label=body_name, marker=MARKER, linestyle=LINESTYLE)
-        self._lines[body_name] = lines[0]
-        self.draw()
+        self._lines.clear()
 
     def remove_body(self, body_name: str) -> None:
+        self._animator.stop()
         self._lines[body_name].remove()
         del self._lines[body_name]
-        self.draw()
+
+    def add_body(self, body_name: str, x: int, y: int) -> None:
+        lines = self._ax.plot(x, y, label=body_name, marker=MARKER, linestyle=LINESTYLE)
+        self._lines[body_name] = lines[0]
 
     def set_simulation_data(self, simulation_data: dict) -> None:
+        self.clear()
         self._animator.set_simulation_data(simulation_data)
+        self._initialize_bodies(simulation_data)
+
+    def _initialize_bodies(self, simulation_data: dict) -> None:
+        for body_name, positions in simulation_data.items():
+            first_position = positions[0.0]
+            self.add_body(body_name, first_position.x, first_position.y)
+
+    def is_animating(self) -> bool:
+        return self._animator.is_animating()
 
     def stop_animation(self) -> None:
         self._animator.stop()
