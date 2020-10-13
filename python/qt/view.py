@@ -136,8 +136,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def selected_body(self) -> str:
         return self.cbBodyNames.currentText()
 
-    def set_as_simulating(self, simulating: bool) -> None:
-        self.pbPlayPause.setText("Pause" if simulating else "Play")
+    def set_as_playing(self, playing: bool) -> None:
+        self.pbPlayPause.setText("Pause" if playing else "Play")
 
     def is_simulating(self) -> bool:
         return self.pbPlayPause.text() != "Play"
@@ -163,11 +163,15 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         return dialog.new_body_data()
 
     def start_simulation(self, simulation_results: dict) -> None:
-        for body_name, positions in simulation_results.items():
-            self.interactive_plot.plot_trail(body_name, positions)
+        self.interactive_plot.set_simulation_data(simulation_results)
         self.interactive_plot.update_axes_limits()
-        self.interactive_plot.show_legend()
-        self.interactive_plot.draw()
+        self.interactive_plot.animate()
+
+    def stop_simulation(self) -> None:
+        self.interactive_plot.stop()
 
     def pause_simulation(self) -> None:
-        pass
+        self.interactive_plot.pause()
+
+    def play_simulation(self) -> None:
+        self.interactive_plot.play()
