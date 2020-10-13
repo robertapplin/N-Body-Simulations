@@ -7,6 +7,7 @@ from qt.add_body_dialog import AddBodyDialog
 from qt.ui.main_window_ui import Ui_MainWindow
 
 from NBodySimulations import Vector2D
+from qt.error_catcher import catch_errors
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -162,16 +163,17 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         dialog.exec_()
         return dialog.new_body_data()
 
+    @catch_errors()
     def start_simulation(self, simulation_results: dict) -> None:
         self.interactive_plot.set_simulation_data(simulation_results)
         self.interactive_plot.update_axes_limits()
-        self.interactive_plot.animate()
+        self.interactive_plot.start_animation()
 
     def stop_simulation(self) -> None:
-        self.interactive_plot.stop()
+        self.interactive_plot.stop_animation()
 
     def pause_simulation(self) -> None:
-        self.interactive_plot.pause()
+        self.interactive_plot.pause_animation()
 
     def play_simulation(self) -> None:
-        self.interactive_plot.play()
+        self.interactive_plot.play_animation()

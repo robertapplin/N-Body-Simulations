@@ -1,8 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from simulation_animator import SimulationAnimator
+from plotting.simulation_animator import SimulationAnimator
 
-from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -25,9 +24,6 @@ class InteractivePlot:
         self._lines = dict()
 
         self._animator = SimulationAnimator()
-        self._animation = None
-        self._simulation_data = None
-        self._pause = False
 
     def canvas(self) -> FigureCanvas:
         return self._canvas
@@ -45,58 +41,22 @@ class InteractivePlot:
         del self._lines[body_name]
         self.draw()
 
-    def set_simulation_data(self, body_positions: dict) -> None:
-        self._simulation_data = body_positions
+    def set_simulation_data(self, simulation_data: dict) -> None:
+        self._animator.set_simulation_data(simulation_data)
 
-    def time_step(self):
-        times = list(list(self._simulation_data.values())[0].keys())
-        return abs(times[-1] / (len(times) - 1))
+    def stop_animation(self) -> None:
+        self._animator.stop()
 
-    def duration(self):
-        return list(list(self._simulation_data.values())[0].keys())[-1]
+    def pause_animation(self) -> None:
+        self._animator.pause()
 
-    def stop(self):
-        if self._animation is not None:
-            self._animation.event_source.stop()
+    def play_animation(self) -> None:
+        self._animator.play()
 
-    def pause(self):
-        self._pause = True
-
-    def play(self):
-        self._pause = False
-
-    def time(self):
-        t = 0.0
-        t_max = self.duration()
-        time_step = self.time_step()
-        while t < t_max:
-            if not self._pause:
-                t += time_step
-            yield t
-
-    def animate_bodies(self, time: float) -> dict:
-        for body_name, positions in self._simulation_data.items():
-            self._lines[body_name].set_xdata(positions[time].x)
-            self._lines[body_name].set_ydata(positions[time].y)
-        return self._lines
-
-    def animate(self):
-        self._animation = FuncAnimation(self._figure, self.animate_bodies, self.time, interval=3)
+    def start_animation(self):
+        self._animator.start(self._figure, self._lines)
         self.show_legend()
         self.draw()
-
-    # Temporarily in place of a simulation
-    def plot_trail(self, body_name: str, positions: list) -> None:
-        xs, ys = [], []
-        for position in positions.values():
-            xs.append(position.x)
-            ys.append(position.y)
-
-        if body_name in self._lines.keys():
-            self.remove_body(body_name)
-
-        lines = self._ax.plot(xs, ys, marker=MARKER, label=body_name)
-        self._lines[body_name] = lines[0]
 
     def show_legend(self) -> None:
         self._ax.legend()
@@ -115,7 +75,7 @@ class InteractivePlot:
 
     def _calculate_axes_min_max(self) -> tuple:
         xs, ys = [], []
-        for body_positions in self._simulation_data.values():
+        for body_positions in self._animator.simulation_data().values():
             for position in body_positions.values():
                 xs.append(position.x)
                 ys.append(position.y)
