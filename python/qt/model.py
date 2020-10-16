@@ -103,6 +103,7 @@ class NBodySimulationsModel:
         return True
 
     def has_data_changed(self):
+        """Returns true if the data held by the simulator has changed since the last simulation."""
         return self._simulator.hasDataChanged()
 
     @catch_errors()
