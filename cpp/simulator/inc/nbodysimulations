@@ -1,8 +1,0 @@
-// Project Repository : https://github.com/robertapplin/N-Body-Simulations
-// Authored by Robert Applin, 2020
-#ifndef NBODYSIMULATIONS_LIBRARY_H
-#define NBODYSIMULATIONS_LIBRARY_H
-
-#include "inc/NBodySimulator.h"
-
-#endif
