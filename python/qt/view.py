@@ -79,7 +79,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.playPauseClickedSignal.emit()
 
     def handle_edit_clicked(self) -> None:
-        self.set_as_editing(True)
         self.set_as_playing(False)
         self.interactive_plot.disable_animation()
 
@@ -99,6 +98,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     @catch_errors()
     def remove_body(self, body_name: str) -> None:
+        self.set_as_editing(True)
         self.handle_edit_clicked()
 
         self.cbBodyNames.removeItem(self.cbBodyNames.currentIndex())
@@ -107,6 +107,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
+        self.set_as_editing(True)
         self.handle_edit_clicked()
 
         for body_name, parameters in body_parameters.items():
@@ -118,6 +119,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.cbBodyNames.setCurrentIndex(0)
 
     def add_body(self, body_name: str, position: Vector2D) -> None:
+        self.set_as_editing(True)
         self.handle_edit_clicked()
 
         self.cbBodyNames.addItem(body_name)
