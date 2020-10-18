@@ -1,13 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from NBodySimulations import Vector2D
+
 from plotting.simulation_animator import SimulationAnimator
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-
-from NBodySimulations import Vector2D
-
-from qt.error_catcher import catch_errors
 
 AXIS_MARGIN = 0.05  # 5% axis margin
 LINESTYLE = " "
@@ -56,7 +54,7 @@ class InteractivePlot:
         self._animator.disable()
         self._initialize_bodies()
 
-    def start_animation(self):
+    def start_animation(self) -> None:
         self._animator.start(self._lines)
         self.show_legend()
         self.draw()

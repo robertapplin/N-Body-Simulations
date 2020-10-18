@@ -3,23 +3,22 @@
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from qt.error_catcher import catch_errors
-
+ANIMATION_INTERVAL = 3
 MARKER = '.'
 
 
 class SimulationAnimator:
 
     def __init__(self, figure: FigureCanvas):
-        self._lines = dict()
-
         self._figure = figure
-
         self._animation = None
-        self._simulation_data = None
+
+        self._lines = dict()
+        self._simulation_data = dict()
+        self._t = 0.0
+
         self._playing = False
         self._active = False
-        self._t = 0.0
 
     def disable(self) -> None:
         self._active = False
@@ -33,7 +32,8 @@ class SimulationAnimator:
 
         self._active = True
         self._lines = lines
-        self._animation = FuncAnimation(self._figure, self._update_body_positions, self._time, interval=3)
+        self._animation = FuncAnimation(self._figure, self._update_body_positions, self._time,
+                                        interval=ANIMATION_INTERVAL)
 
     def is_enabled(self) -> bool:
         return self._active
@@ -74,22 +74,9 @@ class SimulationAnimator:
                 self._t += time_step
             yield self._t
 
-    def _time_step(self):
+    def _time_step(self) -> float:
         times = list(list(self._simulation_data.values())[0].keys())
         return abs(times[-1] / (len(times) - 1))
 
-    def _duration(self):
+    def _duration(self) -> float:
         return list(list(self._simulation_data.values())[0].keys())[-1]
-
-    # Temporarily here for debugging
-    def _plot_trail(self, body_name: str, positions: list) -> None:
-        xs, ys = [], []
-        for position in positions.values():
-            xs.append(position.x)
-            ys.append(position.y)
-
-        if body_name in self._lines.keys():
-            self.remove_body(body_name)
-
-        lines = self._ax.plot(xs, ys, marker=MARKER, label=body_name)
-        self._lines[body_name] = lines[0]
