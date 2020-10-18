@@ -41,6 +41,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbYVelocity.valueChanged.connect(lambda value: self.emit_y_velocity_changed(value))
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+        self.pbEdit.clicked.connect(self.handle_edit_clicked)
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
 
@@ -77,6 +78,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def emit_play_pause_clicked(self) -> None:
         self.playPauseClickedSignal.emit()
 
+    def handle_edit_clicked(self) -> None:
+        self.set_as_editing(True)
+        self.set_as_playing(False)
+        self.interactive_plot.disable_animation()
+
     def handle_stop_clicked(self) -> None:
         self.set_as_playing(False)
         self.interactive_plot.stop_animation()
@@ -91,25 +97,35 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.set_time_step(time_step)
         self.set_duration(duration)
 
+    @catch_errors()
     def remove_body(self, body_name: str) -> None:
+        self.handle_edit_clicked()
+
         self.cbBodyNames.removeItem(self.cbBodyNames.currentIndex())
-        if not self.interactive_plot.is_animating():
-            self.interactive_plot.remove_body(body_name)
-            self.interactive_plot.draw()
+        self.interactive_plot.remove_body(body_name)
+        self.interactive_plot.show_legend()
+        self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
+        self.handle_edit_clicked()
+
         for body_name, parameters in body_parameters.items():
             self.cbBodyNames.addItem(body_name)
-            self.interactive_plot.add_body(body_name, parameters[1].x, parameters[1].y)
+            self.interactive_plot.add_body(body_name, parameters[1])
 
+        self.interactive_plot.show_legend()
         self.interactive_plot.draw()
         self.cbBodyNames.setCurrentIndex(0)
 
     def add_body(self, body_name: str, position: Vector2D) -> None:
+        self.handle_edit_clicked()
+
         self.cbBodyNames.addItem(body_name)
         self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
 
-        self.interactive_plot.add_body(body_name, position.x, position.y)
+        self.interactive_plot.add_body(body_name, position)
+        self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
     def set_time_step(self, time_step: float) -> None:
@@ -146,8 +162,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def selected_body(self) -> str:
         return self.cbBodyNames.currentText()
 
+    def set_as_editing(self, editing: bool) -> None:
+        self.pbEdit.setChecked(editing)
+
     def set_as_playing(self, playing: bool) -> None:
         self.pbPlayPause.setText("Pause" if playing else "Play")
+        if playing:
+            self.set_as_editing(False)
 
     def is_simulating(self) -> bool:
         return self.pbPlayPause.text() != "Play"
@@ -163,6 +184,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbYVelocity.setEnabled(enable)
         self.dsbTimeStep.setEnabled(enable)
         self.dsbDuration.setEnabled(enable)
+        self.pbEdit.setEnabled(enable)
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
 
@@ -175,7 +197,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     @catch_errors()
     def start_simulation(self, simulation_results: dict) -> None:
         self.interactive_plot.set_simulation_data(simulation_results)
-        self.interactive_plot.update_axes_limits()
+        self.interactive_plot.update_axes_limits(initial_data=False)
         self.interactive_plot.start_animation()
 
     def stop_simulation(self) -> None:

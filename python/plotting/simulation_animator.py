@@ -3,18 +3,40 @@
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
+from qt.error_catcher import catch_errors
+
 MARKER = '.'
 
 
 class SimulationAnimator:
 
-    def __init__(self):
+    def __init__(self, figure: FigureCanvas):
         self._lines = dict()
+
+        self._figure = figure
 
         self._animation = None
         self._simulation_data = None
         self._playing = False
-        self.t = 0.0
+        self._active = False
+        self._t = 0.0
+
+    def disable(self) -> None:
+        self._active = False
+        self.stop()
+        if self._animation:
+            self._animation.event_source.stop()
+
+    def enable(self, lines: dict) -> None:
+        if self._active:
+            self.disable()
+
+        self._active = True
+        self._lines = lines
+        self._animation = FuncAnimation(self._figure, self._update_body_positions, self._time, interval=3)
+
+    def is_enabled(self) -> bool:
+        return self._active
 
     def set_simulation_data(self, simulation_data: dict) -> None:
         self._simulation_data = simulation_data
@@ -22,12 +44,9 @@ class SimulationAnimator:
     def simulation_data(self) -> dict:
         return self._simulation_data
 
-    def is_animating(self) -> bool:
-        return self._animation is not None
-
     def stop(self) -> None:
-        self.t = 0.0
         self._playing = False
+        self._t = 0.0
 
     def pause(self) -> None:
         self._playing = False
@@ -35,10 +54,9 @@ class SimulationAnimator:
     def play(self) -> None:
         self._playing = True
 
-    def start(self, figure: FigureCanvas, lines: dict) -> None:
+    def start(self, lines: dict) -> None:
+        self.enable(lines)
         self.play()
-        self._lines = lines
-        self._animation = FuncAnimation(figure, self._update_body_positions, self._time, interval=3)
 
     def _update_body_positions(self, time: float) -> dict:
         for body_name, positions in self._simulation_data.items():
@@ -47,14 +65,14 @@ class SimulationAnimator:
         return self._lines
 
     def _time(self) -> float:
-        self.t = 0.0
+        self._t = 0.0
         t_max = self._duration()
         time_step = self._time_step()
 
-        while self.t < t_max:
+        while self._t < t_max:
             if self._playing:
-                self.t += time_step
-            yield self.t
+                self._t += time_step
+            yield self._t
 
     def _time_step(self):
         times = list(list(self._simulation_data.values())[0].keys())
