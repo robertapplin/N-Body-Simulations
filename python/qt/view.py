@@ -1,13 +1,12 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from PyQt5.QtCore import pyqtSignal, QObject
+from NBodySimulations import Vector2D
 
 from plotting.interactive_plot import InteractivePlot
 from qt.add_body_dialog import AddBodyDialog
 from qt.ui.main_window_ui import Ui_MainWindow
 
-from NBodySimulations import Vector2D
-from qt.error_catcher import catch_errors
+from PyQt5.QtCore import pyqtSignal, QObject
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -96,7 +95,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.set_time_step(time_step)
         self.set_duration(duration)
 
-    @catch_errors()
     def remove_body(self, body_name: str) -> None:
         self.set_as_editing(True)
         self.handle_edit_clicked()
