@@ -194,7 +194,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         dialog.exec_()
         return dialog.new_body_data()
 
-    @catch_errors()
     def start_simulation(self, simulation_results: dict) -> None:
         self.interactive_plot.set_simulation_data(simulation_results)
         self.interactive_plot.update_axes_limits(initial_data=False)
