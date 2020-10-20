@@ -16,7 +16,7 @@ jobs:
     - name: Install Dependencies
       run: |
         conda install -c anaconda pyqt
-        conda install -c conda-forge pybind11 pytest
+        conda install -c conda-forge matplotlib pybind11 pytest
     - name: Build Project
       run: |
         mkdir build

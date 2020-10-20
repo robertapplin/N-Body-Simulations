@@ -14,8 +14,8 @@ class NBodySimulationsPresenter:
         self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 
         self.view.selectedBodyChangedSignal.connect(lambda body_name: self.handle_selected_body_changed(body_name))
-        self.view.removeBodySignal.connect(self.handle_remove_body_clicked)
-        self.view.addBodySignal.connect(self.handle_add_body_clicked)
+        self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
+        self.view.addBodyClickedSignal.connect(self.handle_add_body_clicked)
         self.view.massChangedSignal.connect(lambda body_name, mass: self.handle_mass_changed(body_name, mass))
         self.view.xPositionChangedSignal.connect(lambda body_name, x: self.handle_x_position_changed(body_name, x))
         self.view.yPositionChangedSignal.connect(lambda body_name, y: self.handle_y_position_changed(body_name, y))
@@ -23,7 +23,7 @@ class NBodySimulationsPresenter:
         self.view.yVelocityChangedSignal.connect(lambda body_name, vy: self.handle_y_velocity_changed(body_name, vy))
         self.view.timeStepChangedSignal.connect(lambda time_step: self.handle_time_step_changed(time_step))
         self.view.durationChangedSignal.connect(lambda duration: self.handle_duration_changed(duration))
-        self.view.playPauseSignal.connect(self.handle_play_pause_clicked)
+        self.view.playPauseClickedSignal.connect(self.handle_play_pause_clicked)
 
         self.view.reset_view(self.model.initial_body_parameters(), self.model.time_step(), self.model.duration())
 
@@ -66,10 +66,16 @@ class NBodySimulationsPresenter:
 
     def handle_play_pause_clicked(self) -> None:
         play_clicked = not self.view.is_simulating()
-        self.view.set_as_simulating(play_clicked)
+        self.view.set_as_playing(play_clicked)
+
+        data_changed = self.model.has_data_changed()
+
+        if play_clicked and data_changed:
+            self.view.stop_simulation()
+            self._run_simulation()
 
         if play_clicked:
-            self._run_simulation()
+            self.view.play_simulation()
         else:
             self.view.pause_simulation()
 
@@ -86,4 +92,5 @@ class NBodySimulationsPresenter:
         self.view.enable_view(True)
         if success:
             self.view.start_simulation(self.model.simulation_results())
-        self.view.set_as_simulating(False)
+        else:
+            self.view.set_as_playing(False)

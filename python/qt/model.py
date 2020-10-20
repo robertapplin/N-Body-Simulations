@@ -96,11 +96,15 @@ class NBodySimulationsModel:
     @catch_errors()
     def run_simulation(self) -> bool:
         """Run the simulation if the data has changed since the last simulation."""
-        if self._simulator.hasDataChanged():
+        if self.has_data_changed():
             self._simulator.runSimulation()
 
         # If this point is reached, the simulation has been successfully
         return True
+
+    def has_data_changed(self):
+        """Returns true if the data held by the simulator has changed since the last simulation."""
+        return self._simulator.hasDataChanged()
 
     @catch_errors()
     def simulation_results(self) -> dict:
