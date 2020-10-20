@@ -99,6 +99,14 @@ class InteractivePlot:
         else:
             x_min, x_max, y_min, y_max = self._calculate_simulation_axes_min_max()
 
+        if x_min == x_max:
+            x_min -= 0.5
+            x_max += 0.5
+
+        if y_min == y_max:
+            y_min -= 0.5
+            y_max += 0.5
+
         x_margin = (x_max-x_min)*AXIS_MARGIN
         y_margin = (y_max-y_min)*AXIS_MARGIN
 
