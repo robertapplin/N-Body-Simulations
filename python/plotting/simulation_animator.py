@@ -69,6 +69,15 @@ class SimulationAnimator:
         """Plays the animation."""
         self._playing = True
 
+    def time_step(self) -> float:
+        """Returns the time step used for the simulation."""
+        times = list(list(self._simulation_data.values())[0].keys())
+        return abs(times[-1] / (len(times) - 1))
+
+    def duration(self) -> float:
+        """Returns the duration of the simulation."""
+        return list(list(self._simulation_data.values())[0].keys())[-1]
+
     def _update_body_positions(self, time: float) -> dict:
         """Updates the positions of the bodies in the animation."""
         for body_name, positions in self._simulation_data.items():
@@ -79,19 +88,10 @@ class SimulationAnimator:
     def _time(self) -> float:
         """A generator for stepping through each time step for the simulation."""
         self._t = 0.0
-        t_max = self._duration()
-        time_step = self._time_step()
+        t_max = self.duration()
+        time_step = self.time_step()
 
         while self._t < t_max:
             if self._playing:
                 self._t += time_step
             yield self._t
-
-    def _time_step(self) -> float:
-        """Returns the time step used for the simulation."""
-        times = list(list(self._simulation_data.values())[0].keys())
-        return abs(times[-1] / (len(times) - 1))
-
-    def _duration(self) -> float:
-        """Returns the duration of the simulation."""
-        return list(list(self._simulation_data.values())[0].keys())[-1]
