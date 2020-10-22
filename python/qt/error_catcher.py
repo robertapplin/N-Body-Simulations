@@ -1,9 +1,9 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from functools import wraps
+
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QMessageBox
-
-from functools import wraps
 
 
 class ErrorReporter(QMessageBox):

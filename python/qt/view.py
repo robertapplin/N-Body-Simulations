@@ -1,10 +1,9 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.add_body_dialog import AddBodyDialog
+from n_body_simulations.interactive_plot import InteractivePlot
+from n_body_simulations.main_window_ui import Ui_MainWindow
 from NBodySimulations import Vector2D
-
-from plotting.interactive_plot import InteractivePlot
-from qt.add_body_dialog import AddBodyDialog
-from qt.ui.main_window_ui import Ui_MainWindow
 
 from PyQt5.QtCore import pyqtSignal, QObject
 

@@ -1,10 +1,10 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.add_body_dialog_ui import Ui_AddBodyDialog
+
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtWidgets import QDialog
-
-from qt.ui.add_body_dialog_ui import Ui_AddBodyDialog
 
 
 class AddBodyDialog(Ui_AddBodyDialog, QDialog):

@@ -2,11 +2,11 @@
 # Authored by Robert Applin, 2020
 import sys
 
+from n_body_simulations.presenter import NBodySimulationsPresenter
+from n_body_simulations.view import NBodySimulationsView
+
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QApplication, QMainWindow
-
-from qt.presenter import NBodySimulationsPresenter
-from qt.view import NBodySimulationsView
 
 
 class MainGUI(QMainWindow):
