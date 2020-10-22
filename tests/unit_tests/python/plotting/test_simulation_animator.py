@@ -1,18 +1,12 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 import pytest
-import sys
-from directory_helper import PYTHON_DIRECTORY
 
+from n_body_simulations.simulation_animator import SimulationAnimator
 from NBodySimulations import Vector2D
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-
-# Required to find python modules in parent directories
-sys.path.append(PYTHON_DIRECTORY)
-
-from plotting.simulation_animator import SimulationAnimator
 
 
 class DummyInteractivePlot:
