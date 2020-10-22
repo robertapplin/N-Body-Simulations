@@ -12,6 +12,7 @@ set(SOURCE_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/src/)
 set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc/)
 set(PYTHON_DIRECTORY ${CMAKE_SOURCE_DIR}/python/)
 set(EXPORT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/exports/)
+set(TEST_HELPER_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/helpers/)
 
 include_directories(${HEADER_DIRECTORY})
 

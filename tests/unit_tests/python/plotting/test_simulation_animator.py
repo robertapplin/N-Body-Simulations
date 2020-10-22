@@ -2,25 +2,8 @@
 # Authored by Robert Applin, 2020
 import pytest
 
-from n_body_simulations.simulation_animator import SimulationAnimator
+from n_body_simulations.test_helpers.dummy_class_helper import DummyInteractivePlot
 from NBodySimulations import Vector2D
-
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-
-
-class DummyInteractivePlot:
-    """A class used as a dummy interactive plot for the purposes of testing the animator."""
-
-    def __init__(self):
-        """Initialize the dummy interactive plot."""
-        self._figure = Figure()
-        self._canvas = FigureCanvas(self._figure)
-
-        self._ax = self._figure.add_subplot(111)
-        self.animator = SimulationAnimator(self._figure)
-
-        self.lines = {"Sun": self._ax.plot(0.0, 0.0)[0]}
 
 
 @pytest.fixture

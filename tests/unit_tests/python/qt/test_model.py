@@ -3,13 +3,10 @@
 import pytest
 
 from n_body_simulations.model import NBodySimulationsModel
+from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 from NBodySimulations import Vector2D
 
-from PyQt5.QtCore import QCoreApplication
-
-
-# Required to allow silent error catching
-QCoreApplication.setApplicationName("test")
+enable_test_mode()
 
 
 @pytest.fixture

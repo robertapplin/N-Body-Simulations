@@ -2,49 +2,15 @@
 # Authored by Robert Applin, 2020
 import pytest
 
-from n_body_simulations.error_catcher import catch_errors
+from n_body_simulations.test_helpers.dummy_class_helper import DummyErrorProneClass
+from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 
-from PyQt5.QtCore import QCoreApplication
-
-
-# Required to allow silent error catching
-QCoreApplication.setApplicationName("test")
-
-
-class DummyClass:
-    """A class used for testing the error catcher by causing various errors and exceptions."""
-
-    def __init__(self):
-        pass
-
-    def cause_an_uncaught_exception(self):
-        raise RuntimeError("This is a RuntimeError.")
-
-    @catch_errors()
-    def cause_an_exception(self):
-        raise RuntimeError("This is a RuntimeError.")
-
-    @catch_errors()
-    def divide_by_zero(self):
-        return 10 / 0
-
-    @catch_errors()
-    def index_out_of_range(self):
-        test_list = [0, 1, 2, 3]
-        return test_list[4]
-
-    @catch_errors()
-    def function_that_returns_nothing(self):
-        _ = 1 + 2
-
-    @catch_errors()
-    def function_that_returns_a_value(self):
-        return 1.0
+enable_test_mode()
 
 
 @pytest.fixture(scope='module')
 def dummy_class():
-    return DummyClass()
+    return DummyErrorProneClass()
 
 
 def test_that_the_error_causer_causes_an_error_when_not_using_the_error_catcher(dummy_class):
