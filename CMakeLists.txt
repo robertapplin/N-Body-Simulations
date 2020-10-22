@@ -17,4 +17,5 @@ include_directories(${HEADER_DIRECTORY})
 add_subdirectory(external)
 
 add_subdirectory(cpp)
+add_subdirectory(python)
 add_subdirectory(tests)
