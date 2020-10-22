@@ -1,15 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 import pytest
-import sys
+
+from n_body_simulations.error_catcher import catch_errors
 
 from PyQt5.QtCore import QCoreApplication
-from directory_helper import PYTHON_DIRECTORY
 
-# Required to find python modules in parent directories
-sys.path.append(PYTHON_DIRECTORY)
-
-from qt.error_catcher import catch_errors
 
 # Required to allow silent error catching
 QCoreApplication.setApplicationName("test")

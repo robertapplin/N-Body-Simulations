@@ -1,7 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.error_catcher import catch_errors
 from NBodySimulations import NBodySimulator, Vector2D
-from qt.error_catcher import catch_errors
 
 
 class NBodySimulationsModel:

@@ -1,26 +1,30 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 set(SOURCE_FILES
-    ${SOURCE_DIRECTORY}/Body.cpp
-    ${SOURCE_DIRECTORY}/BodyPositions.cpp
-    ${SOURCE_DIRECTORY}/NBodySimulator.cpp
-    ${SOURCE_DIRECTORY}/SimulationConstants.cpp
-    ${SOURCE_DIRECTORY}/Vector2D.cpp
+    Body.cpp
+    BodyPositions.cpp
+    NBodySimulator.cpp
+    SimulationConstants.cpp
+    Vector2D.cpp
 )
 
 set(HEADER_FILES
-    ${HEADER_DIRECTORY}/Body.h
-    ${HEADER_DIRECTORY}/BodyPositions.h
-    ${HEADER_DIRECTORY}/NBodySimulator.h
-    ${HEADER_DIRECTORY}/SimulationConstants.h
-    ${HEADER_DIRECTORY}/Vector2D.h
+    Body.h
+    BodyPositions.h
+    NBodySimulator.h
+    SimulationConstants.h
+    Vector2D.h
 )
 
 set(EXPORT_FILES
-    ${EXPORT_DIRECTORY}/NBodySimulations.cpp
-    ${EXPORT_DIRECTORY}/NBodySimulator.cpp
-    ${EXPORT_DIRECTORY}/Vector2D.cpp
+    NBodySimulations.cpp
+    NBodySimulator.cpp
+    Vector2D.cpp
 )
+
+list(TRANSFORM SOURCE_FILES PREPEND ${SOURCE_DIRECTORY})
+list(TRANSFORM HEADER_FILES PREPEND ${HEADER_DIRECTORY})
+list(TRANSFORM EXPORT_FILES PREPEND ${EXPORT_DIRECTORY})
 
 # Creates a MODULE library which cannot be target-linked, but can be installed for python.
 find_package(pybind11 REQUIRED)

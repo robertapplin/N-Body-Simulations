@@ -1,16 +1,12 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 import pytest
-import sys
 
-from PyQt5.QtCore import QCoreApplication
-from directory_helper import PYTHON_DIRECTORY
+from n_body_simulations.model import NBodySimulationsModel
 from NBodySimulations import Vector2D
 
-# Required to find python modules in parent directories
-sys.path.append(PYTHON_DIRECTORY)
+from PyQt5.QtCore import QCoreApplication
 
-from qt.model import NBodySimulationsModel
 
 # Required to allow silent error catching
 QCoreApplication.setApplicationName("test")

@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from qt.model import NBodySimulationsModel
+from n_body_simulations.model import NBodySimulationsModel
 
 
 class NBodySimulationsPresenter:
