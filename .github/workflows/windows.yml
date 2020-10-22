@@ -1,4 +1,4 @@
-name: System Tests
+name: Windows
 
 on:
   pull_request:
@@ -23,14 +23,21 @@ jobs:
         cd build
         cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
         cmake --build . --config Release
-    - name: Install NBodySimulations as a Python Module
+    - name: Install into Python Site-Packages
       run: |
         cd build
         cmake --install .
-    - name: Run Cpp System Tests
+    - name: Cpp Unit Tests
+      run: |
+        cd build/tests/unit_tests/cpp/Release
+        ./NBodySimulationsUnitTests.exe
+    - name: Cpp System Tests
       run: |
         cd build/tests/system_tests/cpp/Release
         ./NBodySimulationsSystemTests.exe
-    - name: Run Python System Tests
+    - name: Python Unit Tests
+      run: |
+        pytest tests/unit_tests/python/
+    - name: Python System Tests
       run: |
         pytest tests/system_tests/python/
