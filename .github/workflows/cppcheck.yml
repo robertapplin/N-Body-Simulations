@@ -18,4 +18,8 @@ jobs:
         path: cppcheck
     - name: Compile cppcheck
       run: |
-        dir
+        cd cppcheck
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
