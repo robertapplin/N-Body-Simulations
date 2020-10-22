@@ -22,4 +22,9 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        cmake --build .
+        cmake --build . --config Release
+        cmake --install .
+    - name: Run cppcheck
+      run: |
+        cppcheck cpp/simulator/inc
+        cppcheck cpp/simulator/src
