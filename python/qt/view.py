@@ -93,7 +93,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.clear()
         self.add_bodies(bodies)
         self.set_time_step(time_step)
-        print(self.dsbTimeStep.signalsBlocked())
         self.set_duration(duration)
 
     def remove_body(self, body_name: str) -> None:
