@@ -7,6 +7,7 @@ from n_body_simulations.signal_blocker import SignalBlocker
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtWidgets import QTableWidgetItem
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -30,14 +31,14 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.plotLayout.addWidget(self.interactive_plot.canvas())
 
-        self.cbBodyNames.currentTextChanged.connect(lambda text: self.emit_selected_body_changed(text))
+        # self.cbBodyNames.currentTextChanged.connect(lambda text: self.emit_selected_body_changed(text))
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
-        self.dsbMass.valueChanged.connect(lambda value: self.emit_mass_changed(value))
-        self.dsbXPosition.valueChanged.connect(lambda value: self.emit_x_position_changed(value))
-        self.dsbYPosition.valueChanged.connect(lambda value: self.emit_y_position_changed(value))
-        self.dsbXVelocity.valueChanged.connect(lambda value: self.emit_x_velocity_changed(value))
-        self.dsbYVelocity.valueChanged.connect(lambda value: self.emit_y_velocity_changed(value))
+        # self.dsbMass.valueChanged.connect(lambda value: self.emit_mass_changed(value))
+        # self.dsbXPosition.valueChanged.connect(lambda value: self.emit_x_position_changed(value))
+        # self.dsbYPosition.valueChanged.connect(lambda value: self.emit_y_position_changed(value))
+        # self.dsbXVelocity.valueChanged.connect(lambda value: self.emit_x_velocity_changed(value))
+        # self.dsbYVelocity.valueChanged.connect(lambda value: self.emit_y_velocity_changed(value))
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
         self.pbEdit.clicked.connect(self.handle_edit_clicked)
@@ -87,7 +88,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def clear(self) -> None:
         self.interactive_plot.clear()
-        self.cbBodyNames.clear()
+        self.twBodyData.clearContents()
 
     def reset_view(self, bodies: dict, time_step: float, duration: float) -> None:
         self.clear()
@@ -99,7 +100,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.set_as_editing(True)
         self.handle_edit_clicked()
 
-        self.cbBodyNames.removeItem(self.cbBodyNames.currentIndex())
+        #self.cbBodyNames.removeItem(self.cbBodyNames.currentIndex())
+        self.twBodyData.removeRow(self.twBodyData.row(QTableWidgetItem(body_name)))
         self.interactive_plot.remove_body(body_name)
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
@@ -109,21 +111,37 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.handle_edit_clicked()
 
         for body_name, parameters in body_parameters.items():
-            self.cbBodyNames.addItem(body_name)
+            #self.cbBodyNames.addItem(body_name)
+            row_index = self.twBodyData.rowCount()
+            self.twBodyData.insertRow(row_index)
+            self.twBodyData.setItem(row_index, 0, QTableWidgetItem(body_name))
+            self.twBodyData.setItem(row_index, 1, QTableWidgetItem(parameters[0]))
+            self.twBodyData.setItem(row_index, 2, QTableWidgetItem(parameters[1].x))
+            self.twBodyData.setItem(row_index, 3, QTableWidgetItem(parameters[1].y))
+            self.twBodyData.setItem(row_index, 4, QTableWidgetItem(parameters[2].x))
+            self.twBodyData.setItem(row_index, 5, QTableWidgetItem(parameters[2].y))
             self.interactive_plot.add_body(body_name, parameters[1])
 
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
-        self.cbBodyNames.setCurrentIndex(0)
+        #self.cbBodyNames.setCurrentIndex(0)
 
-    def add_body(self, body_name: str, position: Vector2D) -> None:
+    def add_body(self, body_name: str, initial_data: tuple) -> None:
         self.set_as_editing(True)
         self.handle_edit_clicked()
 
-        self.cbBodyNames.addItem(body_name)
-        self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
+        row_index = self.twBodyData.rowCount()
+        self.twBodyData.insertRow(row_index)
+        self.twBodyData.setItem(row_index, 0, QTableWidgetItem(body_name))
+        self.twBodyData.setItem(row_index, 1, QTableWidgetItem(initial_data[0]))
+        self.twBodyData.setItem(row_index, 2, QTableWidgetItem(initial_data[1].x))
+        self.twBodyData.setItem(row_index, 3, QTableWidgetItem(initial_data[1].y))
+        self.twBodyData.setItem(row_index, 4, QTableWidgetItem(initial_data[2].x))
+        self.twBodyData.setItem(row_index, 5, QTableWidgetItem(initial_data[2].y))
+        #self.cbBodyNames.addItem(body_name)
+        #self.cbBodyNames.setCurrentIndex(self.cbBodyNames.count() - 1)
 
-        self.interactive_plot.add_body(body_name, position)
+        self.interactive_plot.add_body(body_name, initial_data[1])
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
@@ -136,22 +154,30 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         _ = SignalBlocker(self.dsbDuration)
         self.dsbDuration.setValue(duration)
 
-    def set_mass(self, mass: float) -> None:
-        _ = SignalBlocker(self.dsbMass)
-        self.dsbMass.setValue(mass)
+    def set_mass(self, body_name: str, mass: float) -> None:
+        _ = SignalBlocker(self.twBodyData)
+        row_index = self.twBodyData.indexFromItem(QTableWidgetItem(body_name)).row()
+        self.twBodyData.setItem(row_index, 1, QTableWidgetItem(f"{mass:.6f}"))
 
-    def set_position(self, position: Vector2D) -> None:
-        _ = SignalBlocker(self.dsbXPosition, self.dsbYPosition)
-        self.dsbXPosition.setValue(position.x)
-        self.dsbYPosition.setValue(position.y)
+    def set_position(self, body_name: str, position: Vector2D) -> None:
+        _ = SignalBlocker(self.twBodyData)
+        row_index = self.twBodyData.indexFromItem(QTableWidgetItem(body_name)).row()
+        self.twBodyData.setItem(row_index, 2, QTableWidgetItem(f"{position.x:.6f}"))
+        self.twBodyData.setItem(row_index, 3, QTableWidgetItem(f"{position.y:.6f}"))
 
-    def set_velocity(self, velocity: Vector2D) -> None:
-        _ = SignalBlocker(self.dsbXVelocity, self.dsbYVelocity)
-        self.dsbXVelocity.setValue(velocity.x)
-        self.dsbYVelocity.setValue(velocity.y)
+    def set_velocity(self, body_name: str, velocity: Vector2D) -> None:
+        _ = SignalBlocker(self.twBodyData)
+        row_index = self.twBodyData.indexFromItem(QTableWidgetItem(body_name)).row()
+        self.twBodyData.setItem(row_index, 4, QTableWidgetItem(f"{velocity.x:.6f}"))
+        self.twBodyData.setItem(row_index, 5, QTableWidgetItem(f"{velocity.y:.6f}"))
 
     def selected_body(self) -> str:
-        return self.cbBodyNames.currentText()
+        selection_model = self.twBodyData.selectionModel()
+        if selection_model.hasSelection():
+            row_index = selection_model.selectedRows().value(0).row()
+            return self.twBodyData.item(row_index, 0).text()
+
+        raise RuntimeError("A body is not selected.")
 
     def set_as_editing(self, editing: bool) -> None:
         self.pbEdit.setChecked(editing)
@@ -165,14 +191,15 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         return self.pbPlayPause.text() != "Play"
 
     def enable_view(self, enable: bool) -> None:
-        self.cbBodyNames.setEnabled(enable)
+        # self.cbBodyNames.setEnabled(enable)
+        self.twBodyData.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
         self.pbAddBody.setEnabled(enable)
-        self.dsbMass.setEnabled(enable)
-        self.dsbXPosition.setEnabled(enable)
-        self.dsbYPosition.setEnabled(enable)
-        self.dsbXVelocity.setEnabled(enable)
-        self.dsbYVelocity.setEnabled(enable)
+        # self.dsbMass.setEnabled(enable)
+        # self.dsbXPosition.setEnabled(enable)
+        # self.dsbYPosition.setEnabled(enable)
+        # self.dsbXVelocity.setEnabled(enable)
+        # self.dsbYVelocity.setEnabled(enable)
         self.dsbTimeStep.setEnabled(enable)
         self.dsbDuration.setEnabled(enable)
         self.pbEdit.setEnabled(enable)

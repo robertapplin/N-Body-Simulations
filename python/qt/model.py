@@ -16,8 +16,7 @@ class NBodySimulationsModel:
         initial_body_parameters = dict()
 
         for body_name in self._simulator.bodyNames():
-            initial_body_parameters[body_name] = tuple([self.mass(body_name), self.initial_position(body_name),
-                                                        self.initial_velocity(body_name)])
+            initial_body_parameters[body_name] = self.initial_data(body_name)
         return initial_body_parameters
 
     @catch_errors()
@@ -92,6 +91,11 @@ class NBodySimulationsModel:
     def initial_velocity(self, body_name: str) -> Vector2D:
         """Return the initial velocity of the specified body stored by the simulator."""
         return self._simulator.initialVelocity(body_name)
+
+    @catch_errors()
+    def initial_data(self, body_name: str) -> tuple:
+        """Returns the initial data of the specified body stored by the simulator."""
+        return tuple([self.mass(body_name), self.initial_position(body_name), self.initial_velocity(body_name)])
 
     @catch_errors()
     def run_simulation(self) -> bool:

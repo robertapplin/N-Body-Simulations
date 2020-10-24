@@ -29,9 +29,9 @@ class NBodySimulationsPresenter:
 
     def handle_selected_body_changed(self, body_name: str) -> None:
         if body_name:
-            self.view.set_mass(self.model.mass(body_name))
-            self.view.set_position(self.model.initial_position(body_name))
-            self.view.set_velocity(self.model.initial_velocity(body_name))
+            self.view.set_mass(body_name, self.model.mass(body_name))
+            self.view.set_position(body_name, self.model.initial_position(body_name))
+            self.view.set_velocity(body_name, self.model.initial_velocity(body_name))
 
     def handle_remove_body_clicked(self) -> None:
         if self.model.number_of_bodies() > 1:
@@ -84,7 +84,7 @@ class NBodySimulationsPresenter:
         if body_name is not None:
             success = self.model.add_body(body_name, mass, x, y)
             if success:
-                self.view.add_body(body_name, self.model.initial_position(body_name))
+                self.view.add_body(body_name, self.model.initial_data(body_name))
 
     def _run_simulation(self) -> None:
         self.view.enable_view(False)
