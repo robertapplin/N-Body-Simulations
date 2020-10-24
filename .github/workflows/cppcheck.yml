@@ -1,4 +1,4 @@
-name: cppcheck
+name: Cppcheck
 
 on:
   pull_request:
@@ -11,20 +11,20 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Checkout cppcheck
+    - name: Checkout Cppcheck
       uses: actions/checkout@v2
       with:
         repository: danmar/cppcheck
-        path: cppcheck
-    - name: Compile cppcheck
+        path: Cppcheck
+    - name: Compile Cppcheck
       run: |
-        cd cppcheck
+        cd Cppcheck
         mkdir build
         cd build
         cmake .. -DFILESDIR="C:/Program Files (x86)/Cppcheck/bin/"
         cmake --build . --config Release
         cmake --install .      
-    - name: Run cppcheck
+    - name: Run Cppcheck
       run: |
         cd cpp/simulator/src
         "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe" .
