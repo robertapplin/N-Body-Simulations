@@ -21,10 +21,10 @@ jobs:
         cd cppcheck
         mkdir build
         cd build
-        cmake ..
+        cmake .. -DFILESDIR="C:/Program Files (x86)/Cppcheck/bin/"
         cmake --build . --config Release
         cmake --install .
     - name: Run cppcheck
       run: |
-        cppcheck cpp/simulator/inc
-        cppcheck cpp/simulator/src
+        cd cpp/simulator/src
+        cppcheck .
