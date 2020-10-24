@@ -3,6 +3,7 @@
 from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
+from n_body_simulations.signal_blocker import SignalBlocker
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject
@@ -128,35 +129,26 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def set_time_step(self, time_step: float) -> None:
-        self.dsbTimeStep.blockSignals(True)
+        _ = SignalBlocker(self.dsbTimeStep)
         self.dsbTimeStep.setValue(time_step)
-        self.dsbTimeStep.blockSignals(False)
 
     def set_duration(self, duration: float) -> None:
-        self.dsbDuration.blockSignals(True)
+        _ = SignalBlocker(self.dsbDuration)
         self.dsbDuration.setValue(duration)
-        self.dsbDuration.blockSignals(False)
 
     def set_mass(self, mass: float) -> None:
-        self.dsbMass.blockSignals(True)
+        _ = SignalBlocker(self.dsbMass)
         self.dsbMass.setValue(mass)
-        self.dsbMass.blockSignals(False)
 
     def set_position(self, position: Vector2D) -> None:
-        self.dsbXPosition.blockSignals(True)
-        self.dsbYPosition.blockSignals(True)
+        _ = SignalBlocker(self.dsbXPosition, self.dsbYPosition)
         self.dsbXPosition.setValue(position.x)
         self.dsbYPosition.setValue(position.y)
-        self.dsbXPosition.blockSignals(False)
-        self.dsbYPosition.blockSignals(False)
 
     def set_velocity(self, velocity: Vector2D) -> None:
-        self.dsbXVelocity.blockSignals(True)
-        self.dsbYVelocity.blockSignals(True)
+        _ = SignalBlocker(self.dsbXVelocity, self.dsbYVelocity)
         self.dsbXVelocity.setValue(velocity.x)
         self.dsbYVelocity.setValue(velocity.y)
-        self.dsbXVelocity.blockSignals(False)
-        self.dsbYVelocity.blockSignals(False)
 
     def selected_body(self) -> str:
         return self.cbBodyNames.currentText()
