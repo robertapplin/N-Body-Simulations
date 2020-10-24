@@ -27,6 +27,6 @@ jobs:
     - name: Run cppcheck
       run: |
         cd cpp/simulator/src
-        $CPPCHECK_PATH/cppcheck .
+        $CPPCHECK .
       env:
-        CPPCHECK_PATH: C:/Program Files (x86)/Cppcheck/bin
+        CPPCHECK: C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe
