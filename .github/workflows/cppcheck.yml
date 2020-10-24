@@ -9,8 +9,6 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - env:
-      CPPCHECK_PATH: "C:/Program Files (x86)/Cppcheck/bin/"
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Checkout Cppcheck
@@ -23,10 +21,13 @@ jobs:
         cd Cppcheck
         mkdir build
         cd build
-        cmake .. -DFILESDIR=$CPPCHECK_PATH
+        cmake .. -DFILESDIR="C:/Program Files (x86)/Cppcheck/bin/"
         cmake --build . --config Release
         cmake --install .      
     - name: Run Cppcheck
       run: |
-        $CPPCHECK_PATH"cppcheck.exe" cpp/simulator/src
+        $CPPCHECK_EXE cpp/simulator/src
+        $CPPCHECK_EXE python/exports
+      env:
+        CPPCHECK_EXE: "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe"
       shell: cmd
