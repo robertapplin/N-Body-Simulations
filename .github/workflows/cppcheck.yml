@@ -23,10 +23,8 @@ jobs:
         cd build
         cmake .. -DFILESDIR="C:/Program Files (x86)/Cppcheck/bin/"
         cmake --build . --config Release
-        cmake --install .
+        cmake --install .      
     - name: Run cppcheck
       run: |
         cd cpp/simulator/src
-        $CPPCHECK .
-      env:
-        CPPCHECK: C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe
+        "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe" .
