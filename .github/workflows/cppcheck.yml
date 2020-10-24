@@ -27,4 +27,4 @@ jobs:
     - name: Run Cppcheck
       run: |
         cd cpp/simulator/src
-        "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe" .
+        "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe"
