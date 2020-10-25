@@ -45,6 +45,7 @@ class ItemDelegate(QStyledItemDelegate):
 class NBodySimulationsView(Ui_MainWindow, QObject):
     removeBodyClickedSignal = pyqtSignal()
     addBodyClickedSignal = pyqtSignal()
+    bodyNameChangedSignal = pyqtSignal(str, str)
     massChangedSignal = pyqtSignal(str, float)
     xPositionChangedSignal = pyqtSignal(str, float)
     yPositionChangedSignal = pyqtSignal(str, float)
@@ -68,9 +69,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbEdit.clicked.connect(self.handle_edit_clicked)
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
+        self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+
+        self._selected_body = None
 
     def setup_table_widget(self) -> None:
         mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
@@ -97,6 +101,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def emit_duration_changed(self, value: float) -> None:
         self.durationChangedSignal.emit(value)
 
+    def handle_cell_clicked(self, row_index: int, column_index: int) -> None:
+        self._selected_body = self._body_at_index(row_index)
+
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
         self.set_as_editing(True)
 
@@ -108,7 +115,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         signal = signal_switcher.get(column_index, None)
         if signal is not None:
-            signal.emit(self._index_of_body(row_index), self._get_table_value(row_index, column_index))
+            signal.emit(self._selected_body, self._get_table_value(row_index, column_index))
+        else:
+            self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
 
     def handle_edit_clicked(self) -> None:
         self.set_as_playing(False)
@@ -131,7 +140,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def selected_body(self) -> str:
         selected_index = self._selected_row_index()
         if selected_index != -1:
-            return self._index_of_body(selected_index)
+            return self._body_at_index(selected_index)
         return None
 
     def remove_body(self, body_name: str) -> None:
@@ -176,11 +185,21 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItem(row_index, TABLE_VX_INDEX, self._create_table_value(body_data[2].x))
         self.twBodyData.setItem(row_index, TABLE_VY_INDEX, self._create_table_value(body_data[2].y))
 
+    def update_body_name(self, old_name: str, new_name: str) -> None:
+        self.interactive_plot.update_body_name(old_name, new_name)
+        self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.show_legend()
+        self.interactive_plot.draw()
+
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
         self.interactive_plot.remove_body(body_name)
         self.interactive_plot.add_body(body_name, position)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
+
+    def set_name(self, body_name: str) -> None:
+        _ = SignalBlocker(self.twBodyData)
+        self.twBodyData.setItem(self._selected_row_index(), TABLE_NAME_INDEX, QTableWidgetItem(body_name))
 
     def set_time_step(self, time_step: float) -> None:
         _ = SignalBlocker(self.dsbTimeStep)
@@ -242,7 +261,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def _get_table_value(self, row_index: int, column_index: int) -> float:
         return float(self.twBodyData.item(row_index, column_index).text())
 
-    def _index_of_body(self, row_index: int) -> str:
+    def _body_at_index(self, row_index: int) -> str:
         return self.twBodyData.item(row_index, 0).text()
 
     def _selected_row_index(self) -> int:

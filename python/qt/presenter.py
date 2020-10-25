@@ -1,5 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.model import NBodySimulationsModel
 
 
@@ -15,6 +16,8 @@ class NBodySimulationsPresenter:
 
         self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
         self.view.addBodyClickedSignal.connect(self.handle_add_body_clicked)
+        self.view.bodyNameChangedSignal.connect(lambda old_name, new_name: self.handle_body_name_changed(old_name,
+                                                                                                         new_name))
         self.view.massChangedSignal.connect(lambda body_name, mass: self.handle_mass_changed(body_name, mass))
         self.view.xPositionChangedSignal.connect(lambda body_name, x: self.handle_x_position_changed(body_name, x))
         self.view.yPositionChangedSignal.connect(lambda body_name, y: self.handle_y_position_changed(body_name, y))
@@ -35,6 +38,15 @@ class NBodySimulationsPresenter:
     def handle_add_body_clicked(self) -> None:
         if self.model.number_of_bodies() < 5:
             self._add_new_body()
+
+    @catch_errors()
+    def handle_body_name_changed(self, old_name: str, new_name: str) -> None:
+        if new_name not in self.model.body_names():
+            self.model.set_name(old_name, new_name)
+            self.view.update_body_name(old_name, new_name)
+        else:
+            self.view.set_name(old_name)
+            raise ValueError(f"Could not change body name: The body '{new_name}' already exists.")
 
     def handle_mass_changed(self, body_name: str, mass: float) -> None:
         self.model.set_mass(body_name, mass)

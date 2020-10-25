@@ -58,6 +58,15 @@ std::vector<std::string> NBodySimulator::bodyNames() const {
   return names;
 }
 
+void NBodySimulator::setName(std::string const &oldName,
+                             std::string const &newName) {
+  if (hasBody(newName))
+    throw std::invalid_argument("The body '" + newName + "' already exists.");
+
+  findBody(oldName).setName(newName);
+  m_dataChanged = true;
+}
+
 void NBodySimulator::setMass(std::string const &bodyName, double mass) {
   findBody(bodyName).setMass(mass);
   m_dataChanged = true;
