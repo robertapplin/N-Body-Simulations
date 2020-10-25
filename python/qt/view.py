@@ -28,7 +28,7 @@ class ItemDelegate(QStyledItemDelegate):
         self._step = step
         self._decimals = 6
 
-    def createEditor(self, parent, style, index):
+    def createEditor(self, parent, style, index) -> None:
         box = QDoubleSpinBox(parent)
         box.setDecimals(self._decimals)
 
@@ -58,11 +58,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         super(NBodySimulationsView, self).__init__()
         self.setupUi(parent)
 
-        self.interactive_plot = InteractivePlot()
-
-        self.plotLayout.addWidget(self.interactive_plot.canvas())
-
         self.setup_table_widget()
+
+        self.interactive_plot = InteractivePlot()
+        self.plotLayout.addWidget(self.interactive_plot.canvas())
 
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
@@ -73,9 +72,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
-    def setup_table_widget(self):
+    def setup_table_widget(self) -> None:
         mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
-        other_item_delegate = ItemDelegate(self.twBodyData, min_value=-1000, max_value=1000, step=0.1)
+        other_item_delegate = ItemDelegate(self.twBodyData, min_value=-1000.0, max_value=1000.0, step=0.1)
 
         self.twBodyData.setItemDelegateForColumn(TABLE_MASS_INDEX, mass_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, other_item_delegate)
@@ -83,38 +82,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, other_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
 
-    def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
-        self.set_as_editing(True)
-
-        body_name = self._index_of_body(row_index)
-        new_value = self._get_table_value(row_index, column_index)
-
-        if column_index == TABLE_MASS_INDEX:
-            self.massChangedSignal.emit(body_name, new_value)
-        elif column_index == TABLE_X_INDEX:
-            self.xPositionChangedSignal.emit(body_name, new_value)
-        elif column_index == TABLE_Y_INDEX:
-            self.yPositionChangedSignal.emit(body_name, new_value)
-        elif column_index == TABLE_VX_INDEX:
-            self.xVelocityChangedSignal.emit(body_name, new_value)
-        elif column_index == TABLE_VY_INDEX:
-            self.yVelocityChangedSignal.emit(body_name, new_value)
-        else:
-            raise RuntimeError("An unexpected column index was detected.")
-
     def emit_remove_body_clicked(self) -> None:
         self.removeBodyClickedSignal.emit()
 
     def emit_add_body_clicked(self) -> None:
         self.addBodyClickedSignal.emit()
-
-    def handle_edit_clicked(self) -> None:
-        self.set_as_playing(False)
-        self.interactive_plot.disable_animation()
-
-    def handle_stop_clicked(self) -> None:
-        self.set_as_playing(False)
-        self.interactive_plot.stop_animation()
 
     def emit_play_pause_clicked(self) -> None:
         self.playPauseClickedSignal.emit()
@@ -124,6 +96,27 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def emit_duration_changed(self, value: float) -> None:
         self.durationChangedSignal.emit(value)
+
+    def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
+        self.set_as_editing(True)
+
+        signal_switcher = {TABLE_MASS_INDEX: self.massChangedSignal,
+                           TABLE_X_INDEX: self.xPositionChangedSignal,
+                           TABLE_Y_INDEX: self.yPositionChangedSignal,
+                           TABLE_VX_INDEX: self.xVelocityChangedSignal,
+                           TABLE_VY_INDEX: self.yVelocityChangedSignal}
+
+        signal = signal_switcher.get(column_index, None)
+        if signal is not None:
+            signal.emit(self._index_of_body(row_index), self._get_table_value(row_index, column_index))
+
+    def handle_edit_clicked(self) -> None:
+        self.set_as_playing(False)
+        self.interactive_plot.disable_animation()
+
+    def handle_stop_clicked(self) -> None:
+        self.set_as_playing(False)
+        self.interactive_plot.stop_animation()
 
     def clear(self) -> None:
         self.interactive_plot.clear()
