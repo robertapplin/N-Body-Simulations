@@ -13,7 +13,6 @@ class NBodySimulationsPresenter:
         self.model.add_body("Sun", 1.0, 0.0, 0.0)
         self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 
-        self.view.selectedBodyChangedSignal.connect(lambda body_name: self.handle_selected_body_changed(body_name))
         self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
         self.view.addBodyClickedSignal.connect(self.handle_add_body_clicked)
         self.view.massChangedSignal.connect(lambda body_name, mass: self.handle_mass_changed(body_name, mass))
@@ -27,15 +26,9 @@ class NBodySimulationsPresenter:
 
         self.view.reset_view(self.model.initial_body_parameters(), self.model.time_step(), self.model.duration())
 
-    def handle_selected_body_changed(self, body_name: str) -> None:
-        if body_name:
-            self.view.set_mass(body_name, self.model.mass(body_name))
-            self.view.set_position(body_name, self.model.initial_position(body_name))
-            self.view.set_velocity(body_name, self.model.initial_velocity(body_name))
-
     def handle_remove_body_clicked(self) -> None:
-        if self.model.number_of_bodies() > 1:
-            body_name = self.view.selected_body()
+        body_name = self.view.selected_body()
+        if body_name and self.model.number_of_bodies() > 1:
             self.model.remove_body(body_name)
             self.view.remove_body(body_name)
 
