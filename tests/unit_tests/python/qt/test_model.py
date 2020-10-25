@@ -113,6 +113,16 @@ def test_that_initial_body_parameters_will_return_the_expected_parameters(model)
     assert mars_parameters[1] == Vector2D(3.0, 4.0)
 
 
+def test_that_set_name_will_change_the_name_of_a_body_as_expected(model):
+    model.set_name("Earth", "Venus")
+    assert model.initial_position("Venus") == Vector2D(1.0, 0.0)
+
+
+def test_that_set_mass_will_set_the_mass_of_a_body_as_expected(model):
+    model.set_mass("Earth", 5.0)
+    assert model.mass("Earth") == 5.0
+
+
 def test_that_set_x_position_will_set_the_x_position_of_a_body_as_expected(model):
     model.set_x_position("Earth", 5.0)
 

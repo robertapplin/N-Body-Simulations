@@ -63,6 +63,11 @@ def test_that_removeBody_will_remove_a_body(simulator):
     assert simulator.bodyNames() == ["Earth"]
 
 
+def test_that_setName_is_exposed_to_python(simulator):
+    simulator.setName("Sun", "Earth")
+    assert simulator.bodyNames() == ["Earth"]
+
+
 def test_that_mass_is_exposed_to_python(simulator):
     assert simulator.mass("Sun") == 1.0
 
