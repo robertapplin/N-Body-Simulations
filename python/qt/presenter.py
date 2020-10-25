@@ -41,9 +41,11 @@ class NBodySimulationsPresenter:
 
     def handle_x_position_changed(self, body_name: str, x: float) -> None:
         self.model.set_x_position(body_name, x)
+        self.view.update_body_position(body_name, self.model.initial_position(body_name))
 
     def handle_y_position_changed(self, body_name: str, y: float) -> None:
         self.model.set_y_position(body_name, y)
+        self.view.update_body_position(body_name, self.model.initial_position(body_name))
 
     def handle_x_velocity_changed(self, body_name: str, vx: float) -> None:
         self.model.set_x_velocity(body_name, vx)

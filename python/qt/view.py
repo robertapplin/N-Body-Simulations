@@ -4,6 +4,7 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
 from n_body_simulations.signal_blocker import SignalBlocker
+from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtWidgets import QTableWidgetItem
@@ -39,6 +40,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
+        self.set_as_editing(True)
+
         body_name = self._index_of_body(row_index)
         new_value = self._get_table_value(row_index, column_index)
 
@@ -96,17 +99,16 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def remove_body(self, body_name: str) -> None:
         self.set_as_editing(True)
-        self.handle_edit_clicked()
 
         self.twBodyData.removeRow(self._selected_row_index())
 
         self.interactive_plot.remove_body(body_name)
+        self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
         self.set_as_editing(True)
-        self.handle_edit_clicked()
 
         for body_name, parameters in body_parameters.items():
             self.add_body_to_table(body_name, parameters)
@@ -117,7 +119,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def add_body(self, body_name: str, initial_data: tuple) -> None:
         self.set_as_editing(True)
-        self.handle_edit_clicked()
 
         self.add_body_to_table(body_name, initial_data)
 
@@ -138,6 +139,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItem(row_index, 4, self._create_table_value(body_data[2].x))
         self.twBodyData.setItem(row_index, 5, self._create_table_value(body_data[2].y))
 
+    def update_body_position(self, body_name: str, position: Vector2D) -> None:
+        self.interactive_plot.remove_body(body_name)
+        self.interactive_plot.add_body(body_name, position)
+        self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.draw()
+
     def set_time_step(self, time_step: float) -> None:
         _ = SignalBlocker(self.dsbTimeStep)
         self.dsbTimeStep.setValue(time_step)
@@ -148,6 +155,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def set_as_editing(self, editing: bool) -> None:
         self.pbEdit.setChecked(editing)
+        if editing:
+            self.handle_edit_clicked()
 
     def set_as_playing(self, playing: bool) -> None:
         self.pbPlayPause.setText("Pause" if playing else "Play")
