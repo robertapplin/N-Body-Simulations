@@ -6,8 +6,40 @@ from n_body_simulations.main_window_ui import Ui_MainWindow
 from n_body_simulations.signal_blocker import SignalBlocker
 from NBodySimulations import Vector2D
 
-from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtCore import pyqtSignal, QObject, Qt
+from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem
+
+
+TABLE_NAME_INDEX = 0
+TABLE_MASS_INDEX = 1
+TABLE_X_INDEX = 2
+TABLE_Y_INDEX = 3
+TABLE_VX_INDEX = 4
+TABLE_VY_INDEX = 5
+
+
+class ItemDelegate(QStyledItemDelegate):
+
+    def __init__(self, parent, min_value=None, max_value=None, step=None):
+        super(ItemDelegate, self).__init__(parent)
+
+        self._min = min_value
+        self._max = max_value
+        self._step = step
+        self._decimals = 6
+
+    def createEditor(self, parent, style, index):
+        box = QDoubleSpinBox(parent)
+        box.setDecimals(self._decimals)
+
+        if self._step is not None:
+            box.setSingleStep(self._step)
+        if self._min is not None:
+            box.setMinimum(self._min)
+        if self._max is not None:
+            box.setMaximum(self._max)
+
+        return box
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -30,6 +62,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.plotLayout.addWidget(self.interactive_plot.canvas())
 
+        self.setup_table_widget()
+
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
         self.pbEdit.clicked.connect(self.handle_edit_clicked)
@@ -39,21 +73,31 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
+    def setup_table_widget(self):
+        mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
+        other_item_delegate = ItemDelegate(self.twBodyData, min_value=-1000, max_value=1000, step=0.1)
+
+        self.twBodyData.setItemDelegateForColumn(TABLE_MASS_INDEX, mass_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, other_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, other_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, other_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
+
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
         self.set_as_editing(True)
 
         body_name = self._index_of_body(row_index)
         new_value = self._get_table_value(row_index, column_index)
 
-        if column_index == 1:
+        if column_index == TABLE_MASS_INDEX:
             self.massChangedSignal.emit(body_name, new_value)
-        elif column_index == 2:
+        elif column_index == TABLE_X_INDEX:
             self.xPositionChangedSignal.emit(body_name, new_value)
-        elif column_index == 3:
+        elif column_index == TABLE_Y_INDEX:
             self.yPositionChangedSignal.emit(body_name, new_value)
-        elif column_index == 4:
+        elif column_index == TABLE_VX_INDEX:
             self.xVelocityChangedSignal.emit(body_name, new_value)
-        elif column_index == 5:
+        elif column_index == TABLE_VY_INDEX:
             self.yVelocityChangedSignal.emit(body_name, new_value)
         else:
             raise RuntimeError("An unexpected column index was detected.")
@@ -132,12 +176,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         row_index = self.twBodyData.rowCount()
 
         self.twBodyData.insertRow(row_index)
-        self.twBodyData.setItem(row_index, 0, QTableWidgetItem(body_name))
-        self.twBodyData.setItem(row_index, 1, self._create_table_value(body_data[0]))
-        self.twBodyData.setItem(row_index, 2, self._create_table_value(body_data[1].x))
-        self.twBodyData.setItem(row_index, 3, self._create_table_value(body_data[1].y))
-        self.twBodyData.setItem(row_index, 4, self._create_table_value(body_data[2].x))
-        self.twBodyData.setItem(row_index, 5, self._create_table_value(body_data[2].y))
+        self.twBodyData.setItem(row_index, TABLE_NAME_INDEX, QTableWidgetItem(body_name))
+        self.twBodyData.setItem(row_index, TABLE_MASS_INDEX, self._create_table_value(body_data[0]))
+        self.twBodyData.setItem(row_index, TABLE_X_INDEX, self._create_table_value(body_data[1].x))
+        self.twBodyData.setItem(row_index, TABLE_Y_INDEX, self._create_table_value(body_data[1].y))
+        self.twBodyData.setItem(row_index, TABLE_VX_INDEX, self._create_table_value(body_data[2].x))
+        self.twBodyData.setItem(row_index, TABLE_VY_INDEX, self._create_table_value(body_data[2].y))
 
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
         self.interactive_plot.remove_body(body_name)
@@ -198,7 +242,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     @staticmethod
     def _create_table_value(value: float) -> QTableWidgetItem:
-        return QTableWidgetItem(f"{value:.6f}")
+        item = QTableWidgetItem()
+        item.setData(Qt.EditRole, value)
+        return item
 
     def _get_table_value(self, row_index: int, column_index: int) -> float:
         return float(self.twBodyData.item(row_index, column_index).text())
