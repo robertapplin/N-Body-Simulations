@@ -50,6 +50,31 @@ class Ui_MainWindow(object):
         self.pbEdit.setObjectName("pbEdit")
         self.gridLayout.addWidget(self.pbEdit, 0, 6, 1, 1)
         self.twBodyData = QtWidgets.QTableWidget(self.fSetup)
+        self.twBodyData.setStyleSheet("QHeaderView::section {\n"
+"    font-size: 10pt;\n"
+"    background-color: #f0f0f0;\n"
+"    padding: 2px;\n"
+"    border: 1px solid #828790;\n"
+"    border-top: 0px;\n"
+"    border-left: 0px;\n"
+"}\n"
+"\n"
+"QHeaderView::section::last {\n"
+"    border-right: 0px;\n"
+"}\n"
+"\n"
+"QTableWidget {\n"
+"    font-size: 8pt;\n"
+"}\n"
+"\n"
+"QTableWidget::item{\n"
+"    background-color: #ffffff;\n"
+"}\n"
+"\n"
+"QTableWidget::item:selected{\n"
+"    background-color: #c3f49e;\n"
+"    color: #000000;\n"
+"}")
         self.twBodyData.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.twBodyData.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.twBodyData.setShowGrid(False)
@@ -68,6 +93,7 @@ class Ui_MainWindow(object):
         self.twBodyData.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.twBodyData.setHorizontalHeaderItem(5, item)
+        self.twBodyData.horizontalHeader().setHighlightSections(False)
         self.twBodyData.horizontalHeader().setStretchLastSection(True)
         self.twBodyData.verticalHeader().setVisible(False)
         self.gridLayout.addWidget(self.twBodyData, 1, 0, 1, 9)
@@ -99,9 +125,9 @@ class Ui_MainWindow(object):
         self.pbPlayPause.setMaximumSize(QtCore.QSize(30, 30))
         self.pbPlayPause.setObjectName("pbPlayPause")
         self.gridLayout.addWidget(self.pbPlayPause, 0, 8, 1, 1)
-        self.widget = QtWidgets.QWidget(self.splitter)
-        self.widget.setObjectName("widget")
-        self.plotLayout = QtWidgets.QGridLayout(self.widget)
+        self.layoutWidget = QtWidgets.QWidget(self.splitter)
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.plotLayout = QtWidgets.QGridLayout(self.layoutWidget)
         self.plotLayout.setContentsMargins(0, 0, 0, 0)
         self.plotLayout.setObjectName("plotLayout")
         self.gridLayout_2.addWidget(self.splitter, 0, 0, 1, 1)
