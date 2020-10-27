@@ -39,6 +39,10 @@ void export_NBodySimulator(py::module &m) {
                                py::const_))
       .def("bodyNames", py::overload_cast<>(
                             &Simulator::NBodySimulator::bodyNames, py::const_))
+      .def("setName",
+           py::overload_cast<std::string const &, std::string const &>(
+               &Simulator::NBodySimulator::setName),
+           py::arg("oldName"), py::arg("newName"))
       .def("setMass",
            py::overload_cast<std::string const &, double>(
                &Simulator::NBodySimulator::setMass),

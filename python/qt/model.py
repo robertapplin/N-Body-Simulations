@@ -15,9 +15,8 @@ class NBodySimulationsModel:
         """Return the initial body parameters (mass, position and velocity) of all bodies."""
         initial_body_parameters = dict()
 
-        for body_name in self._simulator.bodyNames():
-            initial_body_parameters[body_name] = tuple([self.mass(body_name), self.initial_position(body_name),
-                                                        self.initial_velocity(body_name)])
+        for body_name in self.body_names():
+            initial_body_parameters[body_name] = self.initial_data(body_name)
         return initial_body_parameters
 
     @catch_errors()
@@ -32,6 +31,10 @@ class NBodySimulationsModel:
 
         # If this point is reached, the body has been added successfully
         return True
+
+    def body_names(self):
+        """Returns the body names stored by the simulator."""
+        return self._simulator.bodyNames()
 
     def set_time_step(self, time_step: float) -> None:
         """Set the time step used by the simulator."""
@@ -52,6 +55,11 @@ class NBodySimulationsModel:
     def number_of_bodies(self) -> int:
         """Return the number of bodies in the simulation setup."""
         return self._simulator.numberOfBodies()
+
+    @catch_errors()
+    def set_name(self, old_name: str, new_name: str) -> None:
+        """Set a new name for the specified body in the simulator."""
+        self._simulator.setName(old_name, new_name)
 
     @catch_errors()
     def set_mass(self, body_name: str, mass: float) -> None:
@@ -92,6 +100,11 @@ class NBodySimulationsModel:
     def initial_velocity(self, body_name: str) -> Vector2D:
         """Return the initial velocity of the specified body stored by the simulator."""
         return self._simulator.initialVelocity(body_name)
+
+    @catch_errors()
+    def initial_data(self, body_name: str) -> tuple:
+        """Returns the initial data of the specified body stored by the simulator."""
+        return tuple([self.mass(body_name), self.initial_position(body_name), self.initial_velocity(body_name)])
 
     @catch_errors()
     def run_simulation(self) -> bool:

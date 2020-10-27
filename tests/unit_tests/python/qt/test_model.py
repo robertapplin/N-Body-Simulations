@@ -79,6 +79,11 @@ def test_that_remove_body_fails_silently_if_an_invalid_body_name_is_provided(mod
     model.remove_body("Not a body")
 
 
+def test_that_body_names_will_return_the_expected_body_names(model):
+    model.add_body("Mars", 0.2, 3.0, 4.0)
+    assert model.body_names() == ["Sun", "Earth", "Mars"]
+
+
 def test_that_time_step_returns_the_expected_value(model):
     assert model.time_step() == 1.0
 
@@ -111,6 +116,24 @@ def test_that_initial_body_parameters_will_return_the_expected_parameters(model)
     mars_parameters = body_parameters["Mars"]
     assert mars_parameters[0] == 0.2
     assert mars_parameters[1] == Vector2D(3.0, 4.0)
+
+
+def test_that_initial_data_will_return_the_expected_body_data(model):
+    parameters = model.initial_data("Earth")
+
+    assert parameters[0] == 0.000003
+    assert parameters[1] == Vector2D(1.0, 0.0)
+    assert parameters[2] == Vector2D(0.0, 0.015)
+
+
+def test_that_set_name_will_change_the_name_of_a_body_as_expected(model):
+    model.set_name("Earth", "Venus")
+    assert model.initial_position("Venus") == Vector2D(1.0, 0.0)
+
+
+def test_that_set_mass_will_set_the_mass_of_a_body_as_expected(model):
+    model.set_mass("Earth", 5.0)
+    assert model.mass("Earth") == 5.0
 
 
 def test_that_set_x_position_will_set_the_x_position_of_a_body_as_expected(model):

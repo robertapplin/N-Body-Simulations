@@ -43,6 +43,9 @@ public:
   // Returns the names of the bodies in the simulator.
   std::vector<std::string> bodyNames() const;
 
+  // Set a new name for the specified body in the simulator.
+  void setName(std::string const &oldName, std::string const &newName);
+
   // Set the mass of the specified body in the simulator.
   void setMass(std::string const &bodyName, double mass);
   // Return the mass of the specified body stored by the simulator.

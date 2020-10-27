@@ -81,6 +81,20 @@ TEST_F(
   ASSERT_EQ(expectedNames, bodyNames);
 }
 
+TEST_F(NBodySimulatorTest, test_that_setName_will_set_the_name_of_a_body) {
+  m_simulator->setName("Sun", "Jupiter");
+
+  auto const expectedNames = std::vector<std::string>({"Jupiter"});
+  ASSERT_EQ(expectedNames, m_simulator->bodyNames());
+  ASSERT_TRUE(m_simulator->hasDataChanged());
+}
+
+TEST_F(NBodySimulatorTest,
+       test_that_setName_will_throw_if_the_old_body_name_does_not_exist) {
+  ASSERT_THROW(m_simulator->setName("Neptune", "Jupiter"),
+               std::invalid_argument);
+}
+
 TEST_F(NBodySimulatorTest, test_that_setMass_will_set_the_mass_of_a_body) {
   m_simulator->setMass("Sun", 2.0);
   ASSERT_EQ(2.0, m_simulator->mass("Sun"));

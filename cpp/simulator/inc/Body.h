@@ -17,6 +17,8 @@ public:
        Vector2D const &initialVelocity);
   ~Body() = default;
 
+  // Sets the name of the body.
+  void setName(std::string const &name);
   // Returns the name of the body.
   std::string name() const;
 

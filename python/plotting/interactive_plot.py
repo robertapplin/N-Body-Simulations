@@ -52,6 +52,16 @@ class InteractivePlot:
 
         self._initial_data[body_name] = position
 
+    def update_body_name(self, old_name: str, new_name: str) -> None:
+        """Updates the name of a body to a new name."""
+        if old_name in self._lines:
+            self._lines[new_name] = self._lines[old_name]
+            self._lines[new_name].set_label(new_name)
+            del self._lines[old_name]
+
+            self._initial_data[new_name] = self._initial_data[old_name]
+            del self._initial_data[old_name]
+
     def set_simulation_data(self, simulation_data: dict) -> None:
         """Sets the simulation data in the animator."""
         self._animator.set_simulation_data(simulation_data)
