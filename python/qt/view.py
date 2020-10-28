@@ -232,12 +232,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItem(self._selected_row_index(), TABLE_NAME_INDEX, QTableWidgetItem(body_name))
 
     def set_time_step(self, time_step: float) -> None:
-        _ = SignalBlocker(self.dsbTimeStep)
-        self.dsbTimeStep.setValue(time_step)
+        _ = SignalBlocker(self.timeStepAction.doubleSpinBox)
+        self.timeStepAction.doubleSpinBox.setValue(time_step)
 
     def set_duration(self, duration: float) -> None:
-        _ = SignalBlocker(self.dsbDuration)
-        self.dsbDuration.setValue(duration)
+        _ = SignalBlocker(self.durationAction.doubleSpinBox)
+        self.durationAction.doubleSpinBox.setValue(duration)
 
     def set_as_editing(self, editing: bool) -> None:
         self.pbEdit.setChecked(editing)
@@ -257,8 +257,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
         self.pbAddBody.setEnabled(enable)
-        self.dsbTimeStep.setEnabled(enable)
-        self.dsbDuration.setEnabled(enable)
+        self.tbTimeSettings.setEnabled(enable)
         self.pbEdit.setEnabled(enable)
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
