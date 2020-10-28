@@ -1,5 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+import qtawesome as qta
+
 from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
@@ -59,6 +61,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         super(NBodySimulationsView, self).__init__()
         self.setupUi(parent)
 
+        self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
+        self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
+
+        self.setup_icons()
         self.setup_table_widget()
 
         self.interactive_plot = InteractivePlot()
@@ -75,6 +81,14 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
         self._selected_body = None
+
+    def setup_icons(self) -> None:
+        self.pbPlayPause.setIcon(self.play_icon)
+        self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
+        self.pbEdit.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
+        self.pbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
+        self.pbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
+        self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
         mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
@@ -215,12 +229,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
             self.handle_edit_clicked()
 
     def set_as_playing(self, playing: bool) -> None:
-        self.pbPlayPause.setText("Pause" if playing else "Play")
+        self.pbPlayPause.setToolTip("Pause" if playing else "Play")
+        self.pbPlayPause.setIcon(self.pause_icon if playing else self.play_icon)
         if playing:
             self.set_as_editing(False)
 
     def is_simulating(self) -> bool:
-        return self.pbPlayPause.text() != "Play"
+        return self.pbPlayPause.toolTip() != "Play"
 
     def enable_view(self, enable: bool) -> None:
         self.twBodyData.setEnabled(enable)
