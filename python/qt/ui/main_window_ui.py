@@ -80,7 +80,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QTableWidget::item:selected{\n"
-"    background-color: #c3f49e;\n"
+"    background-color: #c7e0ff;\n"
 "    color: #000000;\n"
 "}")
         self.twBodyData.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)

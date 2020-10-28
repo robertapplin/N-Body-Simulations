@@ -146,7 +146,7 @@ QTableWidget::item{
 }
 
 QTableWidget::item:selected{
-	background-color: #c3f49e;
+	background-color: #c7e0ff;
 	color: #000000;
 }</string>
           </property>
