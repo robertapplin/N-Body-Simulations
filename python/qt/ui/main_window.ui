@@ -22,7 +22,7 @@
       </property>
       <widget class="QFrame" name="fSetup">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="7">
+        <item row="0" column="8">
          <widget class="QPushButton" name="pbEdit">
           <property name="minimumSize">
            <size>
@@ -50,7 +50,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="5">
+        <item row="0" column="6">
          <widget class="QPushButton" name="pbAddBody">
           <property name="minimumSize">
            <size>
@@ -66,28 +66,6 @@
           </property>
           <property name="toolTip">
            <string>Add Body</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4">
-         <widget class="QPushButton" name="pbRemoveBody">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Remove Selected Body</string>
           </property>
           <property name="text">
            <string/>
@@ -121,7 +99,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0" colspan="11">
+        <item row="1" column="0" colspan="12">
          <widget class="QTableWidget" name="twBodyData">
           <property name="styleSheet">
            <string notr="true">QHeaderView::section {
@@ -219,7 +197,7 @@ QTableWidget::item:selected{
           </property>
          </widget>
         </item>
-        <item row="0" column="10">
+        <item row="0" column="11">
          <widget class="QPushButton" name="pbPlayPause">
           <property name="minimumSize">
            <size>
@@ -241,7 +219,7 @@ QTableWidget::item:selected{
           </property>
          </widget>
         </item>
-        <item row="0" column="9">
+        <item row="0" column="10">
          <widget class="QPushButton" name="pbStop">
           <property name="minimumSize">
            <size>
@@ -263,7 +241,14 @@ QTableWidget::item:selected{
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="6">
+        <item row="0" column="9">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="7">
          <widget class="QFrame" name="fControls">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <property name="leftMargin">
@@ -281,8 +266,30 @@ QTableWidget::item:selected{
           </layout>
          </widget>
         </item>
-        <item row="0" column="6">
-         <widget class="QPushButton" name="pbTimeSettings">
+        <item row="0" column="5">
+         <widget class="QPushButton" name="pbRemoveBody">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Remove Selected Body</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QToolButton" name="tbTimeSettings">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -300,13 +307,6 @@ QTableWidget::item:selected{
           </property>
           <property name="text">
            <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="8">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
           </property>
          </widget>
         </item>

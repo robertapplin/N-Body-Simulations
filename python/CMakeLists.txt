@@ -5,6 +5,7 @@ set(PYTHON_FILES
     plotting/interactive_plot.py
     plotting/simulation_animator.py
     qt/add_body_dialog.py
+    qt/doublespinbox_action.py
     qt/error_catcher.py
     qt/main_gui.py
     qt/model.py

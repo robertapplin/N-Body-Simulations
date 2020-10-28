@@ -6,10 +6,11 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
 from n_body_simulations.signal_blocker import SignalBlocker
+from n_body_simulations.doublespinbox_action import DoubleSpinBoxAction
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
-from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem
+from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem, QToolButton
 
 
 TABLE_NAME_INDEX = 0
@@ -61,11 +62,15 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         super(NBodySimulationsView, self).__init__()
         self.setupUi(parent)
 
-        self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
-        self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
+        self.play_icon = None
+        self.pause_icon = None
+
+        self.timeStepAction = None
+        self.durationAction = None
 
         self.setup_icons()
         self.setup_table_widget()
+        self.setup_time_settings_widget()
 
         self.interactive_plot = InteractivePlot()
         self.plotLayout.addWidget(self.interactive_plot.canvas())
@@ -77,16 +82,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
-        self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
-        self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+        self.timeStepAction.doubleSpinBox.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
+        self.durationAction.doubleSpinBox.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
         self._selected_body = None
 
     def setup_icons(self) -> None:
+        self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
+        self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
+
         self.pbPlayPause.setIcon(self.play_icon)
         self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
         self.pbEdit.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
-        self.pbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
+        self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
         self.pbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
@@ -99,6 +107,14 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, other_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, other_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
+
+    def setup_time_settings_widget(self):
+        self.timeStepAction = DoubleSpinBoxAction("Time Step: ", 1.0, 0.0, 500.0, " d")
+        self.durationAction = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+
+        self.tbTimeSettings.addAction(self.timeStepAction)
+        self.tbTimeSettings.addAction(self.durationAction)
+        self.tbTimeSettings.setPopupMode(QToolButton.InstantPopup)
 
     def emit_remove_body_clicked(self) -> None:
         self.removeBodyClickedSignal.emit()
