@@ -61,11 +61,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         super(NBodySimulationsView, self).__init__()
         self.setupUi(parent)
 
-        icon_options = [{'scale_factor': 1.5}]
-        self.play_icon = qta.icon('mdi.play', color='green', options=icon_options)
-        self.pause_icon = qta.icon('mdi.pause', color='blue', options=icon_options)
+        self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
+        self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
 
-        self.setup_icons(icon_options)
+        self.setup_icons()
         self.setup_table_widget()
 
         self.interactive_plot = InteractivePlot()
@@ -83,19 +82,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self._selected_body = None
 
-    def setup_icons(self, icon_options: list) -> None:
-        stop_icon = qta.icon('mdi.stop', color='red', options=icon_options)
-        interactive_icon = qta.icon('mdi.gesture-tap', options=[{'scale_factor': 1.4}])
-        timer_icon = qta.icon('mdi.timer', options=[{'scale_factor': 1.3}])
-        plus_icon = qta.icon('mdi.plus', options=icon_options)
-        minus_icon = qta.icon('mdi.minus', options=icon_options)
-
+    def setup_icons(self) -> None:
         self.pbPlayPause.setIcon(self.play_icon)
-        self.pbStop.setIcon(stop_icon)
-        self.pbEdit.setIcon(interactive_icon)
-        self.pbTimeSettings.setIcon(timer_icon)
-        self.pbAddBody.setIcon(plus_icon)
-        self.pbRemoveBody.setIcon(minus_icon)
+        self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
+        self.pbEdit.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
+        self.pbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
+        self.pbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
+        self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
         mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
