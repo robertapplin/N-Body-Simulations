@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QDoubleSpinBox, QWidget, QWidgetAction
+from PyQt5.QtWidgets import QDoubleSpinBox, QHBoxLayout, QLabel, QWidget, QWidgetAction
 
 
 class DoubleSpinBoxAction(QWidgetAction):
@@ -10,15 +10,15 @@ class DoubleSpinBoxAction(QWidgetAction):
         """Initializes the QLabel, QDoubleSpinBox, and layout of this custom action."""
         super(QWidgetAction, self).__init__(None)
 
-        self.doubleSpinBox = QDoubleSpinBox(None)
-        self.doubleSpinBox.setMinimum(minimum)
-        self.doubleSpinBox.setMaximum(maximum)
-        self.doubleSpinBox.setValue(default_value)
-        self.doubleSpinBox.setSuffix(suffix)
+        self.double_spin_box = QDoubleSpinBox(None)
+        self.double_spin_box.setMinimum(minimum)
+        self.double_spin_box.setMaximum(maximum)
+        self.double_spin_box.setValue(default_value)
+        self.double_spin_box.setSuffix(suffix)
 
         self.layout = QHBoxLayout()
         self.layout.addWidget(QLabel(label))
-        self.layout.addWidget(self.doubleSpinBox)
+        self.layout.addWidget(self.double_spin_box)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)

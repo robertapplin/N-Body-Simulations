@@ -2,40 +2,27 @@
 # Authored by Robert Applin, 2020
 import pytest
 
-from n_body_simulations.test_helpers.dummy_class_helper import DummyErrorProneClass
-from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
+from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 
-enable_test_mode()
-
-
-@pytest.fixture(scope='module')
-def dummy_class():
-    return DummyErrorProneClass()
+from PyQt5.QtWidgets import QToolButton
 
 
-def test_that_the_error_causer_causes_an_error_when_not_using_the_error_catcher(dummy_class):
-    try:
-        dummy_class.cause_an_uncaught_exception()
-    except RuntimeError:
-        return
-    pytest.fail("The ErrorCauser class did not cause an exception when expected.")
+@pytest.fixture
+def dummy_action():
+    return DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
 
 
-def test_that_an_exception_is_caught_by_the_error_catcher(dummy_class):
-    dummy_class.cause_an_exception()
+def test_that_creating_a_DoubleSpinBoxAction_does_not_raise_an_exception():
+    _ = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
 
 
-def test_that_a_divide_by_zero_error_is_caught_by_the_error_catcher(dummy_class):
-    dummy_class.divide_by_zero()
+def test_that_adding_a_DoubleSpinBoxAction_to_a_tool_button_does_not_raise_an_exception(dummy_action):
+    tool_button = QToolButton()
+    tool_button.addAction(dummy_action)
 
 
-def test_that_an_index_out_of_range_error_is_caught_by_the_error_catcher(dummy_class):
-    dummy_class.index_out_of_range()
-
-
-def test_that_a_function_returning_nothing_will_not_cause_an_error_when_decorated_by_the_error_catcher(dummy_class):
-    dummy_class.function_that_returns_nothing()
-
-
-def test_that_a_function_will_return_the_correct_value_when_decorated_by_the_error_catcher(dummy_class):
-    assert dummy_class.function_that_returns_a_value() == 1.0
+def test_that_a_DoubleSpinBoxAction_with_the_correct_spin_box_parameters_is_created(dummy_action):
+    assert dummy_action.double_spin_box.value() == 500.0
+    assert dummy_action.double_spin_box.minimum() == 0.0
+    assert dummy_action.double_spin_box.maximum() == 10000.0
+    assert dummy_action.double_spin_box.suffix() == " d"

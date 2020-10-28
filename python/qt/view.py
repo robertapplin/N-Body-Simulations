@@ -65,8 +65,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.play_icon = None
         self.pause_icon = None
 
-        self.timeStepAction = None
-        self.durationAction = None
+        self.time_step_action = None
+        self.duration_action = None
 
         self.setup_icons()
         self.setup_table_widget()
@@ -82,8 +82,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
-        self.timeStepAction.doubleSpinBox.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
-        self.durationAction.doubleSpinBox.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+        self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
+        self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
         self._selected_body = None
 
@@ -109,11 +109,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
 
     def setup_time_settings_widget(self):
-        self.timeStepAction = DoubleSpinBoxAction("Time Step: ", 1.0, 0.0, 500.0, " d")
-        self.durationAction = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+        self.time_step_action = DoubleSpinBoxAction("Time Step: ", 1.0, 0.0, 500.0, " d")
+        self.duration_action = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
 
-        self.tbTimeSettings.addAction(self.timeStepAction)
-        self.tbTimeSettings.addAction(self.durationAction)
+        self.tbTimeSettings.addAction(self.time_step_action)
+        self.tbTimeSettings.addAction(self.duration_action)
         self.tbTimeSettings.setPopupMode(QToolButton.InstantPopup)
 
     def emit_remove_body_clicked(self) -> None:
@@ -232,12 +232,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItem(self._selected_row_index(), TABLE_NAME_INDEX, QTableWidgetItem(body_name))
 
     def set_time_step(self, time_step: float) -> None:
-        _ = SignalBlocker(self.timeStepAction.doubleSpinBox)
-        self.timeStepAction.doubleSpinBox.setValue(time_step)
+        _ = SignalBlocker(self.time_step_action.double_spin_box)
+        self.time_step_action.double_spin_box.setValue(time_step)
 
     def set_duration(self, duration: float) -> None:
-        _ = SignalBlocker(self.durationAction.doubleSpinBox)
-        self.durationAction.doubleSpinBox.setValue(duration)
+        _ = SignalBlocker(self.duration_action.double_spin_box)
+        self.duration_action.double_spin_box.setValue(duration)
 
     def set_as_editing(self, editing: bool) -> None:
         self.pbEdit.setChecked(editing)
