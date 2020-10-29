@@ -5,7 +5,6 @@ import qtawesome as qta
 from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.signal_blocker import SignalBlocker
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from NBodySimulations import Vector2D
 
@@ -204,7 +203,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_body_to_table(self, body_name: str, body_data: tuple) -> None:
-        _ = SignalBlocker(self.twBodyData)
+        self.twBodyData.blockSignals(True)
         row_index = self.twBodyData.rowCount()
 
         self.twBodyData.insertRow(row_index)
@@ -214,6 +213,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItem(row_index, TABLE_Y_INDEX, self._create_table_value(body_data[1].y))
         self.twBodyData.setItem(row_index, TABLE_VX_INDEX, self._create_table_value(body_data[2].x))
         self.twBodyData.setItem(row_index, TABLE_VY_INDEX, self._create_table_value(body_data[2].y))
+        self.twBodyData.blockSignals(False)
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
         self.interactive_plot.update_body_name(old_name, new_name)
@@ -228,16 +228,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def set_name(self, body_name: str) -> None:
-        _ = SignalBlocker(self.twBodyData)
+        self.twBodyData.blockSignals(True)
         self.twBodyData.setItem(self._selected_row_index(), TABLE_NAME_INDEX, QTableWidgetItem(body_name))
+        self.twBodyData.blockSignals(False)
 
     def set_time_step(self, time_step: float) -> None:
-        _ = SignalBlocker(self.time_step_action.double_spin_box)
+        self.time_step_action.double_spin_box.blockSignals(True)
         self.time_step_action.double_spin_box.setValue(time_step)
+        self.time_step_action.double_spin_box.blockSignals(False)
 
     def set_duration(self, duration: float) -> None:
-        _ = SignalBlocker(self.duration_action.double_spin_box)
+        self.time_step_action.double_spin_box.blockSignals(True)
         self.duration_action.double_spin_box.setValue(duration)
+        self.time_step_action.double_spin_box.blockSignals(False)
 
     def set_as_editing(self, editing: bool) -> None:
         self.pbEdit.setChecked(editing)
