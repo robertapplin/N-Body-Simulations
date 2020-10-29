@@ -128,6 +128,12 @@ class InteractivePlot:
         for position in self._initial_data.values():
             xs.append(position.x)
             ys.append(position.y)
+
+        if len(xs) == 0:
+            xs = [0.0]
+        if len(ys) == 0:
+            ys = [0.0]
+
         return min(xs), max(xs), min(ys), max(ys)
 
     def _calculate_simulation_axes_min_max(self) -> tuple:
@@ -137,6 +143,12 @@ class InteractivePlot:
             for position in body_positions.values():
                 xs.append(position.x)
                 ys.append(position.y)
+
+        if len(xs) == 0:
+            xs = [0.0]
+        if len(ys) == 0:
+            ys = [0.0]
+
         return min(xs), max(xs), min(ys), max(ys)
 
     def _initialize_bodies(self) -> None:
