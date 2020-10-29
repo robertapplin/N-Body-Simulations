@@ -22,7 +22,7 @@
       </property>
       <widget class="QFrame" name="fSetup">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="7">
+        <item row="0" column="5">
          <widget class="QPushButton" name="pbEdit">
           <property name="minimumSize">
            <size>
@@ -50,7 +50,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="5">
+        <item row="0" column="3">
          <widget class="QPushButton" name="pbAddBody">
           <property name="minimumSize">
            <size>
@@ -72,56 +72,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="4">
-         <widget class="QPushButton" name="pbRemoveBody">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Remove Selected Body</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="lbDuration">
-          <property name="text">
-           <string>Duration: </string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="lbTimeStep">
-          <property name="text">
-           <string>Time Step: </string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="dsbTimeStep">
-          <property name="suffix">
-           <string> d</string>
-          </property>
-          <property name="decimals">
-           <number>2</number>
-          </property>
-          <property name="value">
-           <double>1.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="11">
+        <item row="1" column="0" colspan="9">
          <widget class="QTableWidget" name="twBodyData">
           <property name="styleSheet">
            <string notr="true">QHeaderView::section {
@@ -200,26 +151,7 @@ QTableWidget::item:selected{
           </column>
          </widget>
         </item>
-        <item row="0" column="3">
-         <widget class="QDoubleSpinBox" name="dsbDuration">
-          <property name="suffix">
-           <string> d</string>
-          </property>
-          <property name="decimals">
-           <number>2</number>
-          </property>
-          <property name="minimum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>5000.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>500.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="10">
+        <item row="0" column="8">
          <widget class="QPushButton" name="pbPlayPause">
           <property name="minimumSize">
            <size>
@@ -241,7 +173,7 @@ QTableWidget::item:selected{
           </property>
          </widget>
         </item>
-        <item row="0" column="9">
+        <item row="0" column="7">
          <widget class="QPushButton" name="pbStop">
           <property name="minimumSize">
            <size>
@@ -263,7 +195,14 @@ QTableWidget::item:selected{
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="6">
+        <item row="0" column="6">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" colspan="4">
          <widget class="QFrame" name="fControls">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <property name="leftMargin">
@@ -281,8 +220,30 @@ QTableWidget::item:selected{
           </layout>
          </widget>
         </item>
-        <item row="0" column="6">
-         <widget class="QPushButton" name="pbTimeSettings">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pbRemoveBody">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Remove Selected Body</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QToolButton" name="tbTimeSettings">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -300,13 +261,6 @@ QTableWidget::item:selected{
           </property>
           <property name="text">
            <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="8">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
           </property>
          </widget>
         </item>

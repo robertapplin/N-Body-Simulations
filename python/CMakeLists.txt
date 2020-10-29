@@ -5,11 +5,11 @@ set(PYTHON_FILES
     plotting/interactive_plot.py
     plotting/simulation_animator.py
     qt/add_body_dialog.py
+    qt/double_spinbox_action.py
     qt/error_catcher.py
     qt/main_gui.py
     qt/model.py
     qt/presenter.py
-    qt/signal_blocker.py
     qt/view.py
     qt/ui/add_body_dialog_ui.py
     qt/ui/main_window_ui.py

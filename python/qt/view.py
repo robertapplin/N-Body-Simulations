@@ -3,13 +3,13 @@
 import qtawesome as qta
 
 from n_body_simulations.add_body_dialog import AddBodyDialog
+from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.signal_blocker import SignalBlocker
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
-from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem
+from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem, QToolButton
 
 
 TABLE_NAME_INDEX = 0
@@ -61,11 +61,15 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         super(NBodySimulationsView, self).__init__()
         self.setupUi(parent)
 
-        self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
-        self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
+        self.play_icon = None
+        self.pause_icon = None
+
+        self.time_step_action = None
+        self.duration_action = None
 
         self.setup_icons()
         self.setup_table_widget()
+        self.setup_time_settings_widget()
 
         self.interactive_plot = InteractivePlot()
         self.plotLayout.addWidget(self.interactive_plot.canvas())
@@ -77,16 +81,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
-        self.dsbTimeStep.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
-        self.dsbDuration.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+        self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
+        self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
         self._selected_body = None
 
     def setup_icons(self) -> None:
+        self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
+        self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
+
         self.pbPlayPause.setIcon(self.play_icon)
         self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
         self.pbEdit.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
-        self.pbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
+        self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
         self.pbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
@@ -99,6 +106,14 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, other_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, other_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
+
+    def setup_time_settings_widget(self):
+        self.time_step_action = DoubleSpinBoxAction("Time Step: ", 1.0, 0.0, 500.0, " d")
+        self.duration_action = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+
+        self.tbTimeSettings.addAction(self.time_step_action)
+        self.tbTimeSettings.addAction(self.duration_action)
+        self.tbTimeSettings.setPopupMode(QToolButton.InstantPopup)
 
     def emit_remove_body_clicked(self) -> None:
         self.removeBodyClickedSignal.emit()
@@ -188,7 +203,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_body_to_table(self, body_name: str, body_data: tuple) -> None:
-        _ = SignalBlocker(self.twBodyData)
+        self.twBodyData.blockSignals(True)
         row_index = self.twBodyData.rowCount()
 
         self.twBodyData.insertRow(row_index)
@@ -198,6 +213,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItem(row_index, TABLE_Y_INDEX, self._create_table_value(body_data[1].y))
         self.twBodyData.setItem(row_index, TABLE_VX_INDEX, self._create_table_value(body_data[2].x))
         self.twBodyData.setItem(row_index, TABLE_VY_INDEX, self._create_table_value(body_data[2].y))
+        self.twBodyData.blockSignals(False)
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
         self.interactive_plot.update_body_name(old_name, new_name)
@@ -212,16 +228,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def set_name(self, body_name: str) -> None:
-        _ = SignalBlocker(self.twBodyData)
+        self.twBodyData.blockSignals(True)
         self.twBodyData.setItem(self._selected_row_index(), TABLE_NAME_INDEX, QTableWidgetItem(body_name))
+        self.twBodyData.blockSignals(False)
 
     def set_time_step(self, time_step: float) -> None:
-        _ = SignalBlocker(self.dsbTimeStep)
-        self.dsbTimeStep.setValue(time_step)
+        self.time_step_action.double_spin_box.blockSignals(True)
+        self.time_step_action.double_spin_box.setValue(time_step)
+        self.time_step_action.double_spin_box.blockSignals(False)
 
     def set_duration(self, duration: float) -> None:
-        _ = SignalBlocker(self.dsbDuration)
-        self.dsbDuration.setValue(duration)
+        self.time_step_action.double_spin_box.blockSignals(True)
+        self.duration_action.double_spin_box.setValue(duration)
+        self.time_step_action.double_spin_box.blockSignals(False)
 
     def set_as_editing(self, editing: bool) -> None:
         self.pbEdit.setChecked(editing)
@@ -241,8 +260,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
         self.pbAddBody.setEnabled(enable)
-        self.dsbTimeStep.setEnabled(enable)
-        self.dsbDuration.setEnabled(enable)
+        self.tbTimeSettings.setEnabled(enable)
         self.pbEdit.setEnabled(enable)
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
