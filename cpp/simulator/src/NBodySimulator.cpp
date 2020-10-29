@@ -109,6 +109,8 @@ bool NBodySimulator::hasDataChanged() const { return m_dataChanged; }
 void NBodySimulator::runSimulation() {
   if (!m_dataChanged)
     return;
+  else if (bodyNames().empty())
+    throw std::runtime_error("There are no bodies in the simulation.");
 
   m_gravitationalConstant = gravitationalConstant(TimeUnit::Days);
 

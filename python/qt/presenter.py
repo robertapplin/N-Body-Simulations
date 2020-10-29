@@ -31,7 +31,7 @@ class NBodySimulationsPresenter:
 
     def handle_remove_body_clicked(self) -> None:
         body_name = self.view.selected_body()
-        if body_name and self.model.number_of_bodies() > 1:
+        if body_name:
             self.model.remove_body(body_name)
             self.view.remove_body(body_name)
 

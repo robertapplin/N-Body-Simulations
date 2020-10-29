@@ -186,6 +186,12 @@ TEST_F(
   ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
 }
 
+TEST_F(NBodySimulatorTest,
+       test_that_runSimulation_will_throw_if_no_bodies_are_in_the_simulation) {
+  m_simulator->removeBody("Sun");
+  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+}
+
 TEST_F(
     NBodySimulatorTest,
     test_that_simulatedPositions_will_return_a_map_of_positions_with_the_correct_size) {
