@@ -75,13 +75,12 @@ class NBodySimulationsPresenter:
         play_clicked = not self.view.is_simulating()
         self.view.set_as_playing(play_clicked)
 
-        data_changed = self.model.has_data_changed()
-
-        if play_clicked and data_changed:
+        success = True
+        if play_clicked and self.model.has_data_changed():
             self.view.stop_simulation()
-            self._run_simulation()
+            success = self._run_simulation()
 
-        if play_clicked:
+        if play_clicked and success:
             self.view.play_simulation()
         else:
             self.view.pause_simulation()
@@ -93,7 +92,7 @@ class NBodySimulationsPresenter:
             if success:
                 self.view.add_body(body_name, self.model.initial_data(body_name))
 
-    def _run_simulation(self) -> None:
+    def _run_simulation(self) -> bool:
         self.view.enable_view(False)
         success = self.model.run_simulation()
         self.view.enable_view(True)
@@ -101,3 +100,4 @@ class NBodySimulationsPresenter:
             self.view.start_simulation(self.model.simulation_results())
         else:
             self.view.set_as_playing(False)
+        return success
