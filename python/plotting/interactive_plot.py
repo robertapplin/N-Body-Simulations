@@ -99,6 +99,8 @@ class InteractivePlot:
         """Shows the legend if there are lines on the plot."""
         if len(self._lines) > 0:
             self._ax.legend()
+        elif self._ax.get_legend():
+            self._ax.get_legend().remove()
 
     def draw(self) -> None:
         """Draws the lines onto the canvas."""
