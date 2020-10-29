@@ -15,6 +15,21 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -22,8 +37,8 @@
       </property>
       <widget class="QFrame" name="fSetup">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="5">
-         <widget class="QPushButton" name="pbEdit">
+        <item row="0" column="4">
+         <widget class="QToolButton" name="tbTimeSettings">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -37,21 +52,15 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Interactive Mode</string>
+           <string>Time Settings</string>
           </property>
           <property name="text">
            <string/>
           </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
          </widget>
         </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="pbAddBody">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pbRemoveBody">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -65,7 +74,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Add Body</string>
+           <string>Remove Selected Body</string>
           </property>
           <property name="text">
            <string/>
@@ -151,28 +160,6 @@ QTableWidget::item:selected{
           </column>
          </widget>
         </item>
-        <item row="0" column="8">
-         <widget class="QPushButton" name="pbPlayPause">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Play</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="7">
          <widget class="QPushButton" name="pbStop">
           <property name="minimumSize">
@@ -189,6 +176,28 @@ QTableWidget::item:selected{
           </property>
           <property name="toolTip">
            <string>Stop</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
+         <widget class="QPushButton" name="pbPlayPause">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Play</string>
           </property>
           <property name="text">
            <string/>
@@ -220,8 +229,8 @@ QTableWidget::item:selected{
           </layout>
          </widget>
         </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="pbRemoveBody">
+        <item row="0" column="5">
+         <widget class="QPushButton" name="pbEdit">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -235,15 +244,21 @@ QTableWidget::item:selected{
            </size>
           </property>
           <property name="toolTip">
-           <string>Remove Selected Body</string>
+           <string>Interactive Mode</string>
           </property>
           <property name="text">
            <string/>
           </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item row="0" column="4">
-         <widget class="QToolButton" name="tbTimeSettings">
+        <item row="0" column="3">
+         <widget class="QPushButton" name="pbAddBody">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -257,7 +272,7 @@ QTableWidget::item:selected{
            </size>
           </property>
           <property name="toolTip">
-           <string>Time Settings</string>
+           <string>Add Body</string>
           </property>
           <property name="text">
            <string/>
@@ -266,7 +281,7 @@ QTableWidget::item:selected{
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_2">
        <layout class="QGridLayout" name="plotLayout"/>
       </widget>
      </widget>

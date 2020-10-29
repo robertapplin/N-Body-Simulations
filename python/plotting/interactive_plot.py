@@ -18,11 +18,14 @@ class InteractivePlot:
         """Initialize the interactive plot."""
         self._figure = Figure()
         # Modify margins around a figure
-        self._figure.subplots_adjust(left=0.2, bottom=0.05, right=0.95, top=0.95, wspace=0, hspace=0)
+        self._figure.subplots_adjust(left=0.015, bottom=0.015, right=0.985, top=0.985, wspace=0, hspace=0)
         self._figure.patch.set_facecolor('#f0f0f0')
         self._ax = self._figure.add_subplot(111)
         self._ax.set_autoscale_on(True)
         self._canvas = FigureCanvas(self._figure)
+
+        self._ax.get_xaxis().set_visible(False)
+        self._ax.get_yaxis().set_visible(False)
 
         self._lines = dict()
         self._initial_data = dict()
