@@ -77,6 +77,9 @@ public:
   simulatedPositions(std::string const &bodyName) const;
 
 private:
+  // Checks that the provided parameters are valid, and throws if they are not.
+  void validateSimulationParameters() const;
+
   // Calculates the new positions of the bodies at the next time step.
   void calculateNewPositions(std::size_t const &stepNumber);
   // Calculates the new positions of a target body at the next time step.
