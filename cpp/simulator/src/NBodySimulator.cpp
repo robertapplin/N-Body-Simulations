@@ -130,16 +130,16 @@ NBodySimulator::simulatedPositions(std::string const &bodyName) const {
 
 void NBodySimulator::validateSimulationParameters() const {
   if (bodyNames().empty())
-    throw std::runtime_error("There are no bodies in the simulation.");
+    throw std::invalid_argument("There are no bodies in the simulation.");
   else if (m_timeStep == 0.0)
-    throw std::runtime_error("The time step cannot be zero.");
+    throw std::invalid_argument("The time step cannot be zero.");
   else if (m_duration == 0.0)
-    throw std::runtime_error("The duration cannot be zero.");
+    throw std::invalid_argument("The duration cannot be zero.");
   else if (m_timeStep > m_duration)
-    throw std::runtime_error(
+    throw std::invalid_argument(
         "The time step cannot be larger than the duration.");
   else if (std::fmod(m_duration, m_timeStep) != 0.0)
-    throw std::runtime_error(
+    throw std::invalid_argument(
         "The duration must be evenly divisible by the time step.");
 }
 

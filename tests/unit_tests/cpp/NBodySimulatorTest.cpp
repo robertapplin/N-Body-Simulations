@@ -189,19 +189,19 @@ TEST_F(
 TEST_F(NBodySimulatorTest,
        test_that_runSimulation_will_throw_if_no_bodies_are_in_the_simulation) {
   m_simulator->removeBody("Sun");
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_THROW(m_simulator->runSimulation(), std::invalid_argument);
 }
 
 TEST_F(NBodySimulatorTest,
        test_that_runSimulation_will_throw_if_the_time_step_is_zero) {
   m_simulator->setTimeStep(0.0);
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_THROW(m_simulator->runSimulation(), std::invalid_argument);
 }
 
 TEST_F(NBodySimulatorTest,
        test_that_runSimulation_will_throw_if_the_duration_is_zero) {
   m_simulator->setDuration(0.0);
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_THROW(m_simulator->runSimulation(), std::invalid_argument);
 }
 
 TEST_F(
@@ -209,7 +209,7 @@ TEST_F(
     test_that_runSimulation_will_throw_if_the_time_step_is_larger_than_the_duration) {
   m_simulator->setTimeStep(10.0);
   m_simulator->setDuration(5.0);
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_THROW(m_simulator->runSimulation(), std::invalid_argument);
 }
 
 TEST_F(
@@ -217,7 +217,7 @@ TEST_F(
     test_that_runSimulation_will_throw_if_the_duration_is_not_divisible_by_the_time_step) {
   m_simulator->setTimeStep(1.3);
   m_simulator->setDuration(20.0);
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_THROW(m_simulator->runSimulation(), std::invalid_argument);
 }
 
 TEST_F(
