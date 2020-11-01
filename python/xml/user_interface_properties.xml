@@ -2,7 +2,40 @@
 <!--Interface properties changeable by the user are stored here.-->
 <data>
     <items>
-        <item name="item1">item1abc</item>
-        <item name="item2">item2abc</item>
+        <!--Default values.-->
+        <item name="time-step-default">1.0</item>
+        <item name="duration-default">500.0</item>
+
+        <!--Step between values when using a QDoubleSpinBox.-->
+        <item name="time-step-step">1.0</item>
+        <item name="duration-step">10.0</item>
+        <item name="mass-step">0.1</item>
+        <item name="position-step">0.1</item>
+        <item name="velocity-step">0.1</item>
+
+        <!--Minimum allowed values.-->
+        <item name="time-step-min">0.0</item>
+        <item name="duration-min">0.0</item>
+        <item name="mass-min">0.000001</item>
+        <item name="position-min">-1000.0</item>
+        <item name="velocity-min">-1000.0</item>
+
+        <!--Maximum allowed values.-->
+        <item name="time-step-max">500.0</item>
+        <item name="duration-max">10000.0</item>
+        <item name="mass-max">100.0</item>
+        <item name="position-max">1000.0</item>
+        <item name="velocity-max">1000.0</item>
+
+        <!--Units for different parameters.-->
+        <item name="time-unit">d</item>
+        <item name="mass-unit">M*</item>
+        <item name="position-unit">au</item>
+
+        <!--Number of decimal places.-->
+        <item name="time-dp">2</item>
+        <item name="mass-dp">6</item>
+        <item name="position-dp">6</item>
+        <item name="velocity-dp">6</item>
     </items>
 </data>

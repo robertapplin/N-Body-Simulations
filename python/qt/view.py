@@ -6,7 +6,7 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.xml_reader import print_data
+from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
@@ -22,25 +22,25 @@ TABLE_VY_INDEX = 5
 
 
 class ItemDelegate(QStyledItemDelegate):
+    Mass = "mass"
+    Position = "position"
+    Velocity = "velocity"
 
-    def __init__(self, parent, min_value=None, max_value=None, step=None):
+    def __init__(self, parent, item_type: str):
         super(ItemDelegate, self).__init__(parent)
 
-        self._min = min_value
-        self._max = max_value
-        self._step = step
-        self._decimals = 6
+        self._min = float(get_user_interface_property(item_type + "-min"))
+        self._max = float(get_user_interface_property(item_type + "-max"))
+        self._step = float(get_user_interface_property(item_type + "-step"))
+        self._decimals = int(get_user_interface_property(item_type + "-dp"))
 
     def createEditor(self, parent, style, index) -> None:
         box = QDoubleSpinBox(parent)
         box.setDecimals(self._decimals)
 
-        if self._step is not None:
-            box.setSingleStep(self._step)
-        if self._min is not None:
-            box.setMinimum(self._min)
-        if self._max is not None:
-            box.setMaximum(self._max)
+        box.setSingleStep(self._step)
+        box.setMinimum(self._min)
+        box.setMaximum(self._max)
 
         return box
 
@@ -67,8 +67,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.time_step_action = None
         self.duration_action = None
-
-        print_data()
 
         self.setup_icons()
         self.setup_table_widget()
@@ -101,18 +99,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
-        mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
-        other_item_delegate = ItemDelegate(self.twBodyData, min_value=-1000.0, max_value=1000.0, step=0.1)
+        mass_item_delegate = ItemDelegate(self.twBodyData, ItemDelegate.Mass)
+        position_item_delegate = ItemDelegate(self.twBodyData, ItemDelegate.Position)
+        velocity_item_delegate = ItemDelegate(self.twBodyData, ItemDelegate.Velocity)
 
         self.twBodyData.setItemDelegateForColumn(TABLE_MASS_INDEX, mass_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, other_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, other_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, other_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, position_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, position_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, velocity_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, velocity_item_delegate)
 
     def setup_time_settings_widget(self):
-        self.time_step_action = DoubleSpinBoxAction("Time Step: ", 1.0, 0.0, 500.0, " d")
-        self.duration_action = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+        self.time_step_action = DoubleSpinBoxAction("Time Step: ", DoubleSpinBoxAction.TimeStep)
+        self.duration_action = DoubleSpinBoxAction("Duration: ", DoubleSpinBoxAction.Duration)
 
         self.tbTimeSettings.addAction(self.time_step_action)
         self.tbTimeSettings.addAction(self.duration_action)
