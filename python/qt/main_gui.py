@@ -2,6 +2,7 @@
 # Authored by Robert Applin, 2020
 import sys
 
+from n_body_simulations.interface_resources_rc import qInitResources, qCleanupResources
 from n_body_simulations.presenter import NBodySimulationsPresenter
 from n_body_simulations.view import NBodySimulationsView
 
@@ -30,7 +31,9 @@ def qapp():
 def start_gui():
     """Startup the main GUI, but close it immediately if it is being tested."""
     app = qapp()
+    qInitResources()
     window = MainGUI()
     window.show()
     if QCoreApplication.applicationName() != "test":
         app.exec_()
+    qCleanupResources()

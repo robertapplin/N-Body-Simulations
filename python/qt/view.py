@@ -6,6 +6,7 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
+from n_body_simulations.xml_reader import print_data
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
@@ -66,6 +67,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.time_step_action = None
         self.duration_action = None
+
+        print_data()
 
         self.setup_icons()
         self.setup_table_widget()
