@@ -9,11 +9,11 @@ from PyQt5.QtWidgets import QToolButton
 
 @pytest.fixture
 def dummy_action():
-    return DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+    return DoubleSpinBoxAction("Duration: ", DoubleSpinBoxAction.Duration)
 
 
 def test_that_creating_a_DoubleSpinBoxAction_does_not_raise_an_exception():
-    _ = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+    _ = DoubleSpinBoxAction("Duration: ", DoubleSpinBoxAction.TimeStep)
 
 
 def test_that_adding_a_DoubleSpinBoxAction_to_a_tool_button_does_not_raise_an_exception(dummy_action):
@@ -25,4 +25,5 @@ def test_that_a_DoubleSpinBoxAction_with_the_correct_spin_box_parameters_is_crea
     assert dummy_action.double_spin_box.value() == 500.0
     assert dummy_action.double_spin_box.minimum() == 0.0
     assert dummy_action.double_spin_box.maximum() == 10000.0
+    assert dummy_action.double_spin_box.singleStep() == 10.0
     assert dummy_action.double_spin_box.suffix() == " d"
