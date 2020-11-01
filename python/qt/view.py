@@ -7,6 +7,7 @@ from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
 from n_body_simulations.table_item_delegate import TableItemDelegate
+from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
@@ -75,6 +76,15 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
+        time_unit = get_user_interface_property("time-unit")
+        mass_unit = get_user_interface_property("mass-unit")
+        position_unit = get_user_interface_property("position-unit")
+        velocity_unit = position_unit + "/" + time_unit
+
+        headers = ["Name", f"Mass ({mass_unit})", f"X ({position_unit})", f"Y ({position_unit})",
+                   f"Vx ({velocity_unit})", f"Vy ({velocity_unit})"]
+        self.twBodyData.setHorizontalHeaderLabels(headers)
+
         mass_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Mass)
         position_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Position)
         velocity_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Velocity)

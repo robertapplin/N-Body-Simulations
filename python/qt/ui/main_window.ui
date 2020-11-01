@@ -130,32 +130,32 @@ QTableWidget::item:selected{
           </attribute>
           <column>
            <property name="text">
-            <string>Name</string>
+            <string/>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Mass (M*)</string>
+            <string/>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>X (au)</string>
+            <string/>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Y (au)</string>
+            <string/>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Vx (au/d)</string>
+            <string/>
            </property>
           </column>
           <column>
            <property name="text">
-            <string>Vy (au/d)</string>
+            <string/>
            </property>
           </column>
          </widget>
