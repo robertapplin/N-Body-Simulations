@@ -10,6 +10,7 @@ set(PYTHON_FILES
     qt/main_gui.py
     qt/model.py
     qt/presenter.py
+    qt/table_item_delegate.py
     qt/view.py
     qt/ui/add_body_dialog_ui.py
     qt/ui/main_window_ui.py

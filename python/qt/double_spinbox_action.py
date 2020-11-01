@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QDoubleSpinBox, QHBoxLayout, QLabel, QWidget, QWidge
 
 class DoubleSpinBoxAction(QWidgetAction):
     """A class which creates a custom QMenu action made up of a QLabel and QDoubleSpinBox."""
+
     TimeStep = "time-step"
     Duration = "duration"
 

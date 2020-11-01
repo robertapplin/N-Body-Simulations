@@ -6,11 +6,11 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.xml_reader import get_user_interface_property
+from n_body_simulations.table_item_delegate import TableItemDelegate
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
-from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem, QToolButton
+from PyQt5.QtWidgets import QTableWidgetItem, QToolButton
 
 
 TABLE_NAME_INDEX = 0
@@ -19,30 +19,6 @@ TABLE_X_INDEX = 2
 TABLE_Y_INDEX = 3
 TABLE_VX_INDEX = 4
 TABLE_VY_INDEX = 5
-
-
-class ItemDelegate(QStyledItemDelegate):
-    Mass = "mass"
-    Position = "position"
-    Velocity = "velocity"
-
-    def __init__(self, parent, item_type: str):
-        super(ItemDelegate, self).__init__(parent)
-
-        self._min = float(get_user_interface_property(item_type + "-min"))
-        self._max = float(get_user_interface_property(item_type + "-max"))
-        self._step = float(get_user_interface_property(item_type + "-step"))
-        self._decimals = int(get_user_interface_property(item_type + "-dp"))
-
-    def createEditor(self, parent, style, index) -> None:
-        box = QDoubleSpinBox(parent)
-        box.setDecimals(self._decimals)
-
-        box.setSingleStep(self._step)
-        box.setMinimum(self._min)
-        box.setMaximum(self._max)
-
-        return box
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -99,9 +75,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
-        mass_item_delegate = ItemDelegate(self.twBodyData, ItemDelegate.Mass)
-        position_item_delegate = ItemDelegate(self.twBodyData, ItemDelegate.Position)
-        velocity_item_delegate = ItemDelegate(self.twBodyData, ItemDelegate.Velocity)
+        mass_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Mass)
+        position_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Position)
+        velocity_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Velocity)
 
         self.twBodyData.setItemDelegateForColumn(TABLE_MASS_INDEX, mass_item_delegate)
         self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, position_item_delegate)
