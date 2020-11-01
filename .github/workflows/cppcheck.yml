@@ -26,8 +26,6 @@ jobs:
         cmake --install .      
     - name: Run Cppcheck
       run: |
-        $CPPCHECK_EXE cpp/simulator/src
-        $CPPCHECK_EXE python/exports
-      env:
-        CPPCHECK_EXE: "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe"
+        "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe" cpp/simulator/src
+        "C:/Program Files (x86)/Cppcheck/bin/cppcheck.exe" python/exports
       shell: cmd
