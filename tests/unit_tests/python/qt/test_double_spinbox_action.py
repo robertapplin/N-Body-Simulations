@@ -3,8 +3,11 @@
 import pytest
 
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
+from n_body_simulations.test_helpers.setup_test_helper import register_resource_files, cleanup_resource_files
 
 from PyQt5.QtWidgets import QToolButton
+
+register_resource_files()
 
 
 @pytest.fixture
@@ -27,3 +30,6 @@ def test_that_a_DoubleSpinBoxAction_with_the_correct_spin_box_parameters_is_crea
     assert dummy_action.double_spin_box.maximum() == 10000.0
     assert dummy_action.double_spin_box.singleStep() == 10.0
     assert dummy_action.double_spin_box.suffix() == " d"
+
+
+cleanup_resource_files()

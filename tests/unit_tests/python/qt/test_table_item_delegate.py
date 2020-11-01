@@ -1,8 +1,11 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 from n_body_simulations.table_item_delegate import TableItemDelegate
+from n_body_simulations.test_helpers.setup_test_helper import register_resource_files, cleanup_resource_files
 
 from PyQt5.QtWidgets import QTableWidget
+
+register_resource_files()
 
 
 def test_that_creating_a_TableItemDelegate_does_not_raise_an_exception():
@@ -17,3 +20,6 @@ def test_that_the_TableItemDelegate_has_a_spinbox_with_the_correct_parameters():
     assert item_delegate.box.minimum() == 0.000001
     assert item_delegate.box.maximum() == 100.0
     assert item_delegate.box.singleStep() == 0.1
+
+
+cleanup_resource_files()
