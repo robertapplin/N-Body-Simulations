@@ -4,13 +4,7 @@ from xml.dom import minidom
 
 from PyQt5.QtCore import QFile, QTextStream
 
-INTERFACE_PROPERTY_FILE = ":/interface-properties.xml"
 USER_INTERFACE_PROPERTY_FILE = ":/user-interface-properties.xml"
-
-
-def get_interface_property(property_name: str) -> str:
-    """Returns the specified property from the interface-properties.xml file."""
-    return get_xml_file_property(INTERFACE_PROPERTY_FILE, property_name)
 
 
 def get_user_interface_property(property_name: str) -> str:
