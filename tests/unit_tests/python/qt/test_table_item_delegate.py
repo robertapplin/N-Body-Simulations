@@ -18,6 +18,7 @@ def test_that_the_TableItemDelegate_has_a_spinbox_with_the_correct_parameters():
     item_delegate = TableItemDelegate(table, TableItemDelegate.Mass)
     table.setItemDelegateForColumn(0, item_delegate)
 
-    assert item_delegate.box.minimum() == 0.000001
-    assert item_delegate.box.maximum() == 100.0
-    assert item_delegate.box.singleStep() == 0.1
+    assert item_delegate.min == 0.000001
+    assert item_delegate.max == 100.0
+    assert item_delegate.step == 0.1
+    assert item_delegate.decimals == 6
