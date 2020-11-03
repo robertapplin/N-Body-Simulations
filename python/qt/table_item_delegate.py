@@ -16,6 +16,8 @@ class TableItemDelegate(QStyledItemDelegate):
         """Initializes the item delegate using the properties stored in the user interface properties file."""
         super(TableItemDelegate, self).__init__(parent)
 
+        self.box = None
+
         self._min = float(get_user_interface_property(item_type + "-min"))
         self._max = float(get_user_interface_property(item_type + "-max"))
         self._step = float(get_user_interface_property(item_type + "-step"))
@@ -23,11 +25,11 @@ class TableItemDelegate(QStyledItemDelegate):
 
     def createEditor(self, parent, style, index) -> None:
         """Overrides the parent method to create a custom QDoubleSpinBox."""
-        box = QDoubleSpinBox(parent)
-        box.setDecimals(self._decimals)
+        self.box = QDoubleSpinBox(parent)
+        self.box.setDecimals(self._decimals)
 
-        box.setSingleStep(self._step)
-        box.setMinimum(self._min)
-        box.setMaximum(self._max)
+        self.box.setSingleStep(self._step)
+        self.box.setMinimum(self._min)
+        self.box.setMaximum(self._max)
 
-        return box
+        return self.box
