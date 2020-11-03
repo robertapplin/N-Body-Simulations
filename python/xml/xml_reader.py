@@ -13,20 +13,20 @@ def get_user_interface_property(property_name: str) -> str:
     """Returns the specified property from the user-interface-properties.xml file."""
     if QCoreApplication.applicationName() == "test":
         qInitResources()
-    return get_xml_file_property(USER_INTERFACE_PROPERTY_FILE, property_name)
+    return _get_xml_file_property(USER_INTERFACE_PROPERTY_FILE, property_name)
 
 
-def get_xml_file_property(filename: str, item_name: str) -> str:
+def _get_xml_file_property(filename: str, item_name: str) -> str:
     """Get an item with the specified name from an xml file."""
     file = QFile(filename)
     if file.open(QFile.ReadOnly):
         document_string = minidom.parseString(QTextStream(file).readAll())
-        return get_xml_property(document_string, filename, item_name)
+        return _get_xml_property(document_string, filename, item_name)
 
     raise RuntimeError(f"Could not open the file '{filename}'.")
 
 
-def get_xml_property(document_string: str, filename: str, item_name: str) -> str:
+def _get_xml_property(document_string: str, filename: str, item_name: str) -> str:
     """Get an item with the specified name from an xml document string."""
     for element in document_string.getElementsByTagName('item'):
         if element.attributes['name'].value == item_name:
