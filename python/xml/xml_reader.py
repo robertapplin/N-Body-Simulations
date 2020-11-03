@@ -3,14 +3,15 @@
 from xml.dom import minidom
 from n_body_simulations.interface_resources_rc import qInitResources
 
-from PyQt5.QtCore import QFile, QTextStream
+from PyQt5.QtCore import QCoreApplication, QFile, QTextStream
 
 USER_INTERFACE_PROPERTY_FILE = ":/user-interface-properties.xml"
 
 
 def get_user_interface_property(property_name: str) -> str:
     """Returns the specified property from the user-interface-properties.xml file."""
-    qInitResources()
+    if QCoreApplication.applicationName() != "test":
+        qInitResources()
     return get_xml_file_property(USER_INTERFACE_PROPERTY_FILE, property_name)
 
 
