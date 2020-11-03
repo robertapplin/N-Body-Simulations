@@ -1,5 +1,5 @@
 <?xml version = "1.0" encoding = "UTF-8" ?>
-<!--Interface properties changeable by the user are stored here.-->
+<!--Interface properties are stored here to avoid hard-coded values.-->
 <data>
     <items>
         <!--Default values.-->
