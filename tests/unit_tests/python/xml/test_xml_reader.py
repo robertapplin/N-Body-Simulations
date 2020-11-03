@@ -10,7 +10,7 @@ enable_test_mode()
 
 def test_that_get_user_interface_property_returns_a_valid_property_from_the_user_property_file():
     mass_step = get_user_interface_property("mass-step")
-    assert mass_step == 0.1
+    assert mass_step == "0.1"
 
 
 def test_that_get_user_interface_property_throws_when_the_property_name_is_invalid():
