@@ -16,6 +16,7 @@ def test_that_creating_a_TableItemDelegate_does_not_raise_an_exception():
 def test_that_the_TableItemDelegate_has_a_spinbox_with_the_correct_parameters():
     table = QTableWidget()
     item_delegate = TableItemDelegate(table, TableItemDelegate.Mass)
+    table.setItemDelegateForColumn(0, item_delegate)
 
     assert item_delegate.box.minimum() == 0.000001
     assert item_delegate.box.maximum() == 100.0
