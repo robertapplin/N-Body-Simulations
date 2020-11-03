@@ -13,9 +13,9 @@ def test_that_get_user_interface_property_returns_a_valid_property_from_the_user
     assert mass_step == "0.1"
 
 
-def test_that_get_user_interface_property_throws_when_the_property_name_is_invalid():
+def test_that_get_user_interface_property_raises_an_error_when_the_property_name_is_invalid():
     try:
         _ = get_user_interface_property("invalid-property")
         pytest.fail("This should have failed.")
-    except ValueError:
-        pass
+    except ValueError as error:
+        assert str(error) == "The item 'invalid-property' does not exist in the file ':/user-interface-properties.xml'."
