@@ -6,10 +6,12 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
+from n_body_simulations.table_item_delegate import TableItemDelegate
+from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
-from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate, QTableWidgetItem, QToolButton
+from PyQt5.QtWidgets import QTableWidgetItem, QToolButton
 
 
 TABLE_NAME_INDEX = 0
@@ -18,30 +20,6 @@ TABLE_X_INDEX = 2
 TABLE_Y_INDEX = 3
 TABLE_VX_INDEX = 4
 TABLE_VY_INDEX = 5
-
-
-class ItemDelegate(QStyledItemDelegate):
-
-    def __init__(self, parent, min_value=None, max_value=None, step=None):
-        super(ItemDelegate, self).__init__(parent)
-
-        self._min = min_value
-        self._max = max_value
-        self._step = step
-        self._decimals = 6
-
-    def createEditor(self, parent, style, index) -> None:
-        box = QDoubleSpinBox(parent)
-        box.setDecimals(self._decimals)
-
-        if self._step is not None:
-            box.setSingleStep(self._step)
-        if self._min is not None:
-            box.setMinimum(self._min)
-        if self._max is not None:
-            box.setMaximum(self._max)
-
-        return box
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -98,18 +76,28 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
-        mass_item_delegate = ItemDelegate(self.twBodyData, min_value=0.000001, step=0.1)
-        other_item_delegate = ItemDelegate(self.twBodyData, min_value=-1000.0, max_value=1000.0, step=0.1)
+        time_unit = get_user_interface_property("time-unit")
+        mass_unit = get_user_interface_property("mass-unit")
+        position_unit = get_user_interface_property("position-unit")
+        velocity_unit = position_unit + "/" + time_unit
+
+        headers = ["Name", f"Mass ({mass_unit})", f"X ({position_unit})", f"Y ({position_unit})",
+                   f"Vx ({velocity_unit})", f"Vy ({velocity_unit})"]
+        self.twBodyData.setHorizontalHeaderLabels(headers)
+
+        mass_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Mass)
+        position_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Position)
+        velocity_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Velocity)
 
         self.twBodyData.setItemDelegateForColumn(TABLE_MASS_INDEX, mass_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, other_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, other_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, other_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, other_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, position_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, position_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, velocity_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, velocity_item_delegate)
 
     def setup_time_settings_widget(self):
-        self.time_step_action = DoubleSpinBoxAction("Time Step: ", 1.0, 0.0, 500.0, " d")
-        self.duration_action = DoubleSpinBoxAction("Duration: ", 500.0, 0.0, 10000.0, " d")
+        self.time_step_action = DoubleSpinBoxAction("Time Step: ", DoubleSpinBoxAction.TimeStep)
+        self.duration_action = DoubleSpinBoxAction("Duration: ", DoubleSpinBoxAction.Duration)
 
         self.tbTimeSettings.addAction(self.time_step_action)
         self.tbTimeSettings.addAction(self.duration_action)
