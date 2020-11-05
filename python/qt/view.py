@@ -54,7 +54,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
-        self.pbEdit.clicked.connect(self.handle_edit_clicked)
+        self.pbInteractiveMode.clicked.connect(self.handle_interactive_mode_clicked)
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
@@ -70,7 +70,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.pbPlayPause.setIcon(self.play_icon)
         self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
-        self.pbEdit.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
+        self.pbInteractiveMode.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
         self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
         self.pbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
@@ -122,7 +122,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self._selected_body = self._body_at_index(row_index)
 
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
-        self.set_as_editing(True)
+        self.set_interactive_mode(True)
 
         signal_switcher = {TABLE_MASS_INDEX: self.massChangedSignal,
                            TABLE_X_INDEX: self.xPositionChangedSignal,
@@ -136,7 +136,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         else:
             self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
 
-    def handle_edit_clicked(self) -> None:
+    def handle_interactive_mode_clicked(self) -> None:
         self.set_as_playing(False)
         self.interactive_plot.disable_animation()
 
@@ -161,7 +161,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         return None
 
     def remove_body(self, body_name: str) -> None:
-        self.set_as_editing(True)
+        self.set_interactive_mode(True)
 
         self.twBodyData.removeRow(self._selected_row_index())
 
@@ -171,7 +171,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
-        self.set_as_editing(True)
+        self.set_interactive_mode(True)
 
         for body_name, parameters in body_parameters.items():
             self.add_body_to_table(body_name, parameters)
@@ -181,7 +181,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_body(self, body_name: str, initial_data: tuple) -> None:
-        self.set_as_editing(True)
+        self.set_interactive_mode(True)
 
         self.add_body_to_table(body_name, initial_data)
 
@@ -230,16 +230,16 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.duration_action.double_spin_box.setValue(duration)
         self.time_step_action.double_spin_box.blockSignals(False)
 
-    def set_as_editing(self, editing: bool) -> None:
-        self.pbEdit.setChecked(editing)
-        if editing:
-            self.handle_edit_clicked()
+    def set_interactive_mode(self, interactive_mode: bool) -> None:
+        self.pbInteractiveMode.setChecked(interactive_mode)
+        if interactive_mode:
+            self.handle_interactive_mode_clicked()
 
     def set_as_playing(self, playing: bool) -> None:
         self.pbPlayPause.setToolTip("Pause" if playing else "Play")
         self.pbPlayPause.setIcon(self.pause_icon if playing else self.play_icon)
         if playing:
-            self.set_as_editing(False)
+            self.set_interactive_mode(False)
 
     def is_simulating(self) -> bool:
         return self.pbPlayPause.toolTip() != "Play"
@@ -249,7 +249,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setEnabled(enable)
         self.pbAddBody.setEnabled(enable)
         self.tbTimeSettings.setEnabled(enable)
-        self.pbEdit.setEnabled(enable)
+        self.pbInteractiveMode.setEnabled(enable)
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
 
