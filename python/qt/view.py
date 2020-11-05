@@ -14,12 +14,13 @@ from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtWidgets import QTableWidgetItem, QToolButton
 
 
-TABLE_NAME_INDEX = 0
-TABLE_MASS_INDEX = 1
-TABLE_X_INDEX = 2
-TABLE_Y_INDEX = 3
-TABLE_VX_INDEX = 4
-TABLE_VY_INDEX = 5
+class TableColumn:
+
+    def __init__(self, index: int, header: str, unit: str = None):
+        self.index = index
+        self.header = header
+        if unit is not None:
+            self.header += " (" + unit + ")"
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -34,6 +35,24 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     timeStepChangedSignal = pyqtSignal(float)
     durationChangedSignal = pyqtSignal(float)
     playPauseClickedSignal = pyqtSignal()
+
+    time_unit = get_user_interface_property("time-unit")
+    mass_unit = get_user_interface_property("mass-unit")
+    position_unit = get_user_interface_property("position-unit")
+    velocity_unit = position_unit + "/" + time_unit
+
+    name_column = TableColumn(0, "Name")
+    mass_column = TableColumn(1, "Mass", mass_unit)
+    x_column = TableColumn(2, "X", position_unit)
+    y_column = TableColumn(3, "Y", position_unit)
+    vx_column = TableColumn(4, "Vx", velocity_unit)
+    vy_column = TableColumn(5, "Vy", velocity_unit)
+
+    table_signals = {mass_column.index: massChangedSignal,
+                     x_column.index: xPositionChangedSignal,
+                     y_column.index: yPositionChangedSignal,
+                     vx_column.index: xVelocityChangedSignal,
+                     vy_column.index: yVelocityChangedSignal}
 
     def __init__(self, parent=None):
         super(NBodySimulationsView, self).__init__()
@@ -76,24 +95,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
-        time_unit = get_user_interface_property("time-unit")
-        mass_unit = get_user_interface_property("mass-unit")
-        position_unit = get_user_interface_property("position-unit")
-        velocity_unit = position_unit + "/" + time_unit
-
-        headers = ["Name", f"Mass ({mass_unit})", f"X ({position_unit})", f"Y ({position_unit})",
-                   f"Vx ({velocity_unit})", f"Vy ({velocity_unit})"]
-        self.twBodyData.setHorizontalHeaderLabels(headers)
+        self.twBodyData.setHorizontalHeaderLabels([self.name_column.header, self.mass_column.header,
+                                                   self.x_column.header, self.y_column.header,
+                                                   self.vx_column.header, self.vy_column.header])
 
         mass_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Mass)
         position_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Position)
         velocity_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Velocity)
 
-        self.twBodyData.setItemDelegateForColumn(TABLE_MASS_INDEX, mass_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_X_INDEX, position_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_Y_INDEX, position_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_VX_INDEX, velocity_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(TABLE_VY_INDEX, velocity_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(self.mass_column.index, mass_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(self.x_column.index, position_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(self.y_column.index, position_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(self.vx_column.index, velocity_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(self.vy_column.index, velocity_item_delegate)
 
     def setup_time_settings_widget(self):
         self.time_step_action = DoubleSpinBoxAction("Time Step: ", DoubleSpinBoxAction.TimeStep)
@@ -124,13 +138,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
         self.set_interactive_mode(True)
 
-        signal_switcher = {TABLE_MASS_INDEX: self.massChangedSignal,
-                           TABLE_X_INDEX: self.xPositionChangedSignal,
-                           TABLE_Y_INDEX: self.yPositionChangedSignal,
-                           TABLE_VX_INDEX: self.xVelocityChangedSignal,
-                           TABLE_VY_INDEX: self.yVelocityChangedSignal}
-
-        signal = signal_switcher.get(column_index, None)
+        signal = self.table_signals.get(column_index, None)
         if signal is not None:
             signal.emit(self._selected_body, self._get_table_value(row_index, column_index))
         else:
@@ -195,12 +203,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         row_index = self.twBodyData.rowCount()
 
         self.twBodyData.insertRow(row_index)
-        self.twBodyData.setItem(row_index, TABLE_NAME_INDEX, QTableWidgetItem(body_name))
-        self.twBodyData.setItem(row_index, TABLE_MASS_INDEX, self._create_table_value(body_data[0]))
-        self.twBodyData.setItem(row_index, TABLE_X_INDEX, self._create_table_value(body_data[1].x))
-        self.twBodyData.setItem(row_index, TABLE_Y_INDEX, self._create_table_value(body_data[1].y))
-        self.twBodyData.setItem(row_index, TABLE_VX_INDEX, self._create_table_value(body_data[2].x))
-        self.twBodyData.setItem(row_index, TABLE_VY_INDEX, self._create_table_value(body_data[2].y))
+        self.twBodyData.setItem(row_index, self.name_column.index, QTableWidgetItem(body_name))
+        self.twBodyData.setItem(row_index, self.mass_column.index, self._create_table_value(body_data[0]))
+        self.twBodyData.setItem(row_index, self.x_column.index, self._create_table_value(body_data[1].x))
+        self.twBodyData.setItem(row_index, self.y_column.index, self._create_table_value(body_data[1].y))
+        self.twBodyData.setItem(row_index, self.vx_column.index, self._create_table_value(body_data[2].x))
+        self.twBodyData.setItem(row_index, self.vy_column.index, self._create_table_value(body_data[2].y))
         self.twBodyData.blockSignals(False)
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
@@ -217,7 +225,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def set_name(self, body_name: str) -> None:
         self.twBodyData.blockSignals(True)
-        self.twBodyData.setItem(self._selected_row_index(), TABLE_NAME_INDEX, QTableWidgetItem(body_name))
+        self.twBodyData.setItem(self._selected_row_index(), self.name_column.index, QTableWidgetItem(body_name))
         self.twBodyData.blockSignals(False)
 
     def set_time_step(self, time_step: float) -> None:
