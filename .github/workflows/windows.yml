@@ -15,7 +15,7 @@ jobs:
       uses: s-weigand/setup-conda@v1
     - name: Install Dependencies
       run: |
-        conda install -c anaconda pyqt qtawesome
+        conda install -c anaconda pytest-mock pyqt qtawesome
         conda install -c conda-forge matplotlib pybind11 pyside2 pytest
     - name: Build Project
       run: |

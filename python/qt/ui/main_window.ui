@@ -230,7 +230,7 @@ QTableWidget::item:selected{
          </widget>
         </item>
         <item row="0" column="5">
-         <widget class="QPushButton" name="pbEdit">
+         <widget class="QPushButton" name="pbInteractiveMode">
           <property name="minimumSize">
            <size>
             <width>30</width>

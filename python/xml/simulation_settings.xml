@@ -1,0 +1,8 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--Simulation settings are stored here.-->
+<data>
+    <items>
+        <!--Settings used for the simulation.-->
+        <item name="max-number-of-bodies">5</item>
+    </items>
+</data>

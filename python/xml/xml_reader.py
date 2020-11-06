@@ -6,18 +6,25 @@ from n_body_simulations.interface_resources_rc import qInitResources
 
 from PyQt5.QtCore import QCoreApplication, QFile, QTextStream
 
+SIMULATION_SETTINGS_FILE = ":/simulation-settings.xml"
 USER_INTERFACE_PROPERTY_FILE = ":/user-interface-properties.xml"
+
+
+def get_simulation_setting(property_name: str) -> str:
+    """Returns the specified simulation setting from the simulation-settings.xml file."""
+    return _get_xml_file_property(SIMULATION_SETTINGS_FILE, property_name)
 
 
 def get_user_interface_property(property_name: str) -> str:
     """Returns the specified property from the user-interface-properties.xml file."""
-    if QCoreApplication.applicationName() == "test":
-        qInitResources()
     return _get_xml_file_property(USER_INTERFACE_PROPERTY_FILE, property_name)
 
 
 def _get_xml_file_property(filename: str, item_name: str) -> str:
     """Get an item with the specified name from an xml file."""
+    if QCoreApplication.applicationName() == "test":
+        qInitResources()
+
     file = QFile(filename)
     if file.open(QFile.ReadOnly):
         document_string = minidom.parseString(QTextStream(file).readAll())
