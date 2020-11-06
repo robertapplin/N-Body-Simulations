@@ -15,8 +15,10 @@ from PyQt5.QtWidgets import QTableWidgetItem, QToolButton
 
 
 class TableColumn:
+    """A class used to store the details of a column in the data table."""
 
     def __init__(self, index: int, header: str, unit: str = None):
+        """Initialize the column details."""
         self.index = index
         self.header = header
         if unit is not None:
@@ -24,6 +26,7 @@ class TableColumn:
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
+    """A class used as a view for the main GUI (MVP)."""
     removeBodyClickedSignal = pyqtSignal()
     addBodyClickedSignal = pyqtSignal()
     bodyNameChangedSignal = pyqtSignal(str, str)
@@ -55,6 +58,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
                      vy_column.index: yVelocityChangedSignal}
 
     def __init__(self, parent=None):
+        """Initialize the view and perform basic setup of the widgets."""
         super(NBodySimulationsView, self).__init__()
         self.setupUi(parent)
 
@@ -84,6 +88,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self._selected_body = None
 
     def setup_icons(self) -> None:
+        """Setup the button icons."""
         self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
         self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
 
@@ -95,6 +100,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
+        """Setup the table widget."""
         self.twBodyData.setHorizontalHeaderLabels([self.name_column.header, self.mass_column.header,
                                                    self.x_column.header, self.y_column.header,
                                                    self.vx_column.header, self.vy_column.header])
@@ -110,6 +116,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItemDelegateForColumn(self.vy_column.index, velocity_item_delegate)
 
     def setup_time_settings_widget(self):
+        """Setup the custom time settings widget."""
         self.time_step_action = DoubleSpinBoxAction("Time Step: ", DoubleSpinBoxAction.TimeStep)
         self.duration_action = DoubleSpinBoxAction("Duration: ", DoubleSpinBoxAction.Duration)
 
@@ -118,24 +125,31 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.tbTimeSettings.setPopupMode(QToolButton.InstantPopup)
 
     def emit_remove_body_clicked(self) -> None:
+        """Emit that the remove body button was clicked."""
         self.removeBodyClickedSignal.emit()
 
     def emit_add_body_clicked(self) -> None:
+        """Emit that the add body button was clicked."""
         self.addBodyClickedSignal.emit()
 
     def emit_play_pause_clicked(self) -> None:
+        """Emit that the play/pause button was clicked."""
         self.playPauseClickedSignal.emit()
 
     def emit_time_step_changed(self, value: float) -> None:
+        """Emit that the time step was changed."""
         self.timeStepChangedSignal.emit(value)
 
     def emit_duration_changed(self, value: float) -> None:
+        """Emit that the duration was changed."""
         self.durationChangedSignal.emit(value)
 
     def handle_cell_clicked(self, row_index: int, column_index: int) -> None:
+        """Handle when a table row is selected."""
         self._selected_body = self._body_at_index(row_index)
 
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
+        """Handle when body data in the table is changed."""
         self.set_interactive_mode(True)
 
         signal = self.table_signals.get(column_index, None)
@@ -145,30 +159,36 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
             self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
 
     def handle_interactive_mode_clicked(self) -> None:
+        """Handle when the interactive mode button is clicked."""
         self.set_as_playing(False)
         self.interactive_plot.disable_animation()
 
     def handle_stop_clicked(self) -> None:
+        """Handle when the stop button is clicked."""
         self.set_as_playing(False)
         self.interactive_plot.stop_animation()
 
     def clear(self) -> None:
+        """Clear all data displayed in the view."""
         self.interactive_plot.clear()
         self.twBodyData.clearContents()
 
     def reset_view(self, bodies: dict, time_step: float, duration: float) -> None:
+        """Clear the view, and then add some bodies to the view."""
         self.clear()
         self.add_bodies(bodies)
         self.set_time_step(time_step)
         self.set_duration(duration)
 
     def selected_body(self) -> str:
+        """Returns the name of the body which is currently selected."""
         selected_index = self._selected_row_index()
         if selected_index != -1:
             return self._body_at_index(selected_index)
         return None
 
     def remove_body(self, body_name: str) -> None:
+        """Removes the specified body from the view."""
         self.set_interactive_mode(True)
 
         self.twBodyData.removeRow(self._selected_row_index())
@@ -179,6 +199,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
+        """Adds a number of bodies to the view."""
         self.set_interactive_mode(True)
 
         for body_name, parameters in body_parameters.items():
@@ -189,6 +210,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_body(self, body_name: str, initial_data: tuple) -> None:
+        """Adds a body to the view."""
         self.set_interactive_mode(True)
 
         self.add_body_to_table(body_name, initial_data)
@@ -199,6 +221,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.draw()
 
     def add_body_to_table(self, body_name: str, body_data: tuple) -> None:
+        """Adds the data of a body to the table of data."""
         self.twBodyData.blockSignals(True)
         row_index = self.twBodyData.rowCount()
 
@@ -212,47 +235,56 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.blockSignals(False)
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
+        """Updates the name of a body in the interactive plot when it is changed."""
         self.interactive_plot.update_body_name(old_name, new_name)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
+        """Updates the position of a body in the interactive plot when it is changed."""
         self.interactive_plot.remove_body(body_name)
         self.interactive_plot.add_body(body_name, position)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
     def set_name(self, body_name: str) -> None:
+        """Sets the name of a body in the table. Used to reset a bodies name when renaming it fails."""
         self.twBodyData.blockSignals(True)
         self.twBodyData.setItem(self._selected_row_index(), self.name_column.index, QTableWidgetItem(body_name))
         self.twBodyData.blockSignals(False)
 
     def set_time_step(self, time_step: float) -> None:
+        """Sets the time step shown in the view."""
         self.time_step_action.double_spin_box.blockSignals(True)
         self.time_step_action.double_spin_box.setValue(time_step)
         self.time_step_action.double_spin_box.blockSignals(False)
 
     def set_duration(self, duration: float) -> None:
+        """Sets the duration shown in the view."""
         self.time_step_action.double_spin_box.blockSignals(True)
         self.duration_action.double_spin_box.setValue(duration)
         self.time_step_action.double_spin_box.blockSignals(False)
 
     def set_interactive_mode(self, interactive_mode: bool) -> None:
+        """Sets the view to be in interactive mode. This is required to prevent interference from the animator."""
         self.pbInteractiveMode.setChecked(interactive_mode)
         if interactive_mode:
             self.handle_interactive_mode_clicked()
 
     def set_as_playing(self, playing: bool) -> None:
+        """Sets the current role of the play/pause button."""
         self.pbPlayPause.setToolTip("Pause" if playing else "Play")
         self.pbPlayPause.setIcon(self.pause_icon if playing else self.play_icon)
         if playing:
             self.set_interactive_mode(False)
 
     def is_simulating(self) -> bool:
+        """Returns true if a simulation is currently being animated."""
         return self.pbPlayPause.toolTip() != "Play"
 
     def enable_view(self, enable: bool) -> None:
+        """Enables or disables the widgets seen in the view."""
         self.twBodyData.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
         self.pbAddBody.setEnabled(enable)
@@ -263,37 +295,46 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     @staticmethod
     def open_add_body_dialog() -> tuple:
+        """Opens the dialog used for adding a body to the simulation."""
         dialog = AddBodyDialog()
         dialog.exec_()
         return dialog.new_body_data()
 
     def start_simulation(self, simulation_results: dict) -> None:
+        """Starts animating the results of a simulation."""
         self.interactive_plot.set_simulation_data(simulation_results)
         self.interactive_plot.update_axes_limits(initial_data=False)
         self.interactive_plot.start_animation()
 
     def stop_simulation(self) -> None:
+        """Stops the animation of a simulation."""
         self.interactive_plot.stop_animation()
 
     def pause_simulation(self) -> None:
+        """Pauses the animation of a simulation."""
         self.interactive_plot.pause_animation()
 
     def play_simulation(self) -> None:
+        """Plays the animation of a simulation."""
         self.interactive_plot.play_animation()
 
     @staticmethod
     def _create_table_value(value: float) -> QTableWidgetItem:
+        """Creates a table item and sets its role."""
         item = QTableWidgetItem()
         item.setData(Qt.EditRole, value)
         return item
 
     def _get_table_value(self, row_index: int, column_index: int) -> float:
+        """Gets the float value of a table item."""
         return float(self.twBodyData.item(row_index, column_index).text())
 
     def _body_at_index(self, row_index: int) -> str:
+        """Returns the name of the body at a given row index."""
         return self.twBodyData.item(row_index, 0).text()
 
     def _selected_row_index(self) -> int:
+        """Returns the index of the selected row."""
         selection_model = self.twBodyData.selectionModel()
         if selection_model.hasSelection():
             return selection_model.currentIndex().row()
