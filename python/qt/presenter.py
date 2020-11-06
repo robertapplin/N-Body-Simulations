@@ -7,12 +7,12 @@ from n_body_simulations.xml_reader import get_simulation_setting
 
 class NBodySimulationsPresenter:
     """A class used as a presenter for the main GUI (MVP)."""
-    max_number_of_bodies = get_simulation_setting("max-number-of-bodies")
+    max_number_of_bodies = int(get_simulation_setting("max-number-of-bodies"))
 
-    def __init__(self, view):
+    def __init__(self, view, model=NBodySimulationsModel()):
         """Initializes the presenter by creating a view and model."""
         self.view = view
-        self.model = NBodySimulationsModel()
+        self.model = model
 
         # Temporarily here for development
         self.model.add_body("Sun", 1.0, 0.0, 0.0)

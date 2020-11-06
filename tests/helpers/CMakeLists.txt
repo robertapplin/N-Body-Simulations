@@ -2,6 +2,7 @@
 # Authored by Robert Applin, 2020
 set(HELPER_FILES
     dummy_class_helper.py
+    mock_class_helper.py
     setup_test_helper.py
 )
 

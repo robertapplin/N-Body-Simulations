@@ -115,7 +115,7 @@ class NBodySimulationsModel:
         # If this point is reached, the simulation has been successfully
         return True
 
-    def has_data_changed(self):
+    def has_data_changed(self) -> bool:
         """Returns true if the data held by the simulator has changed since the last simulation."""
         return self._simulator.hasDataChanged()
 
