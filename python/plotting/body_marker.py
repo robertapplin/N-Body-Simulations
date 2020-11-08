@@ -8,6 +8,7 @@ from matplotlib.patches import Circle, Patch
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor
 
+BODY_RADIUS = 3  # In pixels
 MARKER_SENSITIVITY = 5
 
 
@@ -23,7 +24,6 @@ class BodyMarker(QObject):
         self.name = name
         self.position = tuple([position.x, position.y])
         self.colour = colour
-        self.radius = 0.01
 
         self._override_cursor = None
         self._is_dragging = False
@@ -78,7 +78,7 @@ class BodyMarker(QObject):
             self._override_cursor = None
 
     def _create_body(self) -> None:
-        self._patch = Circle(self.position, self.radius, facecolor=self.colour)
+        self._patch = Circle(self.position, self._body_radius(), facecolor=self.colour)
         self._axis.add_patch(self._patch)
 
     def _is_above(self, x: float, y: float) -> bool:
@@ -88,3 +88,8 @@ class BodyMarker(QObject):
         r_pixels = ((mouse_x_pixels - body_x_pixels)**2 + (mouse_y_pixels-body_y_pixels)**2)**(1/2)
 
         return r_pixels < MARKER_SENSITIVITY
+
+    def _body_radius(self) -> float:
+        x1, _ = self._axis.transData.inverted().transform((0, 0))
+        x2, _ = self._axis.transData.inverted().transform((BODY_RADIUS, 0))
+        return x2 - x1
