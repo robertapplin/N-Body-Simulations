@@ -39,6 +39,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     durationChangedSignal = pyqtSignal(float)
     playPauseClickedSignal = pyqtSignal()
 
+    bodyMovedSignal = pyqtSignal(str, float, float)
+
     time_unit = get_user_interface_property("time-unit")
     mass_unit = get_user_interface_property("mass-unit")
     position_unit = get_user_interface_property("position-unit")
@@ -78,6 +80,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
         self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+
+        self.interactive_plot.bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
 
         self._selected_body = None
 
@@ -166,6 +170,18 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def handle_stop_clicked(self) -> None:
         """Handle when the stop button is clicked."""
         self.set_interactive_mode(True)
+
+    def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
+        """Handles when a body has been moved on the interactive plot."""
+        self.twBodyData.blockSignals(True)
+
+        row_index = self._index_of_body(body_name)
+        self.twBodyData.setItem(row_index, self.x_column.index, self._create_table_value(x))
+        self.twBodyData.setItem(row_index, self.y_column.index, self._create_table_value(y))
+
+        self.twBodyData.blockSignals(False)
+
+        self.bodyMovedSignal.emit(body_name, x, y)
 
     def clear(self) -> None:
         """Clear all data displayed in the view."""
@@ -328,6 +344,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def _body_at_index(self, row_index: int) -> str:
         """Returns the name of the body at a given row index."""
         return self.twBodyData.item(row_index, 0).text()
+
+    def _index_of_body(self, body_name: str) -> int:
+        """Returns the row index of a given body."""
+        for row_index in range(self.twBodyData.rowCount()):
+            if self.twBodyData.item(row_index, self.name_column.index).text() == body_name:
+                return row_index
+        return -1
 
     def _selected_row_index(self) -> int:
         """Returns the index of the selected row."""

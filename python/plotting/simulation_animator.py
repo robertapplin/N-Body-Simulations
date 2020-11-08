@@ -81,7 +81,7 @@ class SimulationAnimator:
         """Updates the positions of the bodies in the animation."""
         patches = []
         for body_name, positions in self._simulation_data.items():
-            self._body_markers[body_name].set_position(positions[time].x, positions[time].y)
+            self._body_markers[body_name].set_position(positions[time].x, positions[time].y, emit_signal=False)
             patches.append(self._body_markers[body_name].get_patch())
         return patches
 

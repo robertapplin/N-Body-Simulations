@@ -7,18 +7,21 @@ from NBodySimulations import Vector2D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor, QMouseEvent
 from PyQt5.QtWidgets import QApplication
 
 AXIS_MARGIN = 0.05  # 5% axis margin
 
 
-class InteractivePlot:
+class InteractivePlot(QObject):
     """A class used for the interactive plot displaying the simulation data."""
+    bodyMovedSignal = pyqtSignal(str, float, float)
 
     def __init__(self):
         """Initialize the interactive plot."""
+        super(InteractivePlot, self).__init__()
+
         self._figure = Figure()
 
         # Modify margins around a figure
@@ -80,6 +83,11 @@ class InteractivePlot:
                 self._canvas.draw()
                 break
 
+    def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
+        """Handles when a body has been moved on the interactive plot."""
+        self._initial_data[body_name] = Vector2D(x, y)
+        self.bodyMovedSignal.emit(body_name, x, y)
+
     def canvas(self) -> FigureCanvas:
         """Returns the canvas used for the interactive plot."""
         return self._canvas
@@ -99,6 +107,8 @@ class InteractivePlot:
     def add_body(self, body_name: str, position: Vector2D) -> None:
         """Adds a body to the interactive plot."""
         self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, 'green')
+        self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
+
         self._initial_data[body_name] = position
 
     def update_body_name(self, old_name: str, new_name: str) -> None:

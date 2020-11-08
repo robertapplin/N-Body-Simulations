@@ -5,13 +5,14 @@ from NBodySimulations import Vector2D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Circle, Patch
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor
 
 MARKER_SENSITIVITY = 5
 
 
-class BodyMarker:
+class BodyMarker(QObject):
+    bodyMovedSignal = pyqtSignal(str, float, float)
 
     def __init__(self, canvas: FigureCanvas, name: str, position: Vector2D, colour: str):
         super(BodyMarker, self).__init__()
@@ -54,10 +55,13 @@ class BodyMarker:
     def remove_body(self) -> None:
         self._patch.remove()
 
-    def set_position(self, x: float, y: float) -> None:
+    def set_position(self, x: float, y: float, emit_signal: bool = True) -> None:
         self.remove_body()
         self.position = tuple([x, y])
         self._create_body()
+
+        if emit_signal:
+            self.bodyMovedSignal.emit(self.name, x, y)
 
     def get_patch(self) -> Patch:
         return self._patch

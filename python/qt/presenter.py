@@ -31,6 +31,8 @@ class NBodySimulationsPresenter:
         self.view.durationChangedSignal.connect(lambda duration: self.handle_duration_changed(duration))
         self.view.playPauseClickedSignal.connect(self.handle_play_pause_clicked)
 
+        self.view.bodyMovedSignal.connect(lambda body_name, x, y: self.handle_body_moved(body_name, x, y))
+
         self.view.reset_view(self.model.initial_body_parameters(), self.model.time_step(), self.model.duration())
 
     def handle_remove_body_clicked(self) -> None:
@@ -99,6 +101,11 @@ class NBodySimulationsPresenter:
             self.view.play_simulation()
         else:
             self.view.pause_simulation()
+
+    def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
+        """Handles when the body has been moved on the interactive plot."""
+        self.model.set_x_position(body_name, x)
+        self.model.set_y_position(body_name, y)
 
     def _add_new_body(self) -> None:
         """Adds a new body to the model and view."""
