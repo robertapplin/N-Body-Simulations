@@ -67,9 +67,9 @@ class BodyMarker:
 
     def _set_override_cursor(self, x: float, y: float) -> None:
         if self._is_dragging:
-            self._override_cursor = QCursor(Qt.ClosedHandCursor)
+            self._override_cursor = Qt.ClosedHandCursor
         elif not self._is_dragging and self._is_above(x, y):
-            self._override_cursor = QCursor(Qt.OpenHandCursor)
+            self._override_cursor = Qt.OpenHandCursor
         else:
             self._override_cursor = None
 

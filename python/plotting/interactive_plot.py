@@ -211,12 +211,14 @@ class InteractivePlot:
 
     def _update_cursor(self) -> None:
         """Updates the cursor based on the mouse events being performed."""
+        cursor = Qt.ArrowCursor
         for body_marker in self._body_markers.values():
-            cursor = body_marker.get_override_cursor()
-            if cursor is not None:
-                self._set_override_cursor(cursor)
-                return
-        self._set_override_cursor(Qt.ArrowCursor)
+            override_cursor = body_marker.get_override_cursor()
+            if override_cursor is not None:
+                cursor = override_cursor
+                if cursor == Qt.ClosedHandCursor:
+                    break
+        self._set_override_cursor(cursor)
 
     @staticmethod
     def _set_override_cursor(cursor: QCursor) -> None:
