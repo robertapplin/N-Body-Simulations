@@ -46,12 +46,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     position_unit = get_user_interface_property("position-unit")
     velocity_unit = position_unit + "/" + time_unit
 
-    name_column = TableColumn(0, "Name")
-    mass_column = TableColumn(1, "Mass", mass_unit)
-    x_column = TableColumn(2, "X", position_unit)
-    y_column = TableColumn(3, "Y", position_unit)
-    vx_column = TableColumn(4, "Vx", velocity_unit)
-    vy_column = TableColumn(5, "Vy", velocity_unit)
+    colour_column = TableColumn(0, "")
+    name_column = TableColumn(1, "Name")
+    mass_column = TableColumn(2, "Mass", mass_unit)
+    x_column = TableColumn(3, "X", position_unit)
+    y_column = TableColumn(4, "Y", position_unit)
+    vx_column = TableColumn(5, "Vx", velocity_unit)
+    vy_column = TableColumn(6, "Vy", velocity_unit)
 
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
@@ -99,8 +100,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def setup_table_widget(self) -> None:
         """Setup the table widget."""
-        self.twBodyData.setHorizontalHeaderLabels([self.name_column.header, self.mass_column.header,
-                                                   self.x_column.header, self.y_column.header,
+        self.twBodyData.setHorizontalHeaderLabels([self.colour_column.header, self.name_column.header,
+                                                   self.mass_column.header, self.x_column.header, self.y_column.header,
                                                    self.vx_column.header, self.vy_column.header])
 
         mass_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Mass)
@@ -112,6 +113,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.setItemDelegateForColumn(self.y_column.index, position_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.vx_column.index, velocity_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.vy_column.index, velocity_item_delegate)
+
+        self.twBodyData.setColumnWidth(self.colour_column.index, 20)
 
     def setup_time_settings_widget(self):
         """Setup the custom time settings widget."""
@@ -159,7 +162,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         signal = table_signals.get(column_index, None)
         if signal is not None:
             signal.emit(self._selected_body, self._get_table_value(row_index, column_index))
-        else:
+        elif column_index == self.name_column.index:
             self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
 
     def handle_interactive_mode_clicked(self) -> None:
@@ -343,7 +346,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def _body_at_index(self, row_index: int) -> str:
         """Returns the name of the body at a given row index."""
-        return self.twBodyData.item(row_index, 0).text()
+        return self.twBodyData.item(row_index, self.name_column.index).text()
 
     def _index_of_body(self, body_name: str) -> int:
         """Returns the row index of a given body."""

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(640, 846)
+        MainWindow.resize(660, 846)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.twBodyData.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.twBodyData.setShowGrid(False)
         self.twBodyData.setObjectName("twBodyData")
-        self.twBodyData.setColumnCount(6)
+        self.twBodyData.setColumnCount(7)
         self.twBodyData.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.twBodyData.setHorizontalHeaderItem(0, item)
@@ -84,6 +84,8 @@ class Ui_MainWindow(object):
         self.twBodyData.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.twBodyData.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.twBodyData.setHorizontalHeaderItem(6, item)
         self.twBodyData.horizontalHeader().setHighlightSections(False)
         self.twBodyData.horizontalHeader().setStretchLastSection(True)
         self.twBodyData.verticalHeader().setVisible(False)
