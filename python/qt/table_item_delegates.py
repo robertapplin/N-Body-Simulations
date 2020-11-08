@@ -2,11 +2,21 @@
 # Authored by Robert Applin, 2020
 from n_body_simulations.xml_reader import get_user_interface_property
 
-from PyQt5.QtWidgets import QDoubleSpinBox, QStyledItemDelegate
+from PyQt5.QtWidgets import QColorDialog, QDoubleSpinBox, QStyledItemDelegate
 
 
-class TableItemDelegate(QStyledItemDelegate):
-    """A class which creates a custom item delegate for managing the data stored in a QTableWidget."""
+class ColourItemDelegate(QStyledItemDelegate):
+
+    def __init__(self, parent):
+        super(ColourItemDelegate, self).__init__(parent)
+
+    def createEditor(self, parent, style, index) -> None:
+        colour_dialog = QColorDialog(parent)
+        return colour_dialog
+
+
+class DoubleItemDelegate(QStyledItemDelegate):
+    """A class which creates a custom item delegate for managing double data stored in a QTableWidget."""
 
     Mass = "mass"
     Position = "position"
@@ -14,7 +24,7 @@ class TableItemDelegate(QStyledItemDelegate):
 
     def __init__(self, parent, item_type: str):
         """Initializes the item delegate using the properties stored in the user interface properties file."""
-        super(TableItemDelegate, self).__init__(parent)
+        super(DoubleItemDelegate, self).__init__(parent)
 
         self.min = float(get_user_interface_property(item_type + "-min"))
         self.max = float(get_user_interface_property(item_type + "-max"))

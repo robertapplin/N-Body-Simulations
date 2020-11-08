@@ -6,7 +6,7 @@ from n_body_simulations.add_body_dialog import AddBodyDialog
 from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.table_item_delegate import TableItemDelegate
+from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import Vector2D
 
@@ -104,10 +104,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
                                                    self.mass_column.header, self.x_column.header, self.y_column.header,
                                                    self.vx_column.header, self.vy_column.header])
 
-        mass_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Mass)
-        position_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Position)
-        velocity_item_delegate = TableItemDelegate(self.twBodyData, TableItemDelegate.Velocity)
+        colour_item_delegate = ColourItemDelegate(self.twBodyData)
+        mass_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Mass)
+        position_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Position)
+        velocity_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Velocity)
 
+        self.twBodyData.setItemDelegateForColumn(self.colour_column.index, colour_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.mass_column.index, mass_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.x_column.index, position_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.y_column.index, position_item_delegate)
@@ -164,6 +166,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
             signal.emit(self._selected_body, self._get_table_value(row_index, column_index))
         elif column_index == self.name_column.index:
             self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
+
+        print("HERE")
 
     def handle_interactive_mode_clicked(self) -> None:
         """Handle when the interactive mode button is clicked."""
