@@ -48,6 +48,7 @@ class InteractivePlot(QObject):
 
         self._body_markers = dict()
         self._initial_data = dict()
+        self._axes_resized = False
 
         self._animator = SimulationAnimator(self._figure)
 
@@ -159,6 +160,8 @@ class InteractivePlot(QObject):
 
     def draw(self) -> None:
         """Draws the lines onto the canvas."""
+        if self._axes_resized:
+            self._update_body_sizes()
         self._canvas.draw()
 
     def update_axes_limits(self, initial_data: bool = True) -> None:
@@ -181,6 +184,8 @@ class InteractivePlot(QObject):
 
         self._ax.set_xlim(x_min - x_margin, x_max + x_margin)
         self._ax.set_ylim(y_min - y_margin, y_max + y_margin)
+
+        self._axes_resized = True
 
     def _calculate_initial_axes_min_max(self) -> tuple:
         """Calculates the min-max of both axes based on the initial body data."""
@@ -210,6 +215,15 @@ class InteractivePlot(QObject):
             ys = [0.0]
 
         return min(xs), max(xs), min(ys), max(ys)
+
+    def _update_body_sizes(self) -> None:
+        """Updates the size of the bodies just before a draw event."""
+        self._canvas.draw()
+        for body_marker in self._body_markers.values():
+            body_marker.remove_body()
+            body_marker.create_body()
+
+        self._axes_resized = False
 
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
