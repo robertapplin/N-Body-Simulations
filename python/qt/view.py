@@ -51,12 +51,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     vx_column = TableColumn(4, "Vx", velocity_unit)
     vy_column = TableColumn(5, "Vy", velocity_unit)
 
-    table_signals = {mass_column.index: massChangedSignal,
-                     x_column.index: xPositionChangedSignal,
-                     y_column.index: yPositionChangedSignal,
-                     vx_column.index: xVelocityChangedSignal,
-                     vy_column.index: yVelocityChangedSignal}
-
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
         super(NBodySimulationsView, self).__init__()
@@ -152,7 +146,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Handle when body data in the table is changed."""
         self.set_interactive_mode(True)
 
-        signal = self.table_signals.get(column_index, None)
+        table_signals = {self.mass_column.index: self.massChangedSignal,
+                         self.x_column.index: self.xPositionChangedSignal,
+                         self.y_column.index: self.yPositionChangedSignal,
+                         self.vx_column.index: self.xVelocityChangedSignal,
+                         self.vy_column.index: self.yVelocityChangedSignal}
+
+        signal = table_signals.get(column_index, None)
         if signal is not None:
             signal.emit(self._selected_body, self._get_table_value(row_index, column_index))
         else:
@@ -165,8 +165,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def handle_stop_clicked(self) -> None:
         """Handle when the stop button is clicked."""
-        self.set_as_playing(False)
-        self.interactive_plot.stop_animation()
+        self.set_interactive_mode(True)
 
     def clear(self) -> None:
         """Clear all data displayed in the view."""
@@ -195,7 +194,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.interactive_plot.remove_body(body_name)
         self.interactive_plot.update_axes_limits(initial_data=True)
-        self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
     def add_bodies(self, body_parameters: dict) -> None:
@@ -206,7 +204,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
             self.add_body_to_table(body_name, parameters)
             self.interactive_plot.add_body(body_name, parameters[1])
 
-        self.interactive_plot.show_legend()
+        self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
     def add_body(self, body_name: str, initial_data: tuple) -> None:
@@ -217,7 +215,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.interactive_plot.add_body(body_name, initial_data[1])
         self.interactive_plot.update_axes_limits(initial_data=True)
-        self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
     def add_body_to_table(self, body_name: str, body_data: tuple) -> None:
@@ -238,7 +235,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Updates the name of a body in the interactive plot when it is changed."""
         self.interactive_plot.update_body_name(old_name, new_name)
         self.interactive_plot.update_axes_limits(initial_data=True)
-        self.interactive_plot.show_legend()
         self.interactive_plot.draw()
 
     def update_body_position(self, body_name: str, position: Vector2D) -> None:

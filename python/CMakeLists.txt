@@ -2,6 +2,7 @@
 # Authored by Robert Applin, 2020
 set(PYTHON_FILES
     startup.py
+    plotting/body_marker.py
     plotting/interactive_plot.py
     plotting/simulation_animator.py
     qt/add_body_dialog.py
