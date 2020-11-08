@@ -171,13 +171,17 @@ class InteractivePlot(QObject):
         else:
             x_min, x_max, y_min, y_max = self._calculate_simulation_axes_min_max()
 
-        if x_min == x_max:
-            x_min -= 0.5
-            x_max += 0.5
+        x_diff = abs(x_max - x_min)
+        y_diff = abs(y_max - y_min)
+        x_mid = x_min + x_diff / 2.0
+        y_mid = y_min + y_diff / 2.0
 
-        if y_min == y_max:
-            y_min -= 0.5
-            y_max += 0.5
+        if x_diff > y_diff:
+            y_min = y_mid - x_diff / 2.0
+            y_max = y_mid + x_diff / 2.0
+        elif x_diff < y_diff:
+            x_min = x_mid - y_diff / 2.0
+            x_max = x_mid + y_diff / 2.0
 
         x_margin = (x_max-x_min)*AXIS_MARGIN
         y_margin = (y_max-y_min)*AXIS_MARGIN
