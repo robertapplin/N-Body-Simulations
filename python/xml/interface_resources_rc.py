@@ -2,7 +2,7 @@
 
 # Resource object code
 #
-# Created: Fri Nov 6 20:18:51 2020
+# Created: Sun Nov 8 20:47:06 2020
 #      by: The Resource Compiler for PySide2 (Qt v5.12.9)
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ me=\x22max-number-o\
 f-bodies\x22>5</ite\
 m>\x0d\x0a    </items>\
 \x0d\x0a</data>\x0d\x0a\
-\x00\x00\x06\x0d\
+\x00\x00\x06>\
 <\
 ?xml version = \x22\
 1.0\x22 encoding = \
@@ -39,93 +39,96 @@ rd-coded values.\
 -->\x0d\x0a<data>\x0d\x0a   \
  <items>\x0d\x0a      \
   <!--Default va\
-lues.-->\x0d\x0a      \
-  <item name=\x22ti\
-me-step-default\x22\
->1.0</item>\x0d\x0a   \
-     <item name=\
-\x22duration-defaul\
-t\x22>500.0</item>\x0d\
-\x0a\x0d\x0a        <!--S\
-tep between valu\
-es when using a \
-QDoubleSpinBox.-\
-->\x0d\x0a        <ite\
-m name=\x22time-ste\
-p-step\x22>1.0</ite\
-m>\x0d\x0a        <ite\
-m name=\x22duration\
--step\x22>10.0</ite\
-m>\x0d\x0a        <ite\
-m name=\x22mass-ste\
+lues.-->\x0d\x0a\x09\x09<ite\
+m name=\x22body-col\
+our-default\x22>gre\
+en</item>\x0d\x0a     \
+   <item name=\x22t\
+ime-step-default\
+\x22>1.0</item>\x0d\x0a  \
+      <item name\
+=\x22duration-defau\
+lt\x22>500.0</item>\
+\x0d\x0a\x0d\x0a        <!--\
+Step between val\
+ues when using a\
+ QDoubleSpinBox.\
+-->\x0d\x0a        <it\
+em name=\x22time-st\
+ep-step\x22>1.0</it\
+em>\x0d\x0a        <it\
+em name=\x22duratio\
+n-step\x22>10.0</it\
+em>\x0d\x0a        <it\
+em name=\x22mass-st\
+ep\x22>0.1</item>\x0d\x0a\
+        <item na\
+me=\x22position-ste\
 p\x22>0.1</item>\x0d\x0a \
        <item nam\
-e=\x22position-step\
-\x22>0.1</item>\x0d\x0a  \
-      <item name\
-=\x22velocity-step\x22\
->0.1</item>\x0d\x0a\x0d\x0a \
-       <!--Minim\
-um allowed value\
-s.-->\x0d\x0a        <\
-item name=\x22time-\
-step-min\x22>0.0</i\
-tem>\x0d\x0a        <i\
-tem name=\x22durati\
-on-min\x22>0.0</ite\
-m>\x0d\x0a        <ite\
-m name=\x22mass-min\
-\x22>0.000001</item\
->\x0d\x0a        <item\
- name=\x22position-\
-min\x22>-1000.0</it\
-em>\x0d\x0a        <it\
-em name=\x22velocit\
-y-min\x22>-1000.0</\
-item>\x0d\x0a\x0d\x0a       \
- <!--Maximum all\
-owed values.-->\x0d\
-\x0a        <item n\
-ame=\x22time-step-m\
-ax\x22>500.0</item>\
-\x0d\x0a        <item \
-name=\x22duration-m\
-ax\x22>10000.0</ite\
-m>\x0d\x0a        <ite\
-m name=\x22mass-max\
-\x22>100.0</item>\x0d\x0a\
-        <item na\
-me=\x22position-max\
-\x22>1000.0</item>\x0d\
-\x0a        <item n\
-ame=\x22velocity-ma\
-x\x22>1000.0</item>\
-\x0d\x0a\x0d\x0a        <!--\
-Units for differ\
-ent parameters.-\
-->\x0d\x0a        <ite\
-m name=\x22time-uni\
-t\x22>d</item>\x0d\x0a   \
-     <item name=\
-\x22mass-unit\x22>M*</\
+e=\x22velocity-step\
+\x22>0.1</item>\x0d\x0a\x0d\x0a\
+        <!--Mini\
+mum allowed valu\
+es.-->\x0d\x0a        \
+<item name=\x22time\
+-step-min\x22>0.0</\
 item>\x0d\x0a        <\
-item name=\x22posit\
-ion-unit\x22>au</it\
-em>\x0d\x0a\x0d\x0a        <\
-!--Number of dec\
-imal places.-->\x0d\
+item name=\x22durat\
+ion-min\x22>0.0</it\
+em>\x0d\x0a        <it\
+em name=\x22mass-mi\
+n\x22>0.000001</ite\
+m>\x0d\x0a        <ite\
+m name=\x22position\
+-min\x22>-1000.0</i\
+tem>\x0d\x0a        <i\
+tem name=\x22veloci\
+ty-min\x22>-1000.0<\
+/item>\x0d\x0a\x0d\x0a      \
+  <!--Maximum al\
+lowed values.-->\
+\x0d\x0a        <item \
+name=\x22time-step-\
+max\x22>500.0</item\
+>\x0d\x0a        <item\
+ name=\x22duration-\
+max\x22>10000.0</it\
+em>\x0d\x0a        <it\
+em name=\x22mass-ma\
+x\x22>100.0</item>\x0d\
 \x0a        <item n\
-ame=\x22time-dp\x22>2<\
+ame=\x22position-ma\
+x\x22>1000.0</item>\
+\x0d\x0a        <item \
+name=\x22velocity-m\
+ax\x22>1000.0</item\
+>\x0d\x0a\x0d\x0a        <!-\
+-Units for diffe\
+rent parameters.\
+-->\x0d\x0a        <it\
+em name=\x22time-un\
+it\x22>d</item>\x0d\x0a  \
+      <item name\
+=\x22mass-unit\x22>M*<\
 /item>\x0d\x0a        \
-<item name=\x22mass\
--dp\x22>6</item>\x0d\x0a \
-       <item nam\
-e=\x22position-dp\x22>\
-6</item>\x0d\x0a      \
-  <item name=\x22ve\
-locity-dp\x22>6</it\
-em>\x0d\x0a    </items\
->\x0d\x0a</data>\x0d\x0a\
+<item name=\x22posi\
+tion-unit\x22>au</i\
+tem>\x0d\x0a\x0d\x0a        \
+<!--Number of de\
+cimal places.-->\
+\x0d\x0a        <item \
+name=\x22time-dp\x22>2\
+</item>\x0d\x0a       \
+ <item name=\x22mas\
+s-dp\x22>6</item>\x0d\x0a\
+        <item na\
+me=\x22position-dp\x22\
+>6</item>\x0d\x0a     \
+   <item name=\x22v\
+elocity-dp\x22>6</i\
+tem>\x0d\x0a    </item\
+s>\x0d\x0a</data>\x0d\x0a\
 "
 
 qt_resource_name = b"\

@@ -105,21 +105,12 @@ class InteractivePlot(QObject):
             del self._body_markers[body_name]
             del self._initial_data[body_name]
 
-    def add_body(self, body_name: str, position: Vector2D) -> None:
+    def add_body(self, body_name: str, position: Vector2D, colour: str) -> None:
         """Adds a body to the interactive plot."""
-        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, 'green')
+        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, colour)
         self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
 
         self._initial_data[body_name] = position
-
-    def update_body_name(self, old_name: str, new_name: str) -> None:
-        """Updates the name of a body to a new name."""
-        if old_name in self._body_markers:
-            self._body_markers[new_name] = self._body_markers[old_name]
-            del self._body_markers[old_name]
-
-            self._initial_data[new_name] = self._initial_data[old_name]
-            del self._initial_data[old_name]
 
     def set_simulation_data(self, simulation_data: dict) -> None:
         """Sets the simulation data in the animator."""
@@ -127,12 +118,13 @@ class InteractivePlot(QObject):
 
     def disable_animation(self) -> None:
         """Disables the animator and re-plots the bodies in their initial positions."""
-        self.mouse_move_connection = self._figure.canvas.mpl_connect("motion_notify_event", self.handle_mouse_event)
-        self.mouse_press_connection = self._figure.canvas.mpl_connect("button_press_event", self.handle_mouse_event)
-        self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event", self.handle_mouse_event)
+        if self._animator.is_enabled():
+            self.mouse_move_connection = self._figure.canvas.mpl_connect("motion_notify_event", self.handle_mouse_event)
+            self.mouse_press_connection = self._figure.canvas.mpl_connect("button_press_event", self.handle_mouse_event)
+            self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event", self.handle_mouse_event)
 
-        self._animator.disable()
-        self._initialize_bodies()
+            self._animator.disable()
+            self._initialize_bodies()
 
     def start_animation(self) -> None:
         """Starts the animation for the first time."""
@@ -161,8 +153,23 @@ class InteractivePlot(QObject):
     def draw(self) -> None:
         """Draws the lines onto the canvas."""
         if self._axes_resized:
-            self._update_body_sizes()
+            self._refresh_body_markers()
+            self._axes_resized = False
         self._canvas.draw()
+
+    def update_body_colour(self, body_name: str, colour: str) -> None:
+        """Updates the colour of a body to a new colour."""
+        self._body_markers[body_name].set_colour(colour)
+        self._body_markers[body_name].refresh()
+
+    def update_body_name(self, old_name: str, new_name: str) -> None:
+        """Updates the name of a body to a new name."""
+        if old_name in self._body_markers:
+            self._body_markers[new_name] = self._body_markers[old_name]
+            del self._body_markers[old_name]
+
+            self._initial_data[new_name] = self._initial_data[old_name]
+            del self._initial_data[old_name]
 
     def update_axes_limits(self, initial_data: bool = True) -> None:
         """Re-sizes the axis limits for the plot based on the initial data or simulation data."""
@@ -220,20 +227,18 @@ class InteractivePlot(QObject):
 
         return min(xs), max(xs), min(ys), max(ys)
 
-    def _update_body_sizes(self) -> None:
+    def _refresh_body_markers(self) -> None:
         """Updates the size of the bodies just before a draw event."""
         self._canvas.draw()
         for body_marker in self._body_markers.values():
-            body_marker.remove_body()
-            body_marker.create_body()
-
-        self._axes_resized = False
+            body_marker.refresh()
 
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
         for body_name, position in self._initial_data.items():
+            colour = self._body_markers[body_name].get_colour()
             self.remove_body(body_name)
-            self.add_body(body_name, position)
+            self.add_body(body_name, position, colour)
 
         self.draw()
 

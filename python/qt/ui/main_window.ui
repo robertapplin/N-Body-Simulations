@@ -101,10 +101,6 @@ QTableWidget {
 	font-size: 8pt;
 }
 
-QTableWidget::item{
-	background-color: #ffffff;
-}
-
 QTableWidget::item:selected{
 	background-color: #c7e0ff;
 	color: #000000;

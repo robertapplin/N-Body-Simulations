@@ -2,17 +2,34 @@
 # Authored by Robert Applin, 2020
 from n_body_simulations.xml_reader import get_user_interface_property
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QColorDialog, QDoubleSpinBox, QStyledItemDelegate
 
 
 class ColourItemDelegate(QStyledItemDelegate):
+    """A class which creates a custom item delegate for allowing the selection of a QColor from a dialog."""
 
     def __init__(self, parent):
+        """Initializes the item delegate with a None type colour dialog."""
         super(ColourItemDelegate, self).__init__(parent)
+        self._colour_dialog = None
 
     def createEditor(self, parent, style, index) -> None:
-        colour_dialog = QColorDialog(parent)
-        return colour_dialog
+        """Overrides the parent method to create a custom QColorDialog."""
+        self._colour_dialog = QColorDialog(parent)
+        return self._colour_dialog
+
+    def setEditorData(self, editor, index):
+        """Sets the QColor displayed in the QColorDialog when it opens."""
+        colour = index.data(Qt.BackgroundRole)
+        if colour is not None:
+            editor.setCurrentColor(colour)
+
+    def setModelData(self, editor, model, index):
+        """Sets the QColor displayed in the QItemDelegate when the QColorDialog is closed."""
+        if self._colour_dialog.result():
+            colour = editor.currentColor()
+            model.setData(index, colour, Qt.BackgroundRole)
 
 
 class DoubleItemDelegate(QStyledItemDelegate):
