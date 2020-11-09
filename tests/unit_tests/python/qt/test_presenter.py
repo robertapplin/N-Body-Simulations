@@ -184,5 +184,5 @@ def test_that_handle_body_moved_will_set_the_position_in_the_model(mocker):
 
     presenter.handle_body_moved("Earth", 0.0, 0.0)
 
-    model_set_x_position.assert_called_once_with(0.0)
-    model_set_y_position.assert_called_once_with(0.0)
+    model_set_x_position.assert_called_once_with("Earth", 0.0)
+    model_set_y_position.assert_called_once_with("Earth", 0.0)

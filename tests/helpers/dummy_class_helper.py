@@ -1,7 +1,9 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.body_marker import BodyMarker
 from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.simulation_animator import SimulationAnimator
+from NBodySimulations import Vector2D
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -49,3 +51,4 @@ class DummyInteractivePlot:
         self.animator = SimulationAnimator(self._figure)
 
         self.lines = {"Sun": self._ax.plot(0.0, 0.0)[0]}
+        self.body_markers = {"Sun": BodyMarker(self._canvas, "Sun", Vector2D(0.0, 0.0), "green")}
