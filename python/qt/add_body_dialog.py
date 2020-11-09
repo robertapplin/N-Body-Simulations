@@ -1,6 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 from n_body_simulations.add_body_dialog_ui import Ui_AddBodyDialog
+from n_body_simulations.xml_reader import get_user_interface_property
 
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
@@ -16,6 +17,21 @@ class AddBodyDialog(Ui_AddBodyDialog, QDialog):
         self.setupUi(self)
 
         self.leBodyName.setValidator(QRegExpValidator(QRegExp("[a-zA-Z][a-zA-Z0-9]*(?:[-])[a-zA-Z0-9]*")))
+
+        self.dsbMass.setMinimum(float(get_user_interface_property("mass-min")))
+        self.dsbMass.setMaximum(float(get_user_interface_property("mass-max")))
+        self.dsbMass.setSingleStep(float(get_user_interface_property("mass-step")))
+        self.dsbMass.setSuffix(" " + str(get_user_interface_property("mass-unit")))
+
+        self.dsbXPosition.setMinimum(float(get_user_interface_property("position-min")))
+        self.dsbXPosition.setMaximum(float(get_user_interface_property("position-max")))
+        self.dsbXPosition.setSingleStep(float(get_user_interface_property("position-step")))
+        self.dsbXPosition.setSuffix(" " + str(get_user_interface_property("position-unit")))
+
+        self.dsbYPosition.setMinimum(float(get_user_interface_property("position-min")))
+        self.dsbYPosition.setMaximum(float(get_user_interface_property("position-max")))
+        self.dsbYPosition.setSingleStep(float(get_user_interface_property("position-step")))
+        self.dsbYPosition.setSuffix(" " + str(get_user_interface_property("position-unit")))
 
         self.pbCancel.clicked.connect(self.handle_cancel_clicked)
         self.pbAdd.clicked.connect(self.handle_add_clicked)

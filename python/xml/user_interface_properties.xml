@@ -3,6 +3,7 @@
 <data>
     <items>
         <!--Default values.-->
+		<item name="body-colour-default">green</item>
         <item name="time-step-default">1.0</item>
         <item name="duration-default">500.0</item>
 

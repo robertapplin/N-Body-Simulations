@@ -4,7 +4,6 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 ANIMATION_INTERVAL = 3
-MARKER = '.'
 
 
 class SimulationAnimator:
@@ -15,7 +14,7 @@ class SimulationAnimator:
         self._figure = figure
         self._animation = None
 
-        self._lines = dict()
+        self._body_markers = dict()
         self._simulation_data = dict()
         self._t = 0.0
 
@@ -29,13 +28,13 @@ class SimulationAnimator:
         if self._animation:
             self._animation.event_source.stop()
 
-    def enable(self, lines: dict) -> None:
+    def enable(self, body_markers: dict) -> None:
         """Enables the animator and starts animating the simulation data."""
         if self._active:
             self.disable()
 
         self._active = True
-        self._lines = lines
+        self._body_markers = body_markers
         self._animation = FuncAnimation(self._figure, self._update_body_positions, self._time,
                                         interval=ANIMATION_INTERVAL)
 
@@ -51,9 +50,9 @@ class SimulationAnimator:
         """Returns the simulation data currently being animated."""
         return self._simulation_data
 
-    def start(self, lines: dict) -> None:
+    def start(self, body_markers: dict) -> None:
         """Starts the animation for the first time."""
-        self.enable(lines)
+        self.enable(body_markers)
         self.play()
 
     def stop(self) -> None:
@@ -80,10 +79,11 @@ class SimulationAnimator:
 
     def _update_body_positions(self, time: float) -> dict:
         """Updates the positions of the bodies in the animation."""
+        patches = []
         for body_name, positions in self._simulation_data.items():
-            self._lines[body_name].set_xdata(positions[time].x)
-            self._lines[body_name].set_ydata(positions[time].y)
-        return self._lines
+            self._body_markers[body_name].set_position(positions[time].x, positions[time].y, emit_signal=False)
+            patches.append(self._body_markers[body_name].get_patch())
+        return patches
 
     def _time(self) -> float:
         """A generator for stepping through each time step for the simulation."""

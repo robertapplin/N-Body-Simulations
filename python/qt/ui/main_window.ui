@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>660</width>
     <height>846</height>
    </rect>
   </property>
@@ -101,11 +101,7 @@ QTableWidget {
 	font-size: 8pt;
 }
 
-QTableWidget::item{
-	background-color: #ffffff;
-}
-
-QTableWidget::item:selected{
+QTableWidget::item:selected {
 	background-color: #c7e0ff;
 	color: #000000;
 }</string>
@@ -128,6 +124,11 @@ QTableWidget::item:selected{
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
           </attribute>
+          <column>
+           <property name="text">
+            <string/>
+           </property>
+          </column>
           <column>
            <property name="text">
             <string/>
