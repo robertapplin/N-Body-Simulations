@@ -174,3 +174,15 @@ def test_that_handle_play_pause_clicked_will_run_the_simulation(mocker):
     model_has_data_changed.assert_called_once()
     view_stop_simulation.assert_called_once()
     model_run_simulation.assert_called_once()
+
+
+def test_that_handle_body_moved_will_set_the_position_in_the_model(mocker):
+    view, model, presenter = setup_presenter()
+
+    model_set_x_position = mocker.spy(model, 'set_x_position')
+    model_set_y_position = mocker.spy(model, 'set_y_position')
+
+    presenter.handle_body_moved("Earth", 0.0, 0.0)
+
+    model_set_x_position.assert_called_once_with(0.0)
+    model_set_y_position.assert_called_once_with(0.0)

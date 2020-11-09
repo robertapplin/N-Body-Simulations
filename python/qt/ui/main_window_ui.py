@@ -58,7 +58,7 @@ class Ui_MainWindow(object):
 "    font-size: 8pt;\n"
 "}\n"
 "\n"
-"QTableWidget::item:selected{\n"
+"QTableWidget::item:selected {\n"
 "    background-color: #c7e0ff;\n"
 "    color: #000000;\n"
 "}")

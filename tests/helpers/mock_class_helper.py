@@ -97,6 +97,8 @@ class MockNBodySimulationsView(QObject):
     durationChangedSignal = pyqtSignal(float)
     playPauseClickedSignal = pyqtSignal()
 
+    bodyMovedSignal = pyqtSignal(str, float, float)
+
     def __init__(self):
         super(MockNBodySimulationsView, self).__init__()
 
