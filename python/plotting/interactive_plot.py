@@ -157,6 +157,19 @@ class InteractivePlot(QObject):
             self._axes_resized = False
         self._canvas.draw()
 
+    def get_axes_limits(self) -> tuple:
+        """Returns the axes limits currently being used for the plot (minus the margin)."""
+        x_min, x_max = self._ax.get_xlim()
+        y_min, y_max = self._ax.get_ylim()
+
+        x_diff = abs(x_max - x_min)
+        y_diff = abs(y_max - y_min)
+
+        x_margin = (x_diff * AXIS_MARGIN) / (1 + 2 * AXIS_MARGIN)
+        y_margin = (y_diff * AXIS_MARGIN) / (1 + 2 * AXIS_MARGIN)
+
+        return tuple([x_min + x_margin, x_max - x_margin, y_min + y_margin, y_max - y_margin])
+
     def update_body_colour(self, body_name: str, colour: str) -> None:
         """Updates the colour of a body to a new colour."""
         self._body_markers[body_name].set_colour(colour)

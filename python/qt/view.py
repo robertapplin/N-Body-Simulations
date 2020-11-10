@@ -2,8 +2,7 @@
 # Authored by Robert Applin, 2020
 import qtawesome as qta
 
-from n_body_simulations.add_body_dialog import AddBodyDialog
-from n_body_simulations.double_spinbox_action import DoubleSpinBoxAction
+from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
 from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate
@@ -29,7 +28,7 @@ class TableColumn:
 class NBodySimulationsView(Ui_MainWindow, QObject):
     """A class used as a view for the main GUI (MVP)."""
     removeBodyClickedSignal = pyqtSignal()
-    addBodyClickedSignal = pyqtSignal()
+    addBodyClickedSignal = pyqtSignal(str)
     bodyNameChangedSignal = pyqtSignal(str, str)
     massChangedSignal = pyqtSignal(str, float)
     xPositionChangedSignal = pyqtSignal(str, float)
@@ -64,23 +63,26 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.play_icon = None
         self.pause_icon = None
 
+        self.add_single_body_action = None
+        self.add_multiple_bodies_action = None
         self.time_step_action = None
         self.duration_action = None
 
         self.setup_icons()
         self.setup_table_widget()
+        self.setup_add_body_widget()
         self.setup_time_settings_widget()
 
         self.interactive_plot = InteractivePlot()
         self.plotLayout.addWidget(self.interactive_plot.canvas())
 
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
-        self.pbAddBody.clicked.connect(self.emit_add_body_clicked)
         self.pbInteractiveMode.clicked.connect(self.handle_interactive_mode_clicked)
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
+        self.add_single_body_action.push_button.clicked.connect(self.emit_add_body_clicked)
         self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
@@ -97,7 +99,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
         self.pbInteractiveMode.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
         self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
-        self.pbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
+        self.tbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
     def setup_table_widget(self) -> None:
@@ -120,6 +122,15 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.twBodyData.setColumnWidth(self.colour_column.index, 20)
 
+    def setup_add_body_widget(self):
+        """Setup the custom add body tool button widget."""
+        self.add_single_body_action = LineEditButtonAction("Add Body", "[a-zA-Z][a-zA-Z0-9]*(?:[-])[a-zA-Z0-9]*")
+        self.add_multiple_bodies_action = SpinBoxButtonAction("Add Bodies")
+
+        self.tbAddBody.addAction(self.add_single_body_action)
+        self.tbAddBody.addAction(self.add_multiple_bodies_action)
+        self.tbAddBody.setPopupMode(QToolButton.InstantPopup)
+
     def setup_time_settings_widget(self):
         """Setup the custom time settings widget."""
         self.time_step_action = DoubleSpinBoxAction("Time Step: ", DoubleSpinBoxAction.TimeStep)
@@ -135,7 +146,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def emit_add_body_clicked(self) -> None:
         """Emit that the add body button was clicked."""
-        self.addBodyClickedSignal.emit()
+        self.addBodyClickedSignal.emit(self.add_single_body_action.line_edit.text())
+        self.add_single_body_action.line_edit.setText("")
 
     def emit_play_pause_clicked(self) -> None:
         """Emit that the play/pause button was clicked."""
@@ -314,18 +326,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Enables or disables the widgets seen in the view."""
         self.twBodyData.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
-        self.pbAddBody.setEnabled(enable)
+        self.tbAddBody.setEnabled(enable)
         self.tbTimeSettings.setEnabled(enable)
         self.pbInteractiveMode.setEnabled(enable)
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
-
-    @staticmethod
-    def open_add_body_dialog() -> tuple:
-        """Opens the dialog used for adding a body to the simulation."""
-        dialog = AddBodyDialog()
-        dialog.exec_()
-        return dialog.new_body_data()
 
     def start_simulation(self, simulation_results: dict) -> None:
         """Starts animating the results of a simulation."""
@@ -344,6 +349,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def play_simulation(self) -> None:
         """Plays the animation of a simulation."""
         self.interactive_plot.play_animation()
+
+    def get_axes_limits(self) -> tuple:
+        """Returns the axes limits currently being used for the interactive plot."""
+        return self.interactive_plot.get_axes_limits()
 
     @staticmethod
     def _create_table_double(value: float) -> QTableWidgetItem:

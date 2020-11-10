@@ -1,5 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+import random
+
 from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.model import NBodySimulationsModel
 from n_body_simulations.xml_reader import get_simulation_setting
@@ -7,7 +9,11 @@ from n_body_simulations.xml_reader import get_simulation_setting
 
 class NBodySimulationsPresenter:
     """A class used as a presenter for the main GUI (MVP)."""
+
     max_number_of_bodies = int(get_simulation_setting("max-number-of-bodies"))
+    body_mass_default = float(get_simulation_setting("body-mass-default"))
+    body_vx_default = float(get_simulation_setting("body-vx-default"))
+    body_vy_default = float(get_simulation_setting("body-vy-default"))
 
     def __init__(self, view, model=NBodySimulationsModel()):
         """Initializes the presenter by creating a view and model."""
@@ -15,11 +21,11 @@ class NBodySimulationsPresenter:
         self.model = model
 
         # Temporarily here for development
-        self.model.add_body("Sun", 1.0, 0.0, 0.0)
+        self.model.add_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
         self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 
         self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
-        self.view.addBodyClickedSignal.connect(self.handle_add_body_clicked)
+        self.view.addBodyClickedSignal.connect(lambda body_name: self.handle_add_body_clicked(body_name))
         self.view.bodyNameChangedSignal.connect(lambda old_name, new_name: self.handle_body_name_changed(old_name,
                                                                                                          new_name))
         self.view.massChangedSignal.connect(lambda body_name, mass: self.handle_mass_changed(body_name, mass))
@@ -42,10 +48,10 @@ class NBodySimulationsPresenter:
             self.model.remove_body(body_name)
             self.view.remove_body(body_name)
 
-    def handle_add_body_clicked(self) -> None:
+    def handle_add_body_clicked(self, body_name: str) -> None:
         """Handles the addition of a body to the simulation."""
         if self.model.number_of_bodies() < self.max_number_of_bodies:
-            self._add_new_body()
+            self._add_new_body(body_name)
 
     @catch_errors()
     def handle_body_name_changed(self, old_name: str, new_name: str) -> None:
@@ -107,11 +113,14 @@ class NBodySimulationsPresenter:
         self.model.set_x_position(body_name, x)
         self.model.set_y_position(body_name, y)
 
-    def _add_new_body(self) -> None:
+    def _add_new_body(self, body_name: str) -> None:
         """Adds a new body to the model and view."""
-        body_name, mass, x, y = self.view.open_add_body_dialog()
-        if body_name is not None:
-            success = self.model.add_body(body_name, mass, x, y)
+        if body_name != "":
+            axes_limits = self.view.get_axes_limits()
+            x_position = random.uniform(axes_limits[0], axes_limits[1])
+            y_position = random.uniform(axes_limits[2], axes_limits[3])
+            success = self.model.add_body(body_name, self.body_mass_default, x_position, y_position,
+                                          self.body_vx_default, self.body_vy_default)
             if success:
                 self.view.add_body(body_name, self.model.initial_data(body_name))
 

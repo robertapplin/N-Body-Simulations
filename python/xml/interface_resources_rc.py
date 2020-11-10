@@ -2,7 +2,7 @@
 
 # Resource object code
 #
-# Created: Sun Nov 8 20:47:06 2020
+# Created: Tue Nov 10 21:29:11 2020
 #      by: The Resource Compiler for PySide2 (Qt v5.12.9)
 #
 # WARNING! All changes made in this file will be lost!
@@ -10,7 +10,7 @@
 from PySide2 import QtCore
 
 qt_resource_data = b"\
-\x00\x00\x00\xec\
+\x00\x00\x01\x81\
 <\
 ?xml version = \x22\
 1.0\x22 encoding = \
@@ -25,8 +25,18 @@ simulation.-->\x0d\x0a\
         <item na\
 me=\x22max-number-o\
 f-bodies\x22>5</ite\
-m>\x0d\x0a    </items>\
-\x0d\x0a</data>\x0d\x0a\
+m>\x0d\x0a        <ite\
+m name=\x22body-mas\
+s-default\x22>1.0</\
+item>\x0d\x0a        <\
+item name=\x22body-\
+vx-default\x22>0.0<\
+/item>\x0d\x0a        \
+<item name=\x22body\
+-vy-default\x22>0.0\
+</item>\x0d\x0a    </i\
+tems>\x0d\x0a</data>\x0d\x0a\
+\
 \x00\x00\x06>\
 <\
 ?xml version = \x22\
@@ -147,7 +157,7 @@ qt_resource_name = b"\
 qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x01\
 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
-\x00\x00\x004\x00\x00\x00\x00\x00\x01\x00\x00\x00\xf0\
+\x00\x00\x004\x00\x00\x00\x00\x00\x01\x00\x00\x01\x85\
 "
 
 def qInitResources():
