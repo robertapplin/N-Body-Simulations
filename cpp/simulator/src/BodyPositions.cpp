@@ -2,6 +2,8 @@
 // Authored by Robert Applin, 2020
 #include "BodyPositions.h"
 
+#include "Vector2D.h"
+
 #include <stdexcept>
 
 namespace Simulator {
@@ -29,10 +31,6 @@ void BodyPositions::addPosition(double time, Vector2D const &position) {
                              std::to_string(time) + " already exists.");
 
   m_positions[time] = position;
-}
-
-std::map<double, Vector2D> BodyPositions::positions() const {
-  return m_positions;
 }
 
 } // namespace Simulator

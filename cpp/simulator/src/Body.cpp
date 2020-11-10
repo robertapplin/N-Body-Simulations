@@ -12,19 +12,7 @@ Body::Body(std::string const &name, double mass,
 
 void Body::setName(std::string const &name) { m_name = name; }
 
-std::string Body::name() const { return m_name; }
-
 void Body::setMass(double mass) { m_mass = mass; }
-
-double Body::mass() const { return m_mass; }
-
-Vector2D &Body::initialPosition() { return m_initialPosition; }
-
-Vector2D &Body::initialVelocity() { return m_initialVelocity; }
-
-Vector2D &Body::position() { return m_position; }
-
-Vector2D &Body::velocity() { return m_velocity; }
 
 void Body::resetBody() {
   m_position = m_initialPosition;

@@ -20,22 +20,22 @@ public:
   // Sets the name of the body.
   void setName(std::string const &name);
   // Returns the name of the body.
-  std::string name() const;
+  inline std::string name() const noexcept { return m_name; }
 
   // Sets the mass of the body.
   void setMass(double mass);
   // Returns the mass of the body.
-  double mass() const;
+  inline double mass() const noexcept { return m_mass; }
 
   // Returns the initial position of the body.
-  Vector2D &initialPosition();
+  inline Vector2D &initialPosition() noexcept { return m_initialPosition; }
   // Returns the initial velocity of the body.
-  Vector2D &initialVelocity();
+  inline Vector2D &initialVelocity() noexcept { return m_initialVelocity; }
 
   // Returns the current position of the body.
-  Vector2D &position();
+  inline Vector2D &position() noexcept { return m_position; }
   // Returns the current velocity of the body.
-  Vector2D &velocity();
+  inline Vector2D &velocity() noexcept { return m_velocity; }
 
   // Reset the position and velocity of the body to the initial values.
   void resetBody();
