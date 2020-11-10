@@ -3,9 +3,7 @@
 #ifndef NBodySimulator_H
 #define NBodySimulator_H
 
-#include "Body.h"
 #include "BodyPositions.h"
-#include "Vector2D.h"
 
 #include <map>
 #include <memory>
@@ -13,6 +11,9 @@
 #include <vector>
 
 namespace Simulator {
+
+class Body;
+struct Vector2D;
 
 // A class which can be used to simulate an N-Body system.
 class NBodySimulator {
