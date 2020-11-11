@@ -1,14 +1,17 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 import random
+import string
 
 from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.model import NBodySimulationsModel
-from n_body_simulations.xml_reader import get_simulation_setting
+from n_body_simulations.xml_reader import get_simulation_setting, get_user_interface_property
 
 
 class NBodySimulationsPresenter:
     """A class used as a presenter for the main GUI (MVP)."""
+
+    body_names = get_user_interface_property("body-names").split(",")
 
     max_number_of_bodies = int(get_simulation_setting("max-number-of-bodies"))
     body_mass_default = float(get_simulation_setting("body-mass-default"))
@@ -26,6 +29,7 @@ class NBodySimulationsPresenter:
 
         self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
         self.view.addBodyClickedSignal.connect(lambda body_name: self.handle_add_body_clicked(body_name))
+        self.view.addBodiesClickedSignal.connect(lambda n_bodies: self.handle_add_bodies_clicked(n_bodies))
         self.view.bodyNameChangedSignal.connect(lambda old_name, new_name: self.handle_body_name_changed(old_name,
                                                                                                          new_name))
         self.view.massChangedSignal.connect(lambda body_name, mass: self.handle_mass_changed(body_name, mass))
@@ -49,9 +53,14 @@ class NBodySimulationsPresenter:
             self.view.remove_body(body_name)
 
     def handle_add_body_clicked(self, body_name: str) -> None:
-        """Handles the addition of a body to the simulation."""
+        """Handles the addition of a body to the simulation. Randomizes the body position and colour."""
         if self.model.number_of_bodies() < self.max_number_of_bodies:
             self._add_new_body(body_name)
+
+    def handle_add_bodies_clicked(self, number_of_bodies: int) -> None:
+        """Handles the addition of N random bodies. Randomizes the body position, colour, and name."""
+        for _ in range(number_of_bodies):
+            self.handle_add_body_clicked(self._generate_new_random_name())
 
     @catch_errors()
     def handle_body_name_changed(self, old_name: str, new_name: str) -> None:
@@ -134,3 +143,17 @@ class NBodySimulationsPresenter:
         else:
             self.view.set_as_playing(False)
         return success
+
+    def _generate_new_random_name(self):
+        """Keeps generating a random name until an unused name is found."""
+        random_name = self._generate_random_name()
+        while random_name in self.model.body_names():
+            random_name = self._generate_random_name()
+        return random_name
+
+    def _generate_random_name(self):
+        """Generates a random body name."""
+        random_name = self.body_names[random.randint(0, len(self.body_names) - 1)]
+        random_number = random.randint(1, 100)
+        random_letter = random.choice(string.ascii_uppercase)
+        return f"{random_name}-{random_number}{random_letter}"

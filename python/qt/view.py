@@ -1,5 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+import random
 import qtawesome as qta
 
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
@@ -29,6 +30,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     """A class used as a view for the main GUI (MVP)."""
     removeBodyClickedSignal = pyqtSignal()
     addBodyClickedSignal = pyqtSignal(str)
+    addBodiesClickedSignal = pyqtSignal(int)
     bodyNameChangedSignal = pyqtSignal(str, str)
     massChangedSignal = pyqtSignal(str, float)
     xPositionChangedSignal = pyqtSignal(str, float)
@@ -41,7 +43,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     bodyMovedSignal = pyqtSignal(str, float, float)
 
-    body_colour_default = get_user_interface_property("body-colour-default")
+    body_colours = get_user_interface_property("body-colours").split(",")
     time_unit = get_user_interface_property("time-unit")
     mass_unit = get_user_interface_property("mass-unit")
     position_unit = get_user_interface_property("position-unit")
@@ -83,6 +85,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
         self.add_single_body_action.push_button.clicked.connect(self.emit_add_body_clicked)
+        self.add_multiple_bodies_action.push_button.clicked.connect(self.emit_add_bodies_clicked)
         self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
         self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
@@ -149,6 +152,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.addBodyClickedSignal.emit(self.add_single_body_action.line_edit.text())
         self.add_single_body_action.line_edit.setText("")
 
+    def emit_add_bodies_clicked(self) -> None:
+        """Emit that the add bodies button was clicked."""
+        self.addBodiesClickedSignal.emit(self.add_multiple_bodies_action.spin_box.value())
+        self.add_multiple_bodies_action.spin_box.setValue(1)
+
     def emit_play_pause_clicked(self) -> None:
         """Emit that the play/pause button was clicked."""
         self.playPauseClickedSignal.emit()
@@ -161,7 +169,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Emit that the duration was changed."""
         self.durationChangedSignal.emit(value)
 
-    def handle_cell_clicked(self, row_index: int, column_index: int) -> None:
+    def handle_cell_clicked(self, row_index: int, _: int) -> None:
         """Handle when a table row is selected."""
         self._selected_body = self._body_at_index(row_index)
 
@@ -243,8 +251,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.set_interactive_mode(True)
 
         for body_name, parameters in body_parameters.items():
-            self.add_body_to_table(body_name, parameters)
-            self.interactive_plot.add_body(body_name, parameters[1], self.body_colour_default)
+            random_colour = self._random_colour()
+            self.add_body_to_table(body_name, parameters, random_colour)
+            self.interactive_plot.add_body(body_name, parameters[1], random_colour)
 
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
@@ -253,19 +262,20 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Adds a body to the view."""
         self.set_interactive_mode(True)
 
-        self.add_body_to_table(body_name, initial_data)
+        random_colour = self._random_colour()
+        self.add_body_to_table(body_name, initial_data, random_colour)
 
-        self.interactive_plot.add_body(body_name, initial_data[1], self.body_colour_default)
+        self.interactive_plot.add_body(body_name, initial_data[1], random_colour)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
-    def add_body_to_table(self, body_name: str, body_data: tuple) -> None:
+    def add_body_to_table(self, body_name: str, body_data: tuple, colour: str) -> None:
         """Adds the data of a body to the table of data."""
         self.twBodyData.blockSignals(True)
         row_index = self.twBodyData.rowCount()
 
         self.twBodyData.insertRow(row_index)
-        self.twBodyData.setItem(row_index, self.colour_column.index, self._create_table_colour())
+        self.twBodyData.setItem(row_index, self.colour_column.index, self._create_table_colour(colour))
         self.twBodyData.setItem(row_index, self.name_column.index, QTableWidgetItem(body_name))
         self.twBodyData.setItem(row_index, self.mass_column.index, self._create_table_double(body_data[0]))
         self.twBodyData.setItem(row_index, self.x_column.index, self._create_table_double(body_data[1].x))
@@ -282,8 +292,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
         """Updates the position of a body in the interactive plot when it is changed."""
+        body_colour = self.interactive_plot.get_body_colour(body_name)
         self.interactive_plot.remove_body(body_name)
-        self.interactive_plot.add_body(body_name, position, self.body_colour_default)
+        self.interactive_plot.add_body(body_name, position, body_colour)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
@@ -361,10 +372,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         item.setData(Qt.EditRole, value)
         return item
 
-    def _create_table_colour(self) -> QTableWidgetItem:
+    @staticmethod
+    def _create_table_colour(colour: str) -> QTableWidgetItem:
         """Creates a table item and sets its background colour role."""
         item = QTableWidgetItem()
-        item.setData(Qt.BackgroundRole, QColor(self.body_colour_default))
+        item.setData(Qt.BackgroundRole, QColor(colour))
         return item
 
     def _get_cell_double(self, row_index: int, column_index: int) -> float:
@@ -392,3 +404,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         if selection_model.hasSelection():
             return selection_model.currentIndex().row()
         return -1
+
+    def _random_colour(self) -> str:
+        """Returns a random colour to be used for a body."""
+        return self.body_colours[random.randint(0, len(self.body_colours) - 1)]

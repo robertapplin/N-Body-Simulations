@@ -3,7 +3,7 @@
 <data>
     <items>
         <!--Settings used for the simulation.-->
-        <item name="max-number-of-bodies">5</item>
+        <item name="max-number-of-bodies">10</item>
         <item name="body-mass-default">1.0</item>
         <item name="body-vx-default">0.0</item>
         <item name="body-vy-default">0.0</item>

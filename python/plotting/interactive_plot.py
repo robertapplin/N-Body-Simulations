@@ -105,7 +105,7 @@ class InteractivePlot(QObject):
             del self._body_markers[body_name]
             del self._initial_data[body_name]
 
-    def add_body(self, body_name: str, position: Vector2D, colour: str) -> None:
+    def add_body(self, body_name: str, position: Vector2D, colour) -> None:
         """Adds a body to the interactive plot."""
         self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, colour)
         self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
@@ -169,6 +169,10 @@ class InteractivePlot(QObject):
         y_margin = (y_diff * AXIS_MARGIN) / (1 + 2 * AXIS_MARGIN)
 
         return tuple([x_min + x_margin, x_max - x_margin, y_min + y_margin, y_max - y_margin])
+
+    def get_body_colour(self, body_name: str) -> str:
+        """Returns the colour of the specified body."""
+        return self._body_markers[body_name].get_colour()
 
     def update_body_colour(self, body_name: str, colour: str) -> None:
         """Updates the colour of a body to a new colour."""
