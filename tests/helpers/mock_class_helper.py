@@ -86,7 +86,8 @@ class MockNBodySimulationsModel:
 class MockNBodySimulationsView(QObject):
     """A mock class used for mocking the view."""
     removeBodyClickedSignal = pyqtSignal()
-    addBodyClickedSignal = pyqtSignal()
+    addBodyClickedSignal = pyqtSignal(str)
+    addBodiesClickedSignal = pyqtSignal(int)
     bodyNameChangedSignal = pyqtSignal(str, str)
     massChangedSignal = pyqtSignal(str, float)
     xPositionChangedSignal = pyqtSignal(str, float)
@@ -149,3 +150,7 @@ class MockNBodySimulationsView(QObject):
 
     def play_simulation(self) -> None:
         pass
+
+    @staticmethod
+    def get_axes_limits() -> tuple:
+        return 0.0, 1.0, 0.0, 1.0

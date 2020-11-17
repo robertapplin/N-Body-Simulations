@@ -217,11 +217,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.bodyMovedSignal.emit(body_name, x, y)
 
-    def clear(self) -> None:
-        """Clear all data displayed in the view."""
-        self.interactive_plot.clear()
-        self.twBodyData.clearContents()
-
     def selected_body(self) -> str:
         """Returns the name of the body which is currently selected."""
         selected_index = self._selected_row_index()

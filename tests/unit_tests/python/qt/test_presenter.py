@@ -38,13 +38,13 @@ def test_that_handle_add_body_clicked_calls_the_expected_methods(mocker):
     model_initial_data = mocker.spy(model, 'initial_data')
     view_add_body = mocker.spy(view, 'add_body')
 
-    presenter.handle_add_body_clicked()
+    presenter.handle_add_body_clicked("Earth")
 
     model_number_of_bodies.assert_called_once()
     view_open_add_body_dialog.assert_called_once()
-    model_add_body.assert_called_once_with("Earth", 1.0, 0.0, 0.0)
-    model_initial_data.assert_called_once_with("Earth")
-    view_add_body.assert_called_once_with("Earth", tuple([1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0)]))
+    model_add_body.assert_called_once()
+    model_initial_data.assert_called_once()
+    view_add_body.assert_called_once()
 
 
 def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_body_name_does_not_exist(mocker):
