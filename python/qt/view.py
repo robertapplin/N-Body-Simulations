@@ -222,13 +222,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.clear()
         self.twBodyData.clearContents()
 
-    def reset_view(self, bodies: dict, time_step: float, duration: float) -> None:
-        """Clear the view, and then add some bodies to the view."""
-        self.clear()
-        self.add_bodies(bodies)
-        self.set_time_step(time_step)
-        self.set_duration(duration)
-
     def selected_body(self) -> str:
         """Returns the name of the body which is currently selected."""
         selected_index = self._selected_row_index()
@@ -292,9 +285,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
         """Updates the position of a body in the interactive plot when it is changed."""
-        body_colour = self.interactive_plot.get_body_colour(body_name)
-        self.interactive_plot.remove_body(body_name)
-        self.interactive_plot.add_body(body_name, position, body_colour)
+        self.interactive_plot.update_body_position(body_name, position)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 

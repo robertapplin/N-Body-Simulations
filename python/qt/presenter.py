@@ -24,8 +24,8 @@ class NBodySimulationsPresenter:
         self.model = model
 
         # Temporarily here for development
-        self.model.add_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
-        self.model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
+        self._add_new_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
+        self._add_new_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 
         self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
         self.view.addBodyClickedSignal.connect(lambda body_name: self.handle_add_body_clicked(body_name))
@@ -43,19 +43,17 @@ class NBodySimulationsPresenter:
 
         self.view.bodyMovedSignal.connect(lambda body_name, x, y: self.handle_body_moved(body_name, x, y))
 
-        self.view.reset_view(self.model.initial_body_parameters(), self.model.time_step(), self.model.duration())
-
     def handle_remove_body_clicked(self) -> None:
         """Handles the removal of the selected body."""
         body_name = self.view.selected_body()
         if body_name:
-            self.model.remove_body(body_name)
             self.view.remove_body(body_name)
+            self.model.remove_body(body_name)
 
     def handle_add_body_clicked(self, body_name: str) -> None:
         """Handles the addition of a body to the simulation. Randomizes the body position and colour."""
         if self.model.number_of_bodies() < self.max_number_of_bodies:
-            self._add_new_body(body_name)
+            self._add_body(body_name)
 
     def handle_add_bodies_clicked(self, number_of_bodies: int) -> None:
         """Handles the addition of N random bodies. Randomizes the body position, colour, and name."""
@@ -122,16 +120,18 @@ class NBodySimulationsPresenter:
         self.model.set_x_position(body_name, x)
         self.model.set_y_position(body_name, y)
 
-    def _add_new_body(self, body_name: str) -> None:
-        """Adds a new body to the model and view."""
+    def _add_body(self, body_name: str) -> None:
+        """Adds a new body with a random position to the model and view."""
         if body_name != "":
             axes_limits = self.view.get_axes_limits()
-            x_position = random.uniform(axes_limits[0], axes_limits[1])
-            y_position = random.uniform(axes_limits[2], axes_limits[3])
-            success = self.model.add_body(body_name, self.body_mass_default, x_position, y_position,
-                                          self.body_vx_default, self.body_vy_default)
-            if success:
-                self.view.add_body(body_name, self.model.initial_data(body_name))
+            x = random.uniform(axes_limits[0], axes_limits[1])
+            y = random.uniform(axes_limits[2], axes_limits[3])
+            self._add_new_body(body_name, self.body_mass_default, x, y, self.body_vx_default, self.body_vy_default)
+
+    def _add_new_body(self, body_name: str, mass: float, x: float, y: float, vx: float, vy: float) -> None:
+        """Adds a new body to the model and view."""
+        if body_name != "" and self.model.add_body(body_name, mass, x, y, vx, vy):
+            self.view.add_body(body_name, self.model.initial_data(body_name))
 
     def _run_simulation(self) -> bool:
         """Runs a simulation and starts an animation of it in the view."""

@@ -188,6 +188,11 @@ class InteractivePlot(QObject):
             self._initial_data[new_name] = self._initial_data[old_name]
             del self._initial_data[old_name]
 
+    def update_body_position(self, body_name: str, position: Vector2D) -> None:
+        """Updates the position of a body."""
+        self._body_markers[body_name].set_position(position.x, position.y)
+        self._canvas.draw()
+
     def update_axes_limits(self, initial_data: bool = True) -> None:
         """Re-sizes the axis limits for the plot based on the initial data or simulation data."""
         if initial_data:
@@ -258,11 +263,7 @@ class InteractivePlot(QObject):
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
         for body_name, position in self._initial_data.items():
-            colour = self._body_markers[body_name].get_colour()
-            self.remove_body(body_name)
-            self.add_body(body_name, position, colour)
-
-        self.draw()
+            self.update_body_position(body_name, position)
 
     def _update_cursor(self) -> None:
         """Updates the cursor based on the mouse events being performed."""
