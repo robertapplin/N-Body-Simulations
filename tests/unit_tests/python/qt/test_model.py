@@ -12,7 +12,7 @@ enable_test_mode()
 @pytest.fixture
 def model():
     simulator_model = NBodySimulationsModel()
-    simulator_model.add_body("Sun", 1.0, 0.0, 0.0)
+    simulator_model.add_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
     simulator_model.add_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
     return simulator_model
 
@@ -52,7 +52,7 @@ def test_that_initial_velocity_fails_silently_if_an_invalid_body_name_is_provide
 
 
 def test_that_add_body_will_add_a_body_as_expected(model):
-    model.add_body("Mars", 0.2, 3.0, 4.0)
+    model.add_body("Mars", 0.2, 3.0, 4.0, 0.0, 0.0)
 
     mass = model.mass("Mars")
     position = model.initial_position("Mars")
@@ -64,12 +64,12 @@ def test_that_add_body_will_add_a_body_as_expected(model):
 
 
 def test_that_adding_a_body_which_already_exists_fails_silently(model):
-    model.add_body("Earth", 0.5, 3.0, 4.0)
+    model.add_body("Earth", 0.5, 3.0, 4.0, 0.0, 0.0)
     assert model.number_of_bodies() == 2
 
 
 def test_that_remove_body_will_remove_a_body_as_expected(model):
-    model.add_body("Mars", 0.2, 3.0, 4.0)
+    model.add_body("Mars", 0.2, 3.0, 4.0, 0.0, 0.0)
     model.remove_body("Mars")
 
     assert model.number_of_bodies() == 2
@@ -80,7 +80,7 @@ def test_that_remove_body_fails_silently_if_an_invalid_body_name_is_provided(mod
 
 
 def test_that_body_names_will_return_the_expected_body_names(model):
-    model.add_body("Mars", 0.2, 3.0, 4.0)
+    model.add_body("Mars", 0.2, 3.0, 4.0, 0.0, 0.0)
     assert model.body_names() == ["Sun", "Earth", "Mars"]
 
 
@@ -103,7 +103,7 @@ def test_that_set_duration_will_set_the_duration(model):
 
 
 def test_that_initial_body_parameters_will_return_the_expected_parameters(model):
-    model.add_body("Mars", 0.2, 3.0, 4.0)
+    model.add_body("Mars", 0.2, 3.0, 4.0, 0.0, 0.0)
     body_parameters = model.initial_body_parameters()
 
     assert "Earth" in body_parameters

@@ -18,5 +18,5 @@ jobs:
         conda install -c anaconda flake8
     - name: Flake8
       run: |
-        flake8 python/ --extend-exclude=*_ui.py --count --max-complexity=10 --max-line-length=127 --statistics
+        flake8 python/ --extend-exclude=*_rc.py,*_ui.py --count --max-complexity=10 --max-line-length=127 --statistics
         flake8 tests/ --count --max-complexity=10 --max-line-length=127 --statistics

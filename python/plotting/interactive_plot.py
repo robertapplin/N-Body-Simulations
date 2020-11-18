@@ -93,11 +93,6 @@ class InteractivePlot(QObject):
         """Returns the canvas used for the interactive plot."""
         return self._canvas
 
-    def clear(self) -> None:
-        """Clears the interactive plot."""
-        self._ax.clear()
-        self._body_markers.clear()
-
     def remove_body(self, body_name: str) -> None:
         """Removes a body from the interactive plot."""
         if body_name in self._body_markers:
@@ -157,6 +152,23 @@ class InteractivePlot(QObject):
             self._axes_resized = False
         self._canvas.draw()
 
+    def get_axes_limits(self) -> tuple:
+        """Returns the axes limits currently being used for the plot (minus the margin)."""
+        x_min, x_max = self._ax.get_xlim()
+        y_min, y_max = self._ax.get_ylim()
+
+        x_diff = abs(x_max - x_min)
+        y_diff = abs(y_max - y_min)
+
+        x_margin = (x_diff * AXIS_MARGIN) / (1.0 + 2.0 * AXIS_MARGIN)
+        y_margin = (y_diff * AXIS_MARGIN) / (1.0 + 2.0 * AXIS_MARGIN)
+
+        return tuple([x_min + x_margin, x_max - x_margin, y_min + y_margin, y_max - y_margin])
+
+    def get_body_colour(self, body_name: str) -> str:
+        """Returns the colour of the specified body."""
+        return self._body_markers[body_name].get_colour()
+
     def update_body_colour(self, body_name: str, colour: str) -> None:
         """Updates the colour of a body to a new colour."""
         self._body_markers[body_name].set_colour(colour)
@@ -170,6 +182,11 @@ class InteractivePlot(QObject):
 
             self._initial_data[new_name] = self._initial_data[old_name]
             del self._initial_data[old_name]
+
+    def update_body_position(self, body_name: str, position: Vector2D) -> None:
+        """Updates the position of a body."""
+        self._body_markers[body_name].set_position(position.x, position.y)
+        self._canvas.draw()
 
     def update_axes_limits(self, initial_data: bool = True) -> None:
         """Re-sizes the axis limits for the plot based on the initial data or simulation data."""
@@ -189,14 +206,16 @@ class InteractivePlot(QObject):
         elif x_half_diff < y_half_diff:
             x_min = x_mid - y_half_diff
             x_max = x_mid + y_half_diff
-        else:
+
+        if x_min == x_max:
             x_min -= 0.5
             x_max += 0.5
+        if y_min == y_max:
             y_min -= 0.5
             y_max += 0.5
 
-        x_margin = (x_max-x_min)*AXIS_MARGIN
-        y_margin = (y_max-y_min)*AXIS_MARGIN
+        x_margin = abs(x_max - x_min) * AXIS_MARGIN
+        y_margin = abs(y_max - y_min) * AXIS_MARGIN
 
         self._ax.set_xlim(x_min - x_margin, x_max + x_margin)
         self._ax.set_ylim(y_min - y_margin, y_max + y_margin)
@@ -241,11 +260,7 @@ class InteractivePlot(QObject):
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
         for body_name, position in self._initial_data.items():
-            colour = self._body_markers[body_name].get_colour()
-            self.remove_body(body_name)
-            self.add_body(body_name, position, colour)
-
-        self.draw()
+            self.update_body_position(body_name, position)
 
     def _update_cursor(self) -> None:
         """Updates the cursor based on the mouse events being performed."""

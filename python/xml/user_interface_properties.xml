@@ -2,9 +2,12 @@
 <!--Interface properties are stored here to avoid hard-coded values.-->
 <data>
     <items>
-        <!--Default values.-->
-		<item name="body-colour-default">green</item>
-        <item name="time-step-default">1.0</item>
+        <!--Body Properties that are randomly chosen when adding a body.-->
+		<item name="body-colours">lightgreen,green,darkgreen,magenta,red,darkred,deepskyblue,blue,darkblue,orange,purple,yellow,gold,black,brown</item>
+        <item name="body-names">Nevis,Lobiuvis,Ennuter,Vivis,Delia,Cerilia,Pagoria,Drigolara,Geonia,Coovis</item>
+
+		<!--Default values.-->
+		<item name="time-step-default">1.0</item>
         <item name="duration-default">500.0</item>
 
         <!--Step between values when using a QDoubleSpinBox.-->
