@@ -93,11 +93,6 @@ class InteractivePlot(QObject):
         """Returns the canvas used for the interactive plot."""
         return self._canvas
 
-    def clear(self) -> None:
-        """Clears the interactive plot."""
-        self._ax.clear()
-        self._body_markers.clear()
-
     def remove_body(self, body_name: str) -> None:
         """Removes a body from the interactive plot."""
         if body_name in self._body_markers:
@@ -105,7 +100,7 @@ class InteractivePlot(QObject):
             del self._body_markers[body_name]
             del self._initial_data[body_name]
 
-    def add_body(self, body_name: str, position: Vector2D, colour) -> None:
+    def add_body(self, body_name: str, position: Vector2D, colour: str) -> None:
         """Adds a body to the interactive plot."""
         self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, colour)
         self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
