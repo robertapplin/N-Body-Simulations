@@ -160,8 +160,8 @@ class InteractivePlot(QObject):
         x_diff = abs(x_max - x_min)
         y_diff = abs(y_max - y_min)
 
-        x_margin = (x_diff * AXIS_MARGIN) / (1 + 2 * AXIS_MARGIN)
-        y_margin = (y_diff * AXIS_MARGIN) / (1 + 2 * AXIS_MARGIN)
+        x_margin = (x_diff * AXIS_MARGIN) / (1.0 + 2.0 * AXIS_MARGIN)
+        y_margin = (y_diff * AXIS_MARGIN) / (1.0 + 2.0 * AXIS_MARGIN)
 
         return tuple([x_min + x_margin, x_max - x_margin, y_min + y_margin, y_max - y_margin])
 

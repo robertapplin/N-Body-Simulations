@@ -125,7 +125,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.twBodyData.setColumnWidth(self.colour_column.index, 20)
 
-    def setup_add_body_widget(self):
+    def setup_add_body_widget(self) -> None:
         """Setup the custom add body tool button widget."""
         self.add_single_body_action = LineEditButtonAction("Add Body", "[a-zA-Z][a-zA-Z0-9]*(?:[-])[a-zA-Z0-9]*")
         self.add_multiple_bodies_action = SpinBoxButtonAction("Add Bodies")
@@ -134,7 +134,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.tbAddBody.addAction(self.add_multiple_bodies_action)
         self.tbAddBody.setPopupMode(QToolButton.InstantPopup)
 
-    def setup_time_settings_widget(self):
+    def setup_time_settings_widget(self) -> None:
         """Setup the custom time settings widget."""
         self.time_step_action = DoubleSpinBoxAction("Time Step: ", DoubleSpinBoxAction.TimeStep)
         self.duration_action = DoubleSpinBoxAction("Duration: ", DoubleSpinBoxAction.Duration)
