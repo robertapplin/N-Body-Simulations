@@ -61,10 +61,27 @@ def test_that_update_body_position_will_update_the_position_of_a_body(interactiv
     assert interactive_plot._body_markers["Earth"]._position == Vector2D(1.0, 1.0)
 
 
+def test_that_update_axes_limits_will_update_the_axes_limits_for_a_single_body(interactive_plot):
+    interactive_plot.add_body("Sun", Vector2D(0.0, 0.0), "red")
+
+    interactive_plot.update_axes_limits()
+
+    assert interactive_plot.get_axes_limits() == tuple([-0.5, 0.5, -0.5, 0.5])
+
+
 def test_that_update_axes_limits_will_update_the_axes_limits_to_the_expected_values(interactive_plot):
     interactive_plot.add_body("Sun", Vector2D(0.0, 0.0), "red")
     interactive_plot.add_body("Earth", Vector2D(1.0, 1.0), "green")
 
     interactive_plot.update_axes_limits()
 
-    assert interactive_plot.get_axes_limits() == tuple([-0.05, 1.05, -0.05, 1.05])
+    assert interactive_plot.get_axes_limits() == tuple([0.0, 1.0, 0.0, 1.0])
+
+
+def test_that_update_axes_limits_will_update_the_axes_limits_for_a_non_square_layout(interactive_plot):
+    interactive_plot.add_body("Sun", Vector2D(0.0, 0.0), "red")
+    interactive_plot.add_body("Earth", Vector2D(0.1, 0.5), "green")
+
+    interactive_plot.update_axes_limits()
+
+    assert interactive_plot.get_axes_limits() == tuple([-0.2, 0.3, 0.0, 0.5])

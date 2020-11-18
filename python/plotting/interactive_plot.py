@@ -206,14 +206,16 @@ class InteractivePlot(QObject):
         elif x_half_diff < y_half_diff:
             x_min = x_mid - y_half_diff
             x_max = x_mid + y_half_diff
-        else:
+
+        if x_min == x_max:
             x_min -= 0.5
             x_max += 0.5
+        if y_min == y_max:
             y_min -= 0.5
             y_max += 0.5
 
-        x_margin = (x_max-x_min)*AXIS_MARGIN
-        y_margin = (y_max-y_min)*AXIS_MARGIN
+        x_margin = abs(x_max - x_min) * AXIS_MARGIN
+        y_margin = abs(y_max - y_min) * AXIS_MARGIN
 
         self._ax.set_xlim(x_min - x_margin, x_max + x_margin)
         self._ax.set_ylim(y_min - y_margin, y_max + y_margin)
