@@ -122,7 +122,8 @@ class NBodySimulationsModel:
     @catch_errors()
     def simulation_results(self) -> dict:
         """Collect the simulation results from the simulator."""
-        results = dict()
+        position_data, velocity_data = dict(), dict()
         for body_name in self._simulator.bodyNames():
-            results[body_name] = self._simulator.simulatedPositions(body_name)
-        return results
+            position_data[body_name] = self._simulator.simulatedPositions(body_name)
+            velocity_data[body_name] = self._simulator.simulatedVelocities(body_name)
+        return position_data, velocity_data

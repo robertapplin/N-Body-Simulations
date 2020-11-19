@@ -3,7 +3,7 @@
 #ifndef NBodySimulator_H
 #define NBodySimulator_H
 
-#include "BodyPositions.h"
+#include "BodyPositionsAndVelocities.h"
 
 #include <map>
 #include <memory>
@@ -76,6 +76,9 @@ public:
   // Return the simulated locations of the specified body.
   std::map<double, Vector2D>
   simulatedPositions(std::string const &bodyName) const;
+  // Return the simulated velocities of the specified body.
+  std::map<double, Vector2D>
+  simulatedVelocities(std::string const &bodyName) const;
 
 private:
   // Checks that the provided parameters are valid, and throws if they are not.
@@ -111,7 +114,7 @@ private:
   double m_gravitationalConstant;
 
   // The vector containing each body and their simulated positions.
-  std::vector<std::unique_ptr<BodyPositions>> m_bodyData;
+  std::vector<std::unique_ptr<BodyPositionsAndVelocities>> m_bodyData;
   // A flag to notify when the data changes in-between simulations.
   bool m_dataChanged;
 };

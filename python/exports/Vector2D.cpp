@@ -16,5 +16,7 @@ void export_Vector2D(py::module &m) {
       .def(py::init<double, double>())
       .def_readwrite("x", &Simulator::Vector2D::m_x)
       .def_readwrite("y", &Simulator::Vector2D::m_y)
-      .def("__eq__", &Simulator::Vector2D::operator==, py::is_operator());
+      .def("__eq__", &Simulator::Vector2D::operator==, py::is_operator())
+      .def("magnitude",
+           py::overload_cast<>(&Simulator::Vector2D::magnitude, py::const_));
 }

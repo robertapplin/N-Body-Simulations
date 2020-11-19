@@ -42,6 +42,8 @@ class NBodySimulationsPresenter:
         self.view.playPauseClickedSignal.connect(self.handle_play_pause_clicked)
 
         self.view.bodyMovedSignal.connect(lambda body_name, x, y: self.handle_body_moved(body_name, x, y))
+        self.view.bodyVelocityChangedSignal.connect(lambda body_name, vx, vy:
+                                                    self.handle_body_velocity_changed(body_name, vx, vy))
 
     def handle_remove_body_clicked(self) -> None:
         """Handles the removal of the selected body."""
@@ -87,10 +89,12 @@ class NBodySimulationsPresenter:
     def handle_x_velocity_changed(self, body_name: str, vx: float) -> None:
         """Handles when the x velocity of a body is changed."""
         self.model.set_x_velocity(body_name, vx)
+        self.view.update_body_velocity(body_name, self.model.initial_velocity(body_name))
 
     def handle_y_velocity_changed(self, body_name: str, vy: float) -> None:
         """Handles when the y velocity of a body is changed."""
         self.model.set_y_velocity(body_name, vy)
+        self.view.update_body_velocity(body_name, self.model.initial_velocity(body_name))
 
     def handle_time_step_changed(self, time_step: float) -> None:
         """Handles when the time step is changed."""
@@ -119,6 +123,11 @@ class NBodySimulationsPresenter:
         """Handles when the body has been moved on the interactive plot."""
         self.model.set_x_position(body_name, x)
         self.model.set_y_position(body_name, y)
+
+    def handle_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
+        """Handles when a bodies velocity has been changed on the interactive plot."""
+        self.model.set_x_velocity(body_name, vx)
+        self.model.set_y_velocity(body_name, vy)
 
     def _add_body(self, body_name: str) -> None:
         """Adds a new body with a random position to the model and view."""

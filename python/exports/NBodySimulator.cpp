@@ -83,5 +83,9 @@ void export_NBodySimulator(py::module &m) {
       .def("simulatedPositions",
            py::overload_cast<std::string const &>(
                &Simulator::NBodySimulator::simulatedPositions, py::const_),
+           py::arg("bodyName"))
+      .def("simulatedVelocities",
+           py::overload_cast<std::string const &>(
+               &Simulator::NBodySimulator::simulatedVelocities, py::const_),
            py::arg("bodyName"));
 }

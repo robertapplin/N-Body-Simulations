@@ -1,6 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#include "BodyPositions.h"
+#include "BodyPositionsAndVelocities.h"
 #include "Vector2D.h"
 
 #include "gtest/gtest.h"
@@ -13,11 +13,12 @@ using namespace Simulator;
 class BodyPositionsTest : public testing::Test {
 protected:
   void SetUp() override {
-    m_bodyPositions = std::make_unique<BodyPositions>(std::make_unique<Body>(
-        "Earth", 0.01, Vector2D({1.0, 2.0}), Vector2D({3.0, 4.0})));
+    m_bodyPositions =
+        std::make_unique<BodyPositionsAndVelocities>(std::make_unique<Body>(
+            "Earth", 0.01, Vector2D({1.0, 2.0}), Vector2D({3.0, 4.0})));
   }
 
-  std::unique_ptr<BodyPositions> m_bodyPositions;
+  std::unique_ptr<BodyPositionsAndVelocities> m_bodyPositions;
 };
 
 TEST_F(BodyPositionsTest,
@@ -54,7 +55,7 @@ TEST_F(BodyPositionsTest,
        test_that_resetPositions_will_clear_all_positions_but_the_first) {
   m_bodyPositions->addPosition(1.0, {3.0, 3.0});
 
-  m_bodyPositions->resetPositions();
+  m_bodyPositions->resetParameters();
 
   auto const positions = m_bodyPositions->positions();
   ASSERT_EQ(1, positions.size());
@@ -68,7 +69,7 @@ TEST_F(
   position += {3.0, 3.0};
 
   m_bodyPositions->addPosition(1.0, position);
-  m_bodyPositions->resetPositions();
+  m_bodyPositions->resetParameters();
 
   auto const positions = m_bodyPositions->positions();
   ASSERT_EQ(1, positions.size());
