@@ -253,3 +253,38 @@ TEST_F(
     test_that_simulatedPositions_will_throw_if_the_body_name_does_not_exist) {
   ASSERT_THROW(m_simulator->simulatedPositions("Earth"), std::invalid_argument);
 }
+
+TEST_F(
+    NBodySimulatorTest,
+    test_that_simulatedVelocities_will_return_a_map_of_velocities_with_the_correct_size) {
+  m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
+
+  m_simulator->runSimulation();
+
+  auto sunVelocities = m_simulator->simulatedVelocities("Sun");
+  auto earthVelocities = m_simulator->simulatedVelocities("Earth");
+
+  ASSERT_EQ(501, sunVelocities.size());
+  ASSERT_EQ(501, earthVelocities.size());
+}
+
+TEST_F(
+    NBodySimulatorTest,
+    test_that_simulatedVelocities_will_return_the_initial_positions_in_a_map) {
+  m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
+
+  m_simulator->runSimulation();
+
+  auto const sunVelocities = m_simulator->simulatedVelocities("Sun");
+  auto const earthVelocities = m_simulator->simulatedVelocities("Earth");
+
+  ASSERT_TRUE(Vector2D({0.0, 0.0}) == sunVelocities.at(0.0));
+  ASSERT_TRUE(Vector2D({0.0, 0.015}) == earthVelocities.at(0.0));
+}
+
+TEST_F(
+    NBodySimulatorTest,
+    test_that_simulatedVelocities_will_throw_if_the_body_name_does_not_exist) {
+  ASSERT_THROW(m_simulator->simulatedVelocities("Earth"),
+               std::invalid_argument);
+}

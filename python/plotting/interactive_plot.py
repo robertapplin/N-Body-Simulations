@@ -17,6 +17,7 @@ AXIS_MARGIN = 0.05  # 5% axis margin
 class InteractivePlot(QObject):
     """A class used for the interactive plot displaying the simulation data."""
     bodyMovedSignal = pyqtSignal(str, float, float)
+    bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
     def __init__(self):
         """Initialize the interactive plot."""
@@ -86,8 +87,13 @@ class InteractivePlot(QObject):
 
     def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
         """Handles when a body has been moved on the interactive plot."""
-        self._initial_data[body_name] = Vector2D(x, y)
+        self._initial_data[body_name] = tuple([Vector2D(x, y), self._initial_data[body_name][1]])
         self.bodyMovedSignal.emit(body_name, x, y)
+
+    def handle_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
+        """Handles when a bodies velocity is changed on the interactive plot."""
+        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], Vector2D(vx, vy)])
+        self.bodyVelocityChangedSignal.emit(body_name, vx, vy)
 
     def canvas(self) -> FigureCanvas:
         """Returns the canvas used for the interactive plot."""
@@ -100,14 +106,16 @@ class InteractivePlot(QObject):
             del self._body_markers[body_name]
             del self._initial_data[body_name]
 
-    def add_body(self, body_name: str, position: Vector2D, colour: str) -> None:
+    def add_body(self, body_name: str, position: Vector2D, velocity: Vector2D, colour: str) -> None:
         """Adds a body to the interactive plot."""
-        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, colour)
+        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, velocity, colour)
         self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
+        self._body_markers[body_name].bodyVelocityChangedSignal.connect(lambda name, vx, vy:
+                                                                        self.handle_body_velocity_changed(name, vx, vy))
 
-        self._initial_data[body_name] = position
+        self._initial_data[body_name] = tuple([position, velocity])
 
-    def set_simulation_data(self, simulation_data: dict) -> None:
+    def set_simulation_data(self, simulation_data: tuple) -> None:
         """Sets the simulation data in the animator."""
         self._animator.set_simulation_data(simulation_data)
 
@@ -183,10 +191,19 @@ class InteractivePlot(QObject):
             self._initial_data[new_name] = self._initial_data[old_name]
             del self._initial_data[old_name]
 
-    def update_body_position(self, body_name: str, position: Vector2D) -> None:
+    def update_body_position(self, body_name: str, position: Vector2D, draw: bool = True) -> None:
         """Updates the position of a body."""
-        self._body_markers[body_name].set_position(position.x, position.y)
-        self._canvas.draw()
+        self._body_markers[body_name].set_position(position.x, position.y, emit_signal=False)
+        self._initial_data[body_name] = tuple([position, self._initial_data[body_name][1]])
+        if draw:
+            self._canvas.draw()
+
+    def update_body_velocity(self, body_name: str, velocity: Vector2D, draw: bool = True) -> None:
+        """Updates the velocity of a body."""
+        self._body_markers[body_name].set_velocity(velocity.x, velocity.y, emit_signal=False)
+        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], velocity])
+        if draw:
+            self._canvas.draw()
 
     def update_axes_limits(self, initial_data: bool = True) -> None:
         """Re-sizes the axis limits for the plot based on the initial data or simulation data."""
@@ -225,9 +242,9 @@ class InteractivePlot(QObject):
     def _calculate_initial_axes_min_max(self) -> tuple:
         """Calculates the min-max of both axes based on the initial body data."""
         xs, ys = [], []
-        for position in self._initial_data.values():
-            xs.append(position.x)
-            ys.append(position.y)
+        for parameters in self._initial_data.values():
+            xs.append(parameters[0].x)
+            ys.append(parameters[0].y)
 
         if len(xs) == 0:
             xs = [0.0]
@@ -239,7 +256,7 @@ class InteractivePlot(QObject):
     def _calculate_simulation_axes_min_max(self) -> tuple:
         """Calculates the min-max of both axes based on the simulated body data."""
         xs, ys = [], []
-        for body_positions in self._animator.simulation_data().values():
+        for body_positions in self._animator.positional_data().values():
             for position in body_positions.values():
                 xs.append(position.x)
                 ys.append(position.y)
@@ -259,8 +276,10 @@ class InteractivePlot(QObject):
 
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
-        for body_name, position in self._initial_data.items():
-            self.update_body_position(body_name, position)
+        for body_name, parameters in self._initial_data.items():
+            self.update_body_position(body_name, parameters[0], draw=False)
+            self.update_body_velocity(body_name, parameters[1], draw=False)
+        self._canvas.draw()
 
     def _update_cursor(self) -> None:
         """Updates the cursor based on the mouse events being performed."""

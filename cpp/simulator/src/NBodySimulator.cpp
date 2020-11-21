@@ -31,7 +31,7 @@ void NBodySimulator::addBody(std::string const &name, double mass,
   if (hasBody(name))
     throw std::invalid_argument("The body '" + name + "' already exists.");
 
-  m_bodyData.emplace_back(std::make_unique<BodyPositions>(
+  m_bodyData.emplace_back(std::make_unique<BodyPositionsAndVelocities>(
       std::make_unique<Body>(name, mass, position, velocity)));
   m_dataChanged = true;
 }
@@ -131,6 +131,12 @@ NBodySimulator::simulatedPositions(std::string const &bodyName) const {
   return m_bodyData[bodyIndex]->positions();
 }
 
+std::map<double, Vector2D>
+NBodySimulator::simulatedVelocities(std::string const &bodyName) const {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  return m_bodyData[bodyIndex]->velocities();
+}
+
 void NBodySimulator::validateSimulationParameters() const {
   if (bodyNames().empty())
     throw std::invalid_argument("There are no bodies in the simulation.");
@@ -165,6 +171,7 @@ void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
   position += velocity * m_timeStep;
 
   m_bodyData[bodyIndex]->addPosition(stepNumber * m_timeStep, position);
+  m_bodyData[bodyIndex]->addVelocity(stepNumber * m_timeStep, velocity);
 }
 
 Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) const {
@@ -193,7 +200,7 @@ void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
 
 void NBodySimulator::resetSimulation() {
   for (auto const &data : m_bodyData)
-    data->resetPositions();
+    data->resetParameters();
 }
 
 std::size_t NBodySimulator::numberOfSteps() const {
@@ -211,9 +218,10 @@ Body &NBodySimulator::findBody(std::string const &name) const {
 }
 
 std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
-  auto const hasName = [&](std::unique_ptr<BodyPositions> const &positions) {
-    return positions->body().name() == name;
-  };
+  auto const hasName =
+      [&](std::unique_ptr<BodyPositionsAndVelocities> const &parameters) {
+        return parameters->body().name() == name;
+      };
 
   auto const iter = std::find_if(m_bodyData.begin(), m_bodyData.end(), hasName);
   if (iter != m_bodyData.end())

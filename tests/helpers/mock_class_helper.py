@@ -60,6 +60,10 @@ class MockNBodySimulationsModel:
     def initial_position(body_name: str) -> Vector2D:
         return Vector2D(0.0, 0.0)
 
+    @staticmethod
+    def initial_velocity(body_name: str) -> Vector2D:
+        return Vector2D(0.0, 0.0)
+
     def set_x_velocity(self, body_name: str, vx: float) -> None:
         pass
 
@@ -99,6 +103,7 @@ class MockNBodySimulationsView(QObject):
     playPauseClickedSignal = pyqtSignal()
 
     bodyMovedSignal = pyqtSignal(str, float, float)
+    bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
     def __init__(self):
         super(MockNBodySimulationsView, self).__init__()
@@ -116,6 +121,9 @@ class MockNBodySimulationsView(QObject):
         pass
 
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
+        pass
+
+    def update_body_velocity(self, body_name: str, velocity: Vector2D) -> None:
         pass
 
     def set_name(self, body_name: str) -> None:

@@ -135,3 +135,12 @@ def test_that_simulatedPositions_is_exposed_to_python(simulator):
     assert results[0.0] == Vector2D(0.0, 0.0)
     assert results[1.0] == Vector2D(0.0, 0.0)
     assert results[2.0] == Vector2D(0.0, 0.0)
+
+
+def test_that_simulatedVelocities_is_exposed_to_python(simulator):
+    simulator.runSimulation()
+    results = simulator.simulatedVelocities("Sun")
+
+    assert results[0.0] == Vector2D(0.0, 0.0)
+    assert results[1.0] == Vector2D(0.0, 0.0)
+    assert results[2.0] == Vector2D(0.0, 0.0)

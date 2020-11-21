@@ -12,30 +12,38 @@ namespace Simulator {
 
 struct Vector2D;
 
-// A class used to store the positions of a body over a period of time.
-class BodyPositions {
+// A class used to store the positions and velocities of a body over time.
+class BodyPositionsAndVelocities {
 
 public:
-  BodyPositions(std::unique_ptr<Body> body);
-  ~BodyPositions();
+  BodyPositionsAndVelocities(std::unique_ptr<Body> body);
+  ~BodyPositionsAndVelocities();
 
-  // Removes the positions calculated during previous simulations.
-  void resetPositions();
+  // Removes previously calculated positions and velocities.
+  void resetParameters();
 
-  // Return the body associated with the position coordinates.
+  // Return the body associated with the position and velocity coordinates.
   Body &body() const;
 
   // Add a position coordinate for a specific time.
   void addPosition(double time, Vector2D const &position);
+  // Add a velocity for a specific time.
+  void addVelocity(double time, Vector2D const &velocity);
 
   // Returns the body locations calculated during a simulation.
   inline std::map<double, Vector2D> positions() const noexcept {
     return m_positions;
   }
 
+  // Returns the body velocities calculated during a simulation.
+  inline std::map<double, Vector2D> velocities() const noexcept {
+    return m_velocities;
+  }
+
 private:
   std::unique_ptr<Body> m_body;
   std::map<double, Vector2D> m_positions;
+  std::map<double, Vector2D> m_velocities;
 };
 
 } // namespace Simulator

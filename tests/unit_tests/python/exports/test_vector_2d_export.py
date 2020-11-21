@@ -28,3 +28,10 @@ def test_that_reassigning_Vector2D_member_variables_works_in_python(vector_2d):
     vector_2d.y = 4.0
 
     assert vector_2d == Vector2D(3.0, 4.0)
+
+
+def test_that_magnitude_will_return_the_magnitude_of_a_Vector2D(vector_2d):
+    vector_2d.x = 3.0
+    vector_2d.y = 4.0
+
+    assert vector_2d.magnitude() == 5.0

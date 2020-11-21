@@ -42,6 +42,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     playPauseClickedSignal = pyqtSignal()
 
     bodyMovedSignal = pyqtSignal(str, float, float)
+    bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
     body_colours = get_user_interface_property("body-colours").split(",")
     time_unit = get_user_interface_property("time-unit")
@@ -90,6 +91,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
 
         self.interactive_plot.bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
+        self.interactive_plot.bodyVelocityChangedSignal.connect(lambda name, vx, vy:
+                                                                self.handle_body_velocity_changed(name, vx, vy))
 
         self._selected_body = None
 
@@ -217,6 +220,18 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.bodyMovedSignal.emit(body_name, x, y)
 
+    def handle_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
+        """Handles when a bodies velocity has been changed on the interactive plot."""
+        self.twBodyData.blockSignals(True)
+
+        row_index = self._index_of_body(body_name)
+        self.twBodyData.setItem(row_index, self.vx_column.index, self._create_table_double(vx))
+        self.twBodyData.setItem(row_index, self.vy_column.index, self._create_table_double(vy))
+
+        self.twBodyData.blockSignals(False)
+
+        self.bodyVelocityChangedSignal.emit(body_name, vx, vy)
+
     def selected_body(self) -> str:
         """Returns the name of the body which is currently selected."""
         selected_index = self._selected_row_index()
@@ -241,7 +256,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         for body_name, parameters in body_parameters.items():
             random_colour = self._random_colour()
             self.add_body_to_table(body_name, parameters, random_colour)
-            self.interactive_plot.add_body(body_name, parameters[1], random_colour)
+            self.interactive_plot.add_body(body_name, parameters[1], parameters[2], random_colour)
 
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
@@ -253,7 +268,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         random_colour = self._random_colour()
         self.add_body_to_table(body_name, initial_data, random_colour)
 
-        self.interactive_plot.add_body(body_name, initial_data[1], random_colour)
+        self.interactive_plot.add_body(body_name, initial_data[1], initial_data[2], random_colour)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
@@ -281,6 +296,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
         """Updates the position of a body in the interactive plot when it is changed."""
         self.interactive_plot.update_body_position(body_name, position)
+        self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.draw()
+
+    def update_body_velocity(self, body_name: str, velocity: Vector2D) -> None:
+        """Updates the velocity of a body in the interactive plot when it is changed."""
+        self.interactive_plot.update_body_velocity(body_name, velocity)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
@@ -329,7 +350,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
 
-    def start_simulation(self, simulation_results: dict) -> None:
+    def start_simulation(self, simulation_results: tuple) -> None:
         """Starts animating the results of a simulation."""
         self.interactive_plot.set_simulation_data(simulation_results)
         self.interactive_plot.update_axes_limits(initial_data=False)
