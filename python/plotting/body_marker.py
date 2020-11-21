@@ -117,7 +117,7 @@ class BodyMarker(QObject):
     def show_velocity_arrow(self, show_velocity: bool) -> None:
         """Show or hide the velocity arrow on the interactive plot."""
         self._show_velocity_arrow = show_velocity
-        self._velocity_patch.set_visible(show_velocity)
+        self._velocity_patch.set_visible(self._is_velocity_arrow_above_minimum() and show_velocity)
 
     def set_velocity_arrow_magnification(self, magnification: int) -> None:
         """Set the magnification of the velocity arrow."""
@@ -175,11 +175,7 @@ class BodyMarker(QObject):
                                           head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
         self._axis.add_patch(self._velocity_patch)
 
-        if self._distance_to_pixels(self._velocity.magnitude() * self._velocity_magnification) \
-                >= MINIMUM_ARROW_SIZE_PIXELS:
-            self._velocity_patch.set_visible(self._show_velocity_arrow)
-        else:
-            self._velocity_patch.set_visible(False)
+        self._velocity_patch.set_visible(self._is_velocity_arrow_above_minimum() and self._show_velocity_arrow)
 
     def _create_position_circle(self) -> None:
         """Creates a circle used to mark the position of a body."""
@@ -205,6 +201,11 @@ class BodyMarker(QObject):
             self._override_cursor = Qt.OpenHandCursor
         else:
             self._override_cursor = None
+
+    def _is_velocity_arrow_above_minimum(self) -> bool:
+        """Returns true if the velocity arrow is large enough to be plotted."""
+        return (self._distance_to_pixels(self._velocity.magnitude() * self._velocity_magnification)
+                >= MINIMUM_ARROW_SIZE_PIXELS)
 
     def _is_above(self, x_mouse: float, y_mouse: float, x_to_check: float, y_to_check: float) -> bool:
         """Returns true if the mouse position is above the given x and y position."""

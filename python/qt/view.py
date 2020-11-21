@@ -353,11 +353,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def set_interactive_mode(self, interactive_mode: bool) -> None:
         """Sets the view to be in interactive mode. This is required to prevent interference from the animator."""
         self.pbInteractiveMode.setChecked(interactive_mode)
-
         if interactive_mode:
             self.handle_interactive_mode_clicked()
-        else:
-            self._show_position_labels_and_velocities(self.pbInteractiveMode.isChecked())
 
     def set_as_playing(self, playing: bool) -> None:
         """Sets the current role of the play/pause button."""
