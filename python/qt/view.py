@@ -81,6 +81,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbInteractiveMode.clicked.connect(self.handle_interactive_mode_clicked)
+        self.pbShowPositionLabels.clicked.connect(self.handle_show_position_labels_clicked)
+        self.pbShowVelocityArrows.clicked.connect(self.handle_show_velocity_arrows_clicked)
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
@@ -104,6 +106,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbPlayPause.setIcon(self.play_icon)
         self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
         self.pbInteractiveMode.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
+        self.pbShowPositionLabels.setIcon(qta.icon('mdi.numeric', scale_factor=1.4))
+        self.pbShowVelocityArrows.setIcon(qta.icon('mdi.arrow-top-right', scale_factor=1.2))
         self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
         self.tbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
@@ -201,9 +205,21 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def handle_interactive_mode_clicked(self) -> None:
         """Handle when the interactive mode button is clicked."""
+        self._show_position_labels_and_velocities(self.pbInteractiveMode.isChecked())
+
         self.set_as_playing(False)
         self.interactive_plot.disable_animation()
         self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.draw()
+
+    def handle_show_position_labels_clicked(self) -> None:
+        """Handle when the show position labels button is clicked."""
+        self.interactive_plot.show_position_labels(self.pbShowPositionLabels.isChecked())
+        self.interactive_plot.draw()
+
+    def handle_show_velocity_arrows_clicked(self) -> None:
+        """Handle when the show velocity arrows button is clicked."""
+        self.interactive_plot.show_velocity_arrows(self.pbShowVelocityArrows.isChecked())
         self.interactive_plot.draw()
 
     def handle_stop_clicked(self) -> None:
@@ -328,8 +344,11 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def set_interactive_mode(self, interactive_mode: bool) -> None:
         """Sets the view to be in interactive mode. This is required to prevent interference from the animator."""
         self.pbInteractiveMode.setChecked(interactive_mode)
+
         if interactive_mode:
             self.handle_interactive_mode_clicked()
+        else:
+            self._show_position_labels_and_velocities(self.pbInteractiveMode.isChecked())
 
     def set_as_playing(self, playing: bool) -> None:
         """Sets the current role of the play/pause button."""
@@ -374,6 +393,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def get_axes_limits(self) -> tuple:
         """Returns the axes limits currently being used for the interactive plot."""
         return self.interactive_plot.get_axes_limits()
+
+    def _show_position_labels_and_velocities(self, show_visuals: bool) -> None:
+        """Shows or hides the position labels and velocity arrows on the interactive plot."""
+        self.interactive_plot.show_position_labels(show_visuals)
+        self.pbShowPositionLabels.setChecked(show_visuals)
+        self.interactive_plot.show_velocity_arrows(show_visuals)
+        self.pbShowVelocityArrows.setChecked(show_visuals)
 
     @staticmethod
     def _create_table_double(value: float) -> QTableWidgetItem:
