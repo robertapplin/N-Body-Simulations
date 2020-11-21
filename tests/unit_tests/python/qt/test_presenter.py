@@ -113,20 +113,24 @@ def test_that_handle_x_velocity_changed_calls_the_expected_methods(mocker):
     view, model, presenter = setup_presenter()
 
     model_set_x_velocity = mocker.spy(model, 'set_x_velocity')
+    view_update_body_velocity = mocker.spy(view, 'update_body_velocity')
 
     presenter.handle_x_velocity_changed("Earth", 0.0)
 
     model_set_x_velocity.assert_called_once_with("Earth", 0.0)
+    view_update_body_velocity.assert_called_once()
 
 
 def test_that_handle_y_velocity_changed_calls_the_expected_methods(mocker):
     view, model, presenter = setup_presenter()
 
     model_set_y_velocity = mocker.spy(model, 'set_y_velocity')
+    view_update_body_velocity = mocker.spy(view, 'update_body_velocity')
 
     presenter.handle_y_velocity_changed("Earth", 0.0)
 
     model_set_y_velocity.assert_called_once_with("Earth", 0.0)
+    view_update_body_velocity.assert_called_once()
 
 
 def test_that_handle_time_step_changed_calls_the_expected_methods(mocker):
@@ -185,3 +189,15 @@ def test_that_handle_body_moved_will_set_the_position_in_the_model(mocker):
 
     model_set_x_position.assert_called_once_with("Earth", 0.0)
     model_set_y_position.assert_called_once_with("Earth", 0.0)
+
+
+def test_that_handle_body_velocity_changed_will_set_the_velocity_in_the_model(mocker):
+    view, model, presenter = setup_presenter()
+
+    model_set_x_velocity = mocker.spy(model, 'set_x_velocity')
+    model_set_y_velocity = mocker.spy(model, 'set_y_velocity')
+
+    presenter.handle_body_velocity_changed("Earth", 0.0, 0.0)
+
+    model_set_x_velocity.assert_called_once_with("Earth", 0.0)
+    model_set_y_velocity.assert_called_once_with("Earth", 0.0)

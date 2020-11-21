@@ -195,14 +195,16 @@ def test_that_simulation_results_returns_a_dict_with_the_correct_number_of_bodie
     results = model.simulation_results()
 
     number_of_steps = int(model.duration() / model.time_step()) + 1
-    assert len(results) == model.number_of_bodies()
-    assert len(results["Sun"]) == number_of_steps
-    assert len(results["Earth"]) == number_of_steps
+    assert len(results[0]) == model.number_of_bodies()
+    assert len(results[0]["Sun"]) == number_of_steps
+    assert len(results[0]["Earth"]) == number_of_steps
 
 
 def test_that_simulation_results_contains_the_initial_positions_of_the_bodies(model):
     model.run_simulation()
     results = model.simulation_results()
 
-    assert results["Sun"][0] == Vector2D(0.0, 0.0)
-    assert results["Earth"][0] == Vector2D(1.0, 0.0)
+    assert results[0]["Sun"][0] == Vector2D(0.0, 0.0)
+    assert results[0]["Earth"][0] == Vector2D(1.0, 0.0)
+    assert results[1]["Sun"][0] == Vector2D(0.0, 0.0)
+    assert results[1]["Earth"][0] == Vector2D(0.0, 0.015)

@@ -51,4 +51,4 @@ class DummyInteractivePlot:
         self.animator = SimulationAnimator(self._figure)
 
         self.lines = {"Sun": self._ax.plot(0.0, 0.0)[0]}
-        self.body_markers = {"Sun": BodyMarker(self._canvas, "Sun", Vector2D(0.0, 0.0), "green")}
+        self.body_markers = {"Sun": BodyMarker(self._canvas, "Sun", Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), "green")}
