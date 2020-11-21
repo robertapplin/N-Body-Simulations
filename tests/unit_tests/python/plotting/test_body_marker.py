@@ -27,6 +27,11 @@ def test_that_set_position_will_set_the_position_of_the_body(dummy_plot):
     assert dummy_plot.body_markers["Sun"].mouse_drag_start(1.0, 1.0)
 
 
+def test_that_set_velocity_will_set_the_velocity_of_the_body(dummy_plot):
+    dummy_plot.body_markers["Sun"].set_velocity(1.0, 1.0)
+    assert dummy_plot.body_markers["Sun"].mouse_drag_start(1.0, 1.0)
+
+
 def test_that_mouse_drag_start_will_return_true_when_the_mouse_position_is_above_the_marker(dummy_plot):
     assert dummy_plot.body_markers["Sun"].mouse_drag_start(0.0, 0.0)
     assert dummy_plot.body_markers["Sun"].get_override_cursor() == Qt.ClosedHandCursor

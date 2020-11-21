@@ -29,11 +29,14 @@ TEST_F(BodyPositionsTest,
 
 TEST_F(
     BodyPositionsTest,
-    test_that_BodyPositions_has_been_instantiated_with_a_single_position_at_time_zero) {
+    test_that_BodyPositions_has_been_instantiated_with_a_single_position_and_velocity_at_time_zero) {
   auto const positions = m_bodyPositions->positions();
+  auto const velocities = m_bodyPositions->velocities();
 
   ASSERT_EQ(1, positions.size());
+  ASSERT_EQ(1, velocities.size());
   ASSERT_TRUE(Vector2D({1.0, 2.0}) == positions.at(0.0));
+  ASSERT_TRUE(Vector2D({3.0, 4.0}) == velocities.at(0.0));
 }
 
 TEST_F(BodyPositionsTest, test_that_addPosition_will_add_a_position) {
@@ -51,27 +54,53 @@ TEST_F(BodyPositionsTest,
                std::runtime_error);
 }
 
+TEST_F(BodyPositionsTest, test_that_addVelocity_will_add_a_velocity) {
+  m_bodyPositions->addVelocity(1.0, {3.0, 3.0});
+
+  auto const velocities = m_bodyPositions->velocities();
+
+  ASSERT_EQ(2, velocities.size());
+  ASSERT_TRUE(Vector2D({3.0, 3.0}) == velocities.at(1.0));
+}
+
 TEST_F(BodyPositionsTest,
-       test_that_resetPositions_will_clear_all_positions_but_the_first) {
-  m_bodyPositions->addPosition(1.0, {3.0, 3.0});
-
-  m_bodyPositions->resetParameters();
-
-  auto const positions = m_bodyPositions->positions();
-  ASSERT_EQ(1, positions.size());
-  ASSERT_TRUE(Vector2D({1.0, 2.0}) == positions.at(0.0));
+       test_that_addVelocity_will_throw_when_a_time_already_exists) {
+  ASSERT_THROW(m_bodyPositions->addVelocity(0.0, {3.0, 3.0}),
+               std::runtime_error);
 }
 
 TEST_F(
     BodyPositionsTest,
-    test_that_resetPositions_will_reset_the_positions_in_the_body_back_to_the_initial_values) {
-  auto &position = m_bodyPositions->body().position();
-  position += {3.0, 3.0};
+    test_that_resetParameters_will_clear_all_positions_and_velocities_but_the_first) {
+  m_bodyPositions->addPosition(1.0, {3.0, 3.0});
+  m_bodyPositions->addVelocity(1.0, {4.0, 4.0});
 
-  m_bodyPositions->addPosition(1.0, position);
   m_bodyPositions->resetParameters();
 
   auto const positions = m_bodyPositions->positions();
+  auto const velocities = m_bodyPositions->velocities();
   ASSERT_EQ(1, positions.size());
+  ASSERT_EQ(1, velocities.size());
   ASSERT_TRUE(Vector2D({1.0, 2.0}) == positions.at(0.0));
+  ASSERT_TRUE(Vector2D({3.0, 4.0}) == velocities.at(0.0));
+}
+
+TEST_F(
+    BodyPositionsTest,
+    test_that_resetParameters_will_reset_the_positions_and_velocities_in_the_body_back_to_the_initial_values) {
+  auto &position = m_bodyPositions->body().position();
+  position += {3.0, 3.0};
+  auto &velocity = m_bodyPositions->body().velocity();
+  velocity += {3.0, 3.0};
+
+  m_bodyPositions->addPosition(1.0, position);
+  m_bodyPositions->addVelocity(1.0, velocity);
+  m_bodyPositions->resetParameters();
+
+  auto const positions = m_bodyPositions->positions();
+  auto const velocities = m_bodyPositions->velocities();
+  ASSERT_EQ(1, positions.size());
+  ASSERT_EQ(1, velocities.size());
+  ASSERT_TRUE(Vector2D({1.0, 2.0}) == positions.at(0.0));
+  ASSERT_TRUE(Vector2D({3.0, 4.0}) == velocities.at(0.0));
 }
