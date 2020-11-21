@@ -37,8 +37,8 @@
       </property>
       <widget class="QFrame" name="fSetup">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="5">
-         <widget class="QToolButton" name="tbTimeSettings">
+        <item row="0" column="10">
+         <widget class="QPushButton" name="pbInteractiveMode">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -52,21 +52,20 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Time Settings</string>
+           <string>Interactive Mode</string>
           </property>
           <property name="text">
            <string/>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="7">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" colspan="10">
+        <item row="1" column="0" colspan="14">
          <widget class="QTableWidget" name="twBodyData">
           <property name="styleSheet">
            <string notr="true">QHeaderView::section {
@@ -146,7 +145,71 @@ QTableWidget::item:selected {
           </column>
          </widget>
         </item>
-        <item row="0" column="9">
+        <item row="0" column="6">
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="11">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QToolButton" name="tbTimeSettings">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Time Settings</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
+         <widget class="QPushButton" name="pbShowVelocityArrows">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Show Body Velocity Arrows</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="13">
          <widget class="QPushButton" name="pbPlayPause">
           <property name="minimumSize">
            <size>
@@ -168,8 +231,8 @@ QTableWidget::item:selected {
           </property>
          </widget>
         </item>
-        <item row="0" column="6">
-         <widget class="QPushButton" name="pbInteractiveMode">
+        <item row="0" column="12">
+         <widget class="QPushButton" name="pbStop">
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -183,7 +246,51 @@ QTableWidget::item:selected {
            </size>
           </property>
           <property name="toolTip">
-           <string>Interactive Mode</string>
+           <string>Stop</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="pbRemoveBody">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Remove Selected Body</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="9">
+         <widget class="QPushButton" name="pbShowPositionLabels">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Show Body Coordinate Labels</string>
           </property>
           <property name="text">
            <string/>
@@ -214,28 +321,6 @@ QTableWidget::item:selected {
           </layout>
          </widget>
         </item>
-        <item row="0" column="8">
-         <widget class="QPushButton" name="pbStop">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Stop</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="4">
          <widget class="QToolButton" name="tbAddBody">
           <property name="minimumSize">
@@ -258,26 +343,61 @@ QTableWidget::item:selected {
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="pbRemoveBody">
+        <item row="0" column="7">
+         <widget class="QComboBox" name="cbVelocityArrowMagnification">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>42</width>
+            <height>28</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>42</width>
+            <height>28</height>
            </size>
           </property>
           <property name="toolTip">
-           <string>Remove Selected Body</string>
+           <string>The factor to magnify the velocity arrows by</string>
           </property>
-          <property name="text">
-           <string/>
+          <property name="frame">
+           <bool>true</bool>
           </property>
+          <item>
+           <property name="text">
+            <string>x1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x4</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x8</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x16</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x32</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x64</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
