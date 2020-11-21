@@ -225,8 +225,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.twBodyData.blockSignals(True)
 
         row_index = self._index_of_body(body_name)
-        self.twBodyData.setItem(row_index, self.x_column.index, self._create_table_double(vx))
-        self.twBodyData.setItem(row_index, self.y_column.index, self._create_table_double(vy))
+        self.twBodyData.setItem(row_index, self.vx_column.index, self._create_table_double(vx))
+        self.twBodyData.setItem(row_index, self.vy_column.index, self._create_table_double(vy))
 
         self.twBodyData.blockSignals(False)
 

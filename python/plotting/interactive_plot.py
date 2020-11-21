@@ -191,20 +191,19 @@ class InteractivePlot(QObject):
             self._initial_data[new_name] = self._initial_data[old_name]
             del self._initial_data[old_name]
 
-    def update_body_position(self, body_name: str, position: Vector2D, velocity: Vector2D = None) -> None:
+    def update_body_position(self, body_name: str, position: Vector2D, draw: bool = True) -> None:
         """Updates the position of a body."""
         self._body_markers[body_name].set_position(position.x, position.y, emit_signal=False)
-        if velocity is not None:
-            self._initial_data[body_name] = tuple([position, velocity])
-        else:
-            self._initial_data[body_name] = tuple([position, self._initial_data[body_name][1]])
-        self._canvas.draw()
+        self._initial_data[body_name] = tuple([position, self._initial_data[body_name][1]])
+        if draw:
+            self._canvas.draw()
 
-    def update_body_velocity(self, body_name: str, velocity: Vector2D) -> None:
+    def update_body_velocity(self, body_name: str, velocity: Vector2D, draw: bool = True) -> None:
         """Updates the velocity of a body."""
         self._body_markers[body_name].set_velocity(velocity.x, velocity.y, emit_signal=False)
         self._initial_data[body_name] = tuple([self._initial_data[body_name][0], velocity])
-        self._canvas.draw()
+        if draw:
+            self._canvas.draw()
 
     def update_axes_limits(self, initial_data: bool = True) -> None:
         """Re-sizes the axis limits for the plot based on the initial data or simulation data."""
@@ -278,7 +277,9 @@ class InteractivePlot(QObject):
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
         for body_name, parameters in self._initial_data.items():
-            self.update_body_position(body_name, parameters[0], parameters[1])
+            self.update_body_position(body_name, parameters[0], draw=False)
+            self.update_body_velocity(body_name, parameters[1], draw=False)
+        self._canvas.draw()
 
     def _update_cursor(self) -> None:
         """Updates the cursor based on the mouse events being performed."""

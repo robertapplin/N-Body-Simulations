@@ -36,33 +36,55 @@ class BodyMarker(QObject):
         self._velocity_patch = None
         self._position_label = None
         self._override_cursor = None
-        self._is_dragging = False
+
+        self._is_dragging_body = False
+        self._is_dragging_velocity = False
 
         self.create_body()
 
     def mouse_drag_start(self, x: float, y: float) -> bool:
         """Checks if a mouse drag event has started on this body marker. If yes, the override cursor is changed."""
-        self._is_dragging = self._is_above(x, y)
-        if self._is_dragging:
+        self._is_dragging_body = self._is_above(x, y, self._position.x, self._position.y)
+        if self._is_dragging_body:
             self._set_override_cursor(x, y)
             return True
+
+        self._is_dragging_velocity = self._is_above(x, y, self._position.x + self._velocity.x,
+                                                    self._position.y + self._velocity.y)
+        if self._is_dragging_velocity:
+            self._set_override_cursor(x, y)
+            return True
+
         return False
 
     def mouse_drag_stop(self, x: float, y: float) -> bool:
         """Checks if a mouse drag event has stopped for this body marker. If yes, the override cursor is changed."""
-        if self._is_dragging:
+        if self._is_dragging_body:
             self.set_position(x, y)
-            self._is_dragging = False
+            self._is_dragging_body = False
             self._set_override_cursor(x, y)
             return True
+
+        if self._is_dragging_velocity:
+            self.set_velocity(x - self._position.x, y - self._position.y)
+            self._is_dragging_velocity = False
+            self._set_override_cursor(x, y)
+            return True
+
         return False
 
     def mouse_moved(self, x: float, y: float) -> bool:
         """Checks if this body marker is being dragged. If yes, then the position of the body marker is updated."""
         self._set_override_cursor(x, y)
-        if self._is_dragging:
+
+        if self._is_dragging_body:
             self.set_position(x, y)
             return True
+
+        if self._is_dragging_velocity:
+            self.set_velocity(x - self._position.x, y - self._position.y)
+            return True
+
         return False
 
     def remove_body(self) -> None:
@@ -126,7 +148,7 @@ class BodyMarker(QObject):
         """Creates the velocity arrow if necessary."""
         if self._distance_to_pixels(self._velocity.magnitude()) >= MINIMUM_ARROW_SIZE_PIXELS:
             self._velocity_patch = FancyArrow(self._position.x, self._position.y, self._velocity.x, self._velocity.y,
-                                              facecolor=self._colour, edgecolor="black",
+                                              length_includes_head=True, facecolor=self._colour, edgecolor="black",
                                               head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
             self._axis.add_patch(self._velocity_patch)
         else:
@@ -143,21 +165,24 @@ class BodyMarker(QObject):
         label_position = (self._position.x + self._pixels_to_distance(BODY_LABEL_SPACING_PIXELS), self._position.y)
         self._position_label = self._axis.annotate(f"({self._position.x:.2f},{self._position.y:.2f})", label_position)
 
-    def _set_override_cursor(self, x: float, y: float) -> None:
+    def _set_override_cursor(self, x_mouse: float, y_mouse: float) -> None:
         """Sets the override cursor for this body marker."""
-        if self._is_dragging:
+        if self._is_dragging_body or self._is_dragging_velocity:
             self._override_cursor = Qt.ClosedHandCursor
-        elif not self._is_dragging and self._is_above(x, y):
+        elif not self._is_dragging_body and self._is_above(x_mouse, y_mouse, self._position.x, self._position.y):
+            self._override_cursor = Qt.OpenHandCursor
+        elif not self._is_dragging_velocity and self._is_above(x_mouse, y_mouse, self._position.x + self._velocity.x,
+                                                               self._position.y + self._velocity.y):
             self._override_cursor = Qt.OpenHandCursor
         else:
             self._override_cursor = None
 
-    def _is_above(self, x: float, y: float) -> bool:
-        """Returns true if the given coordinate is above the current body marker."""
-        mouse_x_pixels, mouse_y_pixels = self._axis.transData.transform((x, y))
-        body_x_pixels, body_y_pixels = self._axis.transData.transform((self._position.x, self._position.y))
+    def _is_above(self, x_mouse: float, y_mouse: float, x_to_check: float, y_to_check: float) -> bool:
+        """Returns true if the mouse position is above the given x and y position."""
+        mouse_x_pixels, mouse_y_pixels = self._axis.transData.transform((x_mouse, y_mouse))
+        x_pixels, y_pixels = self._axis.transData.transform((x_to_check, y_to_check))
 
-        r_pixels = ((mouse_x_pixels - body_x_pixels)**2 + (mouse_y_pixels - body_y_pixels)**2)**(1/2)
+        r_pixels = ((mouse_x_pixels - x_pixels)**2 + (mouse_y_pixels - y_pixels)**2)**(1/2)
 
         return r_pixels < MARKER_SENSITIVITY
 
