@@ -60,6 +60,10 @@ class MockNBodySimulationsModel:
     def initial_position(body_name: str) -> Vector2D:
         return Vector2D(0.0, 0.0)
 
+    @staticmethod
+    def initial_velocity(body_name: str) -> Vector2D:
+        return Vector2D(0.0, 0.0)
+
     def set_x_velocity(self, body_name: str, vx: float) -> None:
         pass
 
