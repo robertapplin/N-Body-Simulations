@@ -347,18 +347,21 @@ QTableWidget::item:selected {
          <widget class="QComboBox" name="cbVelocityArrowMagnification">
           <property name="minimumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>42</width>
+            <height>28</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>30</width>
-            <height>30</height>
+            <width>42</width>
+            <height>28</height>
            </size>
           </property>
           <property name="toolTip">
-           <string>Magnification of Velocity Arrows</string>
+           <string>The factor to magnify the velocity arrows by</string>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
           </property>
           <item>
            <property name="text">
@@ -383,6 +386,16 @@ QTableWidget::item:selected {
           <item>
            <property name="text">
             <string>x16</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x32</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>x64</string>
            </property>
           </item>
          </widget>

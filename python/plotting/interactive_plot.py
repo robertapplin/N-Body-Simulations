@@ -125,6 +125,12 @@ class InteractivePlot(QObject):
         for body_marker in self._body_markers.values():
             body_marker.show_velocity_arrow(show_velocity)
 
+    def set_velocity_arrow_magnification(self, magnification: int) -> None:
+        """Set the magnification of the velocity arrows."""
+        for body_marker in self._body_markers.values():
+            body_marker.set_velocity_arrow_magnification(magnification)
+            body_marker.refresh()
+
     def set_simulation_data(self, simulation_data: tuple) -> None:
         """Sets the simulation data in the animator."""
         self._animator.set_simulation_data(simulation_data)

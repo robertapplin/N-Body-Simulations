@@ -83,6 +83,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbInteractiveMode.clicked.connect(self.handle_interactive_mode_clicked)
         self.pbShowPositionLabels.clicked.connect(self.handle_show_position_labels_clicked)
         self.pbShowVelocityArrows.clicked.connect(self.handle_show_velocity_arrows_clicked)
+        self.cbVelocityArrowMagnification.currentTextChanged.connect(lambda magnification:
+                                                                     self.handle_velocity_magnification_changed(
+                                                                         magnification))
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
@@ -220,6 +223,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def handle_show_velocity_arrows_clicked(self) -> None:
         """Handle when the show velocity arrows button is clicked."""
         self.interactive_plot.show_velocity_arrows(self.pbShowVelocityArrows.isChecked())
+        self.interactive_plot.draw()
+
+    def handle_velocity_magnification_changed(self, magnification: str) -> None:
+        """Handles when the magnification of the velocity arrows is changed."""
+        print(int(magnification[1:]))
+        self.interactive_plot.set_velocity_arrow_magnification(int(magnification[1:]))
         self.interactive_plot.draw()
 
     def handle_stop_clicked(self) -> None:

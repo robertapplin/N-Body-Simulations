@@ -12,8 +12,7 @@ ARROW_HEAD_WIDTH_PIXELS = 7
 BODY_RADIUS_PIXELS = 3
 BODY_LABEL_SPACING_PIXELS = 5
 MARKER_SENSITIVITY = 5
-MINIMUM_ARROW_SIZE_PIXELS = 3
-VELOCITY_MAGNIFICATION = 4
+MINIMUM_ARROW_SIZE_PIXELS = 12
 
 
 class BodyMarker(QObject):
@@ -38,6 +37,7 @@ class BodyMarker(QObject):
         self._position_label = None
         self._override_cursor = None
 
+        self._velocity_magnification = 1
         self._show_position_label = True
         self._show_velocity_arrow = True
 
@@ -54,9 +54,9 @@ class BodyMarker(QObject):
             return True
 
         if self._show_velocity_arrow:
-            self._is_dragging_velocity = self._is_above(x, y,
-                                                        self._position.x + self._velocity.x * VELOCITY_MAGNIFICATION,
-                                                        self._position.y + self._velocity.y * VELOCITY_MAGNIFICATION)
+            self._is_dragging_velocity = \
+                self._is_above(x, y, self._position.x + self._velocity.x * self._velocity_magnification,
+                               self._position.y + self._velocity.y * self._velocity_magnification)
             if self._is_dragging_velocity:
                 self._set_override_cursor(x, y)
                 return True
@@ -72,8 +72,8 @@ class BodyMarker(QObject):
             return True
 
         if self._show_velocity_arrow and self._is_dragging_velocity:
-            self.set_velocity((x - self._position.x) / VELOCITY_MAGNIFICATION,
-                              (y - self._position.y) / VELOCITY_MAGNIFICATION)
+            self.set_velocity((x - self._position.x) / self._velocity_magnification,
+                              (y - self._position.y) / self._velocity_magnification)
             self._is_dragging_velocity = False
             self._set_override_cursor(x, y)
             return True
@@ -89,8 +89,8 @@ class BodyMarker(QObject):
             return True
 
         if self._show_velocity_arrow and self._is_dragging_velocity:
-            self.set_velocity((x - self._position.x) / VELOCITY_MAGNIFICATION,
-                              (y - self._position.y) / VELOCITY_MAGNIFICATION)
+            self.set_velocity((x - self._position.x) / self._velocity_magnification,
+                              (y - self._position.y) / self._velocity_magnification)
             return True
 
         return False
@@ -118,6 +118,10 @@ class BodyMarker(QObject):
         """Show or hide the velocity arrow on the interactive plot."""
         self._show_velocity_arrow = show_velocity
         self._velocity_patch.set_visible(show_velocity)
+
+    def set_velocity_arrow_magnification(self, magnification: int) -> None:
+        """Set the magnification of the velocity arrow."""
+        self._velocity_magnification = magnification
 
     def refresh(self) -> None:
         """Refreshes the body marker. This is required to reset its size and colour."""
@@ -164,13 +168,15 @@ class BodyMarker(QObject):
 
     def _create_velocity_arrow(self) -> None:
         """Creates the velocity arrow if necessary."""
-        self._velocity_patch = FancyArrow(self._position.x, self._position.y, self._velocity.x * VELOCITY_MAGNIFICATION,
-                                          self._velocity.y * VELOCITY_MAGNIFICATION, length_includes_head=True,
+        self._velocity_patch = FancyArrow(self._position.x, self._position.y,
+                                          self._velocity.x * self._velocity_magnification,
+                                          self._velocity.y * self._velocity_magnification, length_includes_head=True,
                                           facecolor=self._colour, edgecolor="black",
                                           head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
         self._axis.add_patch(self._velocity_patch)
 
-        if self._distance_to_pixels(self._velocity.magnitude()) >= MINIMUM_ARROW_SIZE_PIXELS:
+        if self._distance_to_pixels(self._velocity.magnitude() * self._velocity_magnification) \
+                >= MINIMUM_ARROW_SIZE_PIXELS:
             self._velocity_patch.set_visible(self._show_velocity_arrow)
         else:
             self._velocity_patch.set_visible(False)
@@ -194,8 +200,8 @@ class BodyMarker(QObject):
         elif not self._is_dragging_body and self._is_above(x_mouse, y_mouse, self._position.x, self._position.y):
             self._override_cursor = Qt.OpenHandCursor
         elif self._show_velocity_arrow and not self._is_dragging_velocity and \
-                self._is_above(x_mouse, y_mouse, self._position.x + self._velocity.x * VELOCITY_MAGNIFICATION,
-                               self._position.y + self._velocity.y * VELOCITY_MAGNIFICATION):
+                self._is_above(x_mouse, y_mouse, self._position.x + self._velocity.x * self._velocity_magnification,
+                               self._position.y + self._velocity.y * self._velocity_magnification):
             self._override_cursor = Qt.OpenHandCursor
         else:
             self._override_cursor = None
