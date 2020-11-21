@@ -203,6 +203,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Handle when the interactive mode button is clicked."""
         self.set_as_playing(False)
         self.interactive_plot.disable_animation()
+        self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.draw()
 
     def handle_stop_clicked(self) -> None:
         """Handle when the stop button is clicked."""
@@ -366,6 +368,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def play_simulation(self) -> None:
         """Plays the animation of a simulation."""
+        self.interactive_plot.update_axes_limits(initial_data=False)
         self.interactive_plot.play_animation()
 
     def get_axes_limits(self) -> tuple:
