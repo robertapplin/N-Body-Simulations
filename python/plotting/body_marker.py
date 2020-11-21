@@ -13,6 +13,7 @@ BODY_RADIUS_PIXELS = 3
 BODY_LABEL_SPACING_PIXELS = 5
 MARKER_SENSITIVITY = 5
 MINIMUM_ARROW_SIZE_PIXELS = 3
+VELOCITY_MAGNIFICATION = 4
 
 
 class BodyMarker(QObject):
@@ -49,8 +50,8 @@ class BodyMarker(QObject):
             self._set_override_cursor(x, y)
             return True
 
-        self._is_dragging_velocity = self._is_above(x, y, self._position.x + self._velocity.x,
-                                                    self._position.y + self._velocity.y)
+        self._is_dragging_velocity = self._is_above(x, y, self._position.x + self._velocity.x * VELOCITY_MAGNIFICATION,
+                                                    self._position.y + self._velocity.y * VELOCITY_MAGNIFICATION)
         if self._is_dragging_velocity:
             self._set_override_cursor(x, y)
             return True
@@ -66,7 +67,8 @@ class BodyMarker(QObject):
             return True
 
         if self._is_dragging_velocity:
-            self.set_velocity(x - self._position.x, y - self._position.y)
+            self.set_velocity((x - self._position.x) / VELOCITY_MAGNIFICATION,
+                              (y - self._position.y) / VELOCITY_MAGNIFICATION)
             self._is_dragging_velocity = False
             self._set_override_cursor(x, y)
             return True
@@ -82,7 +84,8 @@ class BodyMarker(QObject):
             return True
 
         if self._is_dragging_velocity:
-            self.set_velocity(x - self._position.x, y - self._position.y)
+            self.set_velocity((x - self._position.x) / VELOCITY_MAGNIFICATION,
+                              (y - self._position.y) / VELOCITY_MAGNIFICATION)
             return True
 
         return False
@@ -147,7 +150,9 @@ class BodyMarker(QObject):
     def _create_velocity_arrow(self) -> None:
         """Creates the velocity arrow if necessary."""
         if self._distance_to_pixels(self._velocity.magnitude()) >= MINIMUM_ARROW_SIZE_PIXELS:
-            self._velocity_patch = FancyArrow(self._position.x, self._position.y, self._velocity.x, self._velocity.y,
+            self._velocity_patch = FancyArrow(self._position.x, self._position.y,
+                                              self._velocity.x * VELOCITY_MAGNIFICATION,
+                                              self._velocity.y * VELOCITY_MAGNIFICATION,
                                               length_includes_head=True, facecolor=self._colour, edgecolor="black",
                                               head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
             self._axis.add_patch(self._velocity_patch)
@@ -171,8 +176,10 @@ class BodyMarker(QObject):
             self._override_cursor = Qt.ClosedHandCursor
         elif not self._is_dragging_body and self._is_above(x_mouse, y_mouse, self._position.x, self._position.y):
             self._override_cursor = Qt.OpenHandCursor
-        elif not self._is_dragging_velocity and self._is_above(x_mouse, y_mouse, self._position.x + self._velocity.x,
-                                                               self._position.y + self._velocity.y):
+        elif not self._is_dragging_velocity and self._is_above(x_mouse, y_mouse, self._position.x + self._velocity.x *
+                                                               VELOCITY_MAGNIFICATION,
+                                                               self._position.y + self._velocity.y *
+                                                               VELOCITY_MAGNIFICATION):
             self._override_cursor = Qt.OpenHandCursor
         else:
             self._override_cursor = None
