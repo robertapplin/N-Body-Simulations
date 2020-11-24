@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>660</width>
-    <height>846</height>
+    <width>658</width>
+    <height>963</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -440,6 +440,10 @@ QTableWidget {
 QTableWidget::item:selected {
 	background-color: #c7e0ff;
 	color: #000000;
+}
+
+QTableWidget::item:hover {
+	background-color: #dcf5ff;
 }</string>
           </property>
           <property name="verticalScrollBarPolicy">

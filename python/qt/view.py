@@ -6,7 +6,7 @@ import qtawesome as qta
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate
+from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate, StringItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import Vector2D
 
@@ -123,11 +123,13 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
                                                    self.vx_column.header, self.vy_column.header])
 
         colour_item_delegate = ColourItemDelegate(self.twBodyData)
+        name_item_delegate = StringItemDelegate(self.twBodyData)
         mass_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Mass)
         position_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Position)
         velocity_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Velocity)
 
         self.twBodyColours.setItemDelegateForColumn(self.colour_column.index, colour_item_delegate)
+        self.twBodyData.setItemDelegateForColumn(self.name_column.index, name_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.mass_column.index, mass_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.x_column.index, position_item_delegate)
         self.twBodyData.setItemDelegateForColumn(self.y_column.index, position_item_delegate)

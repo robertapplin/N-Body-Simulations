@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(660, 846)
+        MainWindow.resize(658, 963)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -177,6 +177,10 @@ class Ui_MainWindow(object):
 "QTableWidget::item:selected {\n"
 "    background-color: #c7e0ff;\n"
 "    color: #000000;\n"
+"}\n"
+"\n"
+"QTableWidget::item:hover {\n"
+"    background-color: #dcf5ff;\n"
 "}")
         self.twBodyData.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.twBodyData.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)

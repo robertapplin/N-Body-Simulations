@@ -2,8 +2,9 @@
 # Authored by Robert Applin, 2020
 from n_body_simulations.xml_reader import get_user_interface_property
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QColorDialog, QDoubleSpinBox, QStyledItemDelegate
+from PyQt5.QtCore import QModelIndex, Qt
+from PyQt5.QtGui import QPainter
+from PyQt5.QtWidgets import QColorDialog, QDoubleSpinBox, QStyledItemDelegate, QStyleOptionViewItem, QTableWidgetItem, QStyle
 
 
 class ColourItemDelegate(QStyledItemDelegate):
@@ -43,10 +44,21 @@ class DoubleItemDelegate(QStyledItemDelegate):
         """Initializes the item delegate using the properties stored in the user interface properties file."""
         super(DoubleItemDelegate, self).__init__(parent)
 
+        self.table_widget = parent
+        self.table_widget.setMouseTracking(True)
+        self.table_widget.itemEntered.connect(lambda table_item: self.handle_item_entered(table_item))
+
         self.min = float(get_user_interface_property(item_type + "-min"))
         self.max = float(get_user_interface_property(item_type + "-max"))
         self.step = float(get_user_interface_property(item_type + "-step"))
         self.decimals = int(get_user_interface_property(item_type + "-dp"))
+
+        self.hovered_row = -1
+
+    def handle_item_entered(self, table_item: QTableWidgetItem) -> None:
+        """Handles when a table item is hovered over."""
+        self.hovered_row = table_item.row()
+        self.table_widget.viewport().update()
 
     def createEditor(self, parent, style, index) -> None:
         """Overrides the parent method to create a custom QDoubleSpinBox."""
@@ -58,3 +70,36 @@ class DoubleItemDelegate(QStyledItemDelegate):
         box.setMaximum(self.max)
 
         return box
+
+    def paint(self, painter: QPainter, opt: QStyleOptionViewItem, index: QModelIndex) -> None:
+        """Paints the table row colour when a hover event occurs."""
+        option = QStyleOptionViewItem(opt)
+        if index.row() == self.hovered_row:
+            option.state |= QStyle.State_MouseOver
+        super().paint(painter, option, index)
+
+
+class StringItemDelegate(QStyledItemDelegate):
+    """A class which creates a custom item delegate for managing string data stored in a QTableWidget."""
+
+    def __init__(self, parent):
+        """Initializes the item delegate using the properties stored in the user interface properties file."""
+        super(StringItemDelegate, self).__init__(parent)
+
+        self.table_widget = parent
+        self.table_widget.setMouseTracking(True)
+        self.table_widget.itemEntered.connect(lambda table_item: self.handle_item_entered(table_item))
+
+        self.hovered_row = -1
+
+    def handle_item_entered(self, table_item: QTableWidgetItem) -> None:
+        """Handles when a table item is hovered over."""
+        self.hovered_row = table_item.row()
+        self.table_widget.viewport().update()
+
+    def paint(self, painter: QPainter, opt: QStyleOptionViewItem, index: QModelIndex) -> None:
+        """Paints the table row colour when a hover event occurs."""
+        option = QStyleOptionViewItem(opt)
+        if index.row() == self.hovered_row:
+            option.state |= QStyle.State_MouseOver
+        super().paint(painter, option, index)
