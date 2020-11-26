@@ -11,6 +11,7 @@ from PyQt5.QtGui import QCursor
 ARROW_HEAD_WIDTH_PIXELS = 7
 BODY_RADIUS_PIXELS = 3
 BODY_LABEL_SPACING_PIXELS = 5
+FONT_SIZE = 9
 MARKER_SENSITIVITY = 5
 MINIMUM_ARROW_SIZE_PIXELS = 12
 
@@ -186,7 +187,8 @@ class BodyMarker(QObject):
     def _create_position_label(self) -> None:
         """Creates the label that denotes the position of a body."""
         label_position = (self._position.x + self._pixels_to_distance(BODY_LABEL_SPACING_PIXELS), self._position.y)
-        self._position_label = self._axis.annotate(f"({self._position.x:.2f},{self._position.y:.2f})", label_position)
+        self._position_label = self._axis.annotate(f"({self._position.x:.2f},{self._position.y:.2f})", label_position,
+                                                   fontsize=FONT_SIZE)
         self._position_label.set_visible(self._show_position_label)
 
     def _set_override_cursor(self, x_mouse: float, y_mouse: float) -> None:

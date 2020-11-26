@@ -11,7 +11,7 @@ from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor, QMouseEvent
 from PyQt5.QtWidgets import QApplication
 
-AXIS_MARGIN = 0.05  # 5% axis margin
+AXIS_MARGIN = 0.16  # 16% axis margin
 
 
 class InteractivePlot(QObject):
