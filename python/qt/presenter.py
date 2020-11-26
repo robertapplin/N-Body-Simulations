@@ -46,11 +46,12 @@ class NBodySimulationsPresenter:
                                                     self.handle_body_velocity_changed(body_name, vx, vy))
 
     def handle_remove_body_clicked(self) -> None:
-        """Handles the removal of the selected body."""
-        body_name = self.view.selected_body()
-        if body_name:
-            self.view.remove_body(body_name)
-            self.model.remove_body(body_name)
+        """Handles the removal of the selected bodies."""
+        body_names = self.view.selected_bodies()
+        if body_names:
+            for body_name in body_names:
+                self.view.remove_body(body_name)
+                self.model.remove_body(body_name)
 
     def handle_add_body_clicked(self, body_name: str) -> None:
         """Handles the addition of a body to the simulation. Randomizes the body position and colour."""

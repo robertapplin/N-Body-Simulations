@@ -8,6 +8,17 @@ from NBodySimulations import Vector2D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+
+
+class DummyBodyTable(QTableWidget):
+    """A class used as a dummy body data table for the purposes of testing."""
+    itemExited = pyqtSignal(QTableWidgetItem)
+
+    def __init__(self):
+        super(DummyBodyTable, self).__init__(None)
+
 
 class DummyErrorProneClass:
     """A class used for testing the error catcher by causing various errors and exceptions."""

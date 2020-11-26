@@ -11,7 +11,7 @@ from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor, QMouseEvent
 from PyQt5.QtWidgets import QApplication
 
-AXIS_MARGIN = 0.05  # 5% axis margin
+AXIS_MARGIN = 0.16  # 16% axis margin
 
 
 class InteractivePlot(QObject):
@@ -26,7 +26,7 @@ class InteractivePlot(QObject):
         self._figure = Figure()
 
         # Modify margins around a figure
-        self._figure.subplots_adjust(left=0.015, bottom=0.015, right=0.985, top=0.985, wspace=0, hspace=0)
+        self._figure.subplots_adjust(left=0.004, bottom=0.015, right=0.996, top=0.996, wspace=0, hspace=0)
         self._figure.patch.set_facecolor("#f0f0f0")
 
         self._ax = self._figure.add_subplot(111)

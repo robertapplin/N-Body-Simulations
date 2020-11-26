@@ -5,11 +5,13 @@ set(PYTHON_FILES
     plotting/body_marker.py
     plotting/interactive_plot.py
     plotting/simulation_animator.py
+    qt/body_data_table.py
     qt/custom_actions.py
     qt/error_catcher.py
     qt/main_gui.py
     qt/model.py
     qt/presenter.py
+    qt/splitter_widgets.py
     qt/table_item_delegates.py
     qt/view.py
     qt/ui/add_body_dialog_ui.py
