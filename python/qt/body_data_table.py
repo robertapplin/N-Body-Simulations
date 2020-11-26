@@ -1,6 +1,8 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.table_item_delegates import DoubleItemDelegate, StringItemDelegate
+import random
+
+from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate, StringItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 
 from PyQt5.QtCore import pyqtSignal, QEvent, QModelIndex, QPersistentModelIndex, Qt
@@ -112,3 +114,43 @@ class BodyDataTableWidget(QTableWidget):
                     self.itemExited.emit(item)
                 self._last_index = QPersistentModelIndex(index)
         return QTableWidget.eventFilter(self, widget, event)
+
+
+class ColourTableWidget(QTableWidget):
+    """A class derived from a QTableWidget to display body colours."""
+    colour_column = TableColumn(0, "")
+    body_colours = get_user_interface_property("body-colours").split(",")
+
+    def __init__(self, parent=None):
+        """Initialize the table widget for displaying body colours."""
+        super(ColourTableWidget, self).__init__(parent)
+
+        self.setMinimumWidth(30)
+        self.setMaximumWidth(30)
+        self.setShowGrid(False)
+        self.setColumnCount(1)
+        self.setRowCount(0)
+        self.verticalHeader().setVisible(False)
+        self.horizontalHeader().setHighlightSections(False)
+        self.horizontalHeader().setStretchLastSection(True)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setStyleSheet("QHeaderView::section {\n"
+                           "    font-size: 10pt;\n"
+                           "    background-color: #f0f0f0;\n"
+                           "    padding: 2px;\n"
+                           "    border: 1px solid #828790;\n"
+                           "    border-top: 0px;"
+                           "    border-left: 0px;"
+                           "}\n"
+                           "\n"
+                           "QFrame {\n"
+                           "    border: none;\n"
+                           "}")
+
+        colour_item_delegate = ColourItemDelegate(self)
+        self.setItemDelegateForColumn(self.colour_column.index, colour_item_delegate)
+
+    def random_colour(self) -> str:
+        """Returns a random colour to be used for a body."""
+        return self.body_colours[random.randint(0, len(self.body_colours) - 1)]

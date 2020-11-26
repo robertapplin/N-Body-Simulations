@@ -11,6 +11,7 @@ set(PYTHON_FILES
     qt/main_gui.py
     qt/model.py
     qt/presenter.py
+    qt/splitter_widgets.py
     qt/table_item_delegates.py
     qt/view.py
     qt/ui/add_body_dialog_ui.py

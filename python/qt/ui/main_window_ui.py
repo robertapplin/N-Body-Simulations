@@ -106,44 +106,6 @@ class Ui_MainWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.fSetup)
-        self.splitter = QtWidgets.QSplitter(self.centralwidget)
-        self.splitter.setOrientation(QtCore.Qt.Vertical)
-        self.splitter.setObjectName("splitter")
-        self.fBodyDataTable = QtWidgets.QFrame(self.splitter)
-        self.fBodyDataTable.setStyleSheet("QFrame {\n"
-"    border: 1px solid #828790;\n"
-"}")
-        self.fBodyDataTable.setObjectName("fBodyDataTable")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.fBodyDataTable)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.twBodyColours = QtWidgets.QTableWidget(self.fBodyDataTable)
-        self.twBodyColours.setMinimumSize(QtCore.QSize(30, 0))
-        self.twBodyColours.setMaximumSize(QtCore.QSize(30, 16777215))
-        self.twBodyColours.setStyleSheet("QHeaderView::section {\n"
-"    font-size: 10pt;\n"
-"    background-color: #f0f0f0;\n"
-"    padding: 2px;\n"
-"    border: 1px solid #828790;\n"
-"    border-top: 0px;\n"
-"    border-left: 0px;\n"
-"}\n"
-"\n"
-"QFrame {\n"
-"    border: none;\n"
-"}")
-        self.twBodyColours.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.twBodyColours.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        self.twBodyColours.setObjectName("twBodyColours")
-        self.twBodyColours.setColumnCount(1)
-        self.twBodyColours.setRowCount(0)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyColours.setHorizontalHeaderItem(0, item)
-        self.twBodyColours.horizontalHeader().setStretchLastSection(True)
-        self.twBodyColours.verticalHeader().setVisible(False)
-        self.horizontalLayout.addWidget(self.twBodyColours)
-        self.verticalLayout.addWidget(self.splitter)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)

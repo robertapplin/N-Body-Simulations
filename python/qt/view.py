@@ -1,19 +1,17 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import random
 import qtawesome as qta
 
-from n_body_simulations.body_data_table import BodyDataTableWidget, TableColumn
+from n_body_simulations.body_data_table import ColourTableWidget, BodyDataTableWidget
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.table_item_delegates import ColourItemDelegate
-from n_body_simulations.xml_reader import get_user_interface_property
+from n_body_simulations.splitter_widgets import Splitter
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QTableWidgetItem, QToolButton
+from PyQt5.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, QToolButton
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -34,10 +32,6 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     bodyMovedSignal = pyqtSignal(str, float, float)
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
-    body_colours = get_user_interface_property("body-colours").split(",")
-
-    colour_column = TableColumn(0, "")
-
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
         super(NBodySimulationsView, self).__init__()
@@ -51,10 +45,16 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.time_step_action = None
         self.duration_action = None
 
+        self.splitter = None
+        self.plot_frame = None
+        self.table_frame = None
+        self.horizontal_layout = None
+        self.colour_table = None
         self.body_data_table = None
         self.interactive_plot = None
 
         self.setup_icons()
+        self.setup_splitter_widget()
         self.setup_table_widgets()
         self.setup_interactive_plot_widget()
         self.setup_add_body_widget()
@@ -69,7 +69,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
                                                                          magnification))
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
-        self.twBodyColours.cellChanged.connect(lambda row, column: self.handle_body_colour_changed(row, column))
+        self.colour_table.cellChanged.connect(lambda row, column: self.handle_body_colour_changed(row, column))
         self.body_data_table.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
         self.body_data_table.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
         self.add_single_body_action.push_button.clicked.connect(self.emit_add_body_clicked)
@@ -97,18 +97,44 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.tbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
 
-    def setup_table_widgets(self) -> None:
-        """Setup the table widget."""
-        self.body_data_table = BodyDataTableWidget()
-        self.fBodyDataTable.layout().addWidget(self.body_data_table)
+    def setup_splitter_widget(self) -> None:
+        """Setup the splitter widget."""
+        self.splitter = Splitter(qta.icon('mdi.dots-horizontal', scale_factor=1.0))
+        self.splitter.setOrientation(Qt.Vertical)
+        self.splitter.setStyleSheet("QSplitter::handle { background-color: transparent; }")
 
-        colour_item_delegate = ColourItemDelegate(self)
-        self.twBodyColours.setItemDelegateForColumn(self.colour_column.index, colour_item_delegate)
+        self.centralwidget.layout().addWidget(self.splitter)
+
+        self.table_frame = QFrame()
+        self.table_frame.setStyleSheet("QFrame { border: 1px solid #828790; }")
+        horizontal_layout = QHBoxLayout()
+        horizontal_layout.setContentsMargins(0, 0, 0, 0)
+        horizontal_layout.setSpacing(0)
+        self.table_frame.setLayout(horizontal_layout)
+
+        self.splitter.addWidget(self.table_frame)
+
+    def setup_table_widgets(self) -> None:
+        """Setup the table widgets."""
+        self.colour_table = ColourTableWidget()
+        self.table_frame.layout().addWidget(self.colour_table)
+
+        self.body_data_table = BodyDataTableWidget()
+        self.table_frame.layout().addWidget(self.body_data_table)
 
     def setup_interactive_plot_widget(self) -> None:
         """Setup the interactive plot widget."""
+        self.plot_frame = QFrame()
+        grid_layout = QGridLayout()
+        grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.plot_frame.setLayout(grid_layout)
+        self.plot_frame.setMinimumWidth(100)
+        self.plot_frame.setMinimumHeight(100)
+
         self.interactive_plot = InteractivePlot()
-        self.splitter.addWidget(self.interactive_plot.canvas())
+        self.plot_frame.layout().addWidget(self.interactive_plot.canvas())
+
+        self.splitter.addWidget(self.plot_frame)
 
     def setup_add_body_widget(self) -> None:
         """Setup the custom add body tool button widget."""
@@ -245,7 +271,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         row_index = self._index_of_body(body_name)
 
-        self.twBodyColours.removeRow(row_index)
+        self.colour_table.removeRow(row_index)
         self.body_data_table.removeRow(row_index)
 
         self.interactive_plot.remove_body(body_name)
@@ -257,7 +283,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.set_interactive_mode(True)
 
         for body_name, parameters in body_parameters.items():
-            random_colour = self._random_colour()
+            random_colour = self.colour_table.random_colour()
             self.add_body_to_table(body_name, parameters, random_colour)
             self.interactive_plot.add_body(body_name, parameters[1], parameters[2], random_colour)
 
@@ -268,7 +294,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Adds a body to the view."""
         self.set_interactive_mode(True)
 
-        random_colour = self._random_colour()
+        random_colour = self.colour_table.random_colour()
         self.add_body_to_table(body_name, initial_data, random_colour)
 
         self.interactive_plot.add_body(body_name, initial_data[1], initial_data[2], random_colour)
@@ -277,23 +303,23 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def add_body_to_table(self, body_name: str, body_data: tuple, colour: str) -> None:
         """Adds the data of a body to the table of data."""
-        self.twBodyColours.blockSignals(True)
+        self.colour_table.blockSignals(True)
         self.body_data_table.blockSignals(True)
 
         row_index = self.body_data_table.rowCount()
         body_table = self.body_data_table
 
         self.body_data_table.insertRow(row_index)
-        self.twBodyColours.insertRow(row_index)
+        self.colour_table.insertRow(row_index)
         self.body_data_table.setItem(row_index, body_table.name_column.index, QTableWidgetItem(body_name))
         self.body_data_table.setItem(row_index, body_table.mass_column.index, self._create_table_double(body_data[0]))
         self.body_data_table.setItem(row_index, body_table.x_column.index, self._create_table_double(body_data[1].x))
         self.body_data_table.setItem(row_index, body_table.y_column.index, self._create_table_double(body_data[1].y))
         self.body_data_table.setItem(row_index, body_table.vx_column.index, self._create_table_double(body_data[2].x))
         self.body_data_table.setItem(row_index, body_table.vy_column.index, self._create_table_double(body_data[2].y))
-        self.twBodyColours.setItem(row_index, self.colour_column.index, self._create_table_colour(colour))
+        self.colour_table.setItem(row_index, self.colour_table.colour_column.index, self._create_table_colour(colour))
 
-        self.twBodyColours.blockSignals(False)
+        self.colour_table.blockSignals(False)
         self.body_data_table.blockSignals(False)
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
@@ -352,7 +378,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def enable_view(self, enable: bool) -> None:
         """Enables or disables the widgets seen in the view."""
-        self.twBodyColours.setEnabled(enable)
+        self.colour_table.setEnabled(enable)
         self.body_data_table.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
         self.tbAddBody.setEnabled(enable)
@@ -411,7 +437,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def _get_cell_colour(self, row_index: int, column_index: int) -> str:
         """Gets the background colour of a table item in string format."""
-        return self.twBodyColours.item(row_index, column_index).background().color().name()
+        return self.colour_table.item(row_index, column_index).background().color().name()
 
     def _body_at_index(self, row_index: int) -> str:
         """Returns the name of the body at a given row index."""
@@ -430,7 +456,3 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         if selection_model.hasSelection():
             return sorted([model_index.row() for model_index in selection_model.selectedRows()], reverse=True)
         return None
-
-    def _random_colour(self) -> str:
-        """Returns a random colour to be used for a body."""
-        return self.body_colours[random.randint(0, len(self.body_colours) - 1)]
