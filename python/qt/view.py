@@ -81,7 +81,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.bodyVelocityChangedSignal.connect(lambda name, vx, vy:
                                                                 self.handle_body_velocity_changed(name, vx, vy))
 
-        self._selected_body = None
+        self._last_selected_body_name = None
 
     def setup_icons(self) -> None:
         """Setup the button icons."""
@@ -156,7 +156,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def handle_cell_clicked(self, row_index: int, _: int) -> None:
         """Handle when a table row is selected."""
-        self._selected_body = self._body_at_index(row_index)
+        self._last_selected_body_name = self._body_at_index(row_index)
 
     def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
         """Handle when body data in the table is changed."""
@@ -170,9 +170,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         signal = table_signals.get(column_index, None)
         if signal is not None:
-            signal.emit(self._selected_body, self._get_cell_double(row_index, column_index))
+            signal.emit(self._body_at_index(row_index), self._get_cell_double(row_index, column_index))
         elif column_index == self.body_data_table.name_column.index:
-            self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
+            self.bodyNameChangedSignal.emit(self._last_selected_body_name, self._body_at_index(row_index))
 
     def handle_body_colour_changed(self, row_index: int, column_index: int) -> None:
         """Handles updating the colour of a body on the interactive plot when it is changed."""
@@ -232,18 +232,18 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.bodyVelocityChangedSignal.emit(body_name, vx, vy)
 
-    def selected_body(self) -> str:
-        """Returns the name of the body which is currently selected."""
-        selected_index = self._selected_row_index()
-        if selected_index != -1:
-            return self._body_at_index(selected_index)
+    def selected_bodies(self) -> list:
+        """Returns the name of the bodies which are currently selected."""
+        selected_indices = self._selected_row_indices()
+        if selected_indices is not None:
+            return [self._body_at_index(row_index) for row_index in selected_indices]
         return None
 
     def remove_body(self, body_name: str) -> None:
         """Removes the specified body from the view."""
         self.set_interactive_mode(True)
 
-        row_index = self._selected_row_index()
+        row_index = self._index_of_body(body_name)
 
         self.twBodyColours.removeRow(row_index)
         self.body_data_table.removeRow(row_index)
@@ -317,7 +317,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def set_name(self, body_name: str) -> None:
         """Sets the name of a body in the table. Used to reset a bodies name when renaming it fails."""
         self.body_data_table.blockSignals(True)
-        self.body_data_table.setItem(self._selected_row_index(), self.body_data_table.name_column.index,
+        self.body_data_table.setItem(self._selected_row_indices()[0], self.body_data_table.name_column.index,
                                      QTableWidgetItem(body_name))
         self.body_data_table.blockSignals(False)
 
@@ -424,12 +424,12 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
                 return row_index
         return -1
 
-    def _selected_row_index(self) -> int:
-        """Returns the index of the selected row."""
+    def _selected_row_indices(self) -> list:
+        """Returns the indices of the selected row."""
         selection_model = self.body_data_table.selectionModel()
         if selection_model.hasSelection():
-            return selection_model.currentIndex().row()
-        return -1
+            return sorted([model_index.row() for model_index in selection_model.selectedRows()], reverse=True)
+        return None
 
     def _random_colour(self) -> str:
         """Returns a random colour to be used for a body."""

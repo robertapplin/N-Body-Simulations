@@ -133,6 +133,7 @@ class Ui_MainWindow(object):
 "QFrame {\n"
 "    border: none;\n"
 "}")
+        self.twBodyColours.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.twBodyColours.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         self.twBodyColours.setObjectName("twBodyColours")
         self.twBodyColours.setColumnCount(1)

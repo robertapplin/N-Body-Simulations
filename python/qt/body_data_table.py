@@ -3,7 +3,7 @@
 from n_body_simulations.table_item_delegates import DoubleItemDelegate, StringItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 
-from PyQt5.QtCore import pyqtSignal, QEvent, QModelIndex, QPersistentModelIndex
+from PyQt5.QtCore import pyqtSignal, QEvent, QModelIndex, QPersistentModelIndex, Qt
 from PyQt5.QtWidgets import QAbstractItemView, QTableWidget, QTableWidgetItem, QWidget
 
 
@@ -39,13 +39,14 @@ class BodyDataTableWidget(QTableWidget):
         super(BodyDataTableWidget, self).__init__(parent)
 
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setShowGrid(False)
         self.setColumnCount(6)
         self.setRowCount(0)
         self.verticalHeader().setVisible(False)
         self.horizontalHeader().setHighlightSections(False)
         self.horizontalHeader().setStretchLastSection(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setColumnWidth(5, 1)
         self.setStyleSheet("QHeaderView::section {\n"
                            "    font-size: 10pt;\n"
@@ -54,10 +55,6 @@ class BodyDataTableWidget(QTableWidget):
                            "    border: 1px solid #828790;\n"
                            "    border-top: 0px;"
                            "    border-right: 0px;"
-                           "}\n"
-                           "\n"
-                           "QHeaderView::section::last {\n"
-                           "    border-right: 0px;\n"
                            "}\n"
                            "\n"
                            "QTableWidget {\n"
