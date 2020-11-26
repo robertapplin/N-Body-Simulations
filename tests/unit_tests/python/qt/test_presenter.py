@@ -17,7 +17,7 @@ def setup_presenter():
 def test_that_handle_remove_body_clicked_calls_the_expected_methods(mocker):
     view, model, presenter = setup_presenter()
 
-    view_selected_body = mocker.spy(view, 'selected_body')
+    view_selected_body = mocker.spy(view, 'selected_bodies')
     model_remove_body = mocker.spy(model, 'remove_body')
     view_remove_body = mocker.spy(view, 'remove_body')
 

@@ -82,7 +82,11 @@ def test_that_update_axes_limits_will_update_the_axes_limits_to_the_expected_val
 
     interactive_plot.update_axes_limits()
 
-    assert interactive_plot.get_axes_limits() == tuple([0.0, 1.0, 0.0, 1.0])
+    axes_limits = interactive_plot.get_axes_limits()
+    assert round(axes_limits[0], 2) == 0.0
+    assert round(axes_limits[1], 2) == 1.0
+    assert round(axes_limits[2], 2) == 0.0
+    assert round(axes_limits[3], 2) == 1.0
 
 
 def test_that_update_axes_limits_will_update_the_axes_limits_for_a_non_square_layout(interactive_plot):
@@ -91,4 +95,8 @@ def test_that_update_axes_limits_will_update_the_axes_limits_for_a_non_square_la
 
     interactive_plot.update_axes_limits()
 
-    assert interactive_plot.get_axes_limits() == tuple([-0.2, 0.3, 0.0, 0.5])
+    axes_limits = interactive_plot.get_axes_limits()
+    assert round(axes_limits[0], 2) == -0.2
+    assert round(axes_limits[1], 2) == 0.3
+    assert round(axes_limits[2], 2) == 0.0
+    assert round(axes_limits[3], 2) == 0.5

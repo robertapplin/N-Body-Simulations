@@ -2,31 +2,32 @@
 # Authored by Robert Applin, 2020
 from n_body_simulations.xml_reader import get_user_interface_property
 
-from PyQt5.QtCore import QModelIndex, Qt
+from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
 from PyQt5.QtGui import QPainter
-from PyQt5.QtWidgets import QColorDialog, QDoubleSpinBox, QStyledItemDelegate, QStyleOptionViewItem, QTableWidgetItem, QStyle
+from PyQt5.QtWidgets import (QColorDialog, QDoubleSpinBox, QStyle, QStyledItemDelegate, QStyleOptionViewItem,
+                             QTableWidget, QTableWidgetItem, QWidget)
 
 
 class ColourItemDelegate(QStyledItemDelegate):
     """A class which creates a custom item delegate for allowing the selection of a QColor from a dialog."""
 
-    def __init__(self, parent):
+    def __init__(self, parent: QTableWidget):
         """Initializes the item delegate with a None type colour dialog."""
         super(ColourItemDelegate, self).__init__(parent)
         self._colour_dialog = None
 
-    def createEditor(self, parent, style, index) -> None:
+    def createEditor(self, parent: QWidget, style: QStyleOptionViewItem, index: QModelIndex) -> None:
         """Overrides the parent method to create a custom QColorDialog."""
         self._colour_dialog = QColorDialog(parent)
         return self._colour_dialog
 
-    def setEditorData(self, editor, index):
+    def setEditorData(self, editor: QWidget, index: QModelIndex):
         """Sets the QColor displayed in the QColorDialog when it opens."""
         colour = index.data(Qt.BackgroundRole)
         if colour is not None:
             editor.setCurrentColor(colour)
 
-    def setModelData(self, editor, model, index):
+    def setModelData(self, editor: QWidget, model: QAbstractItemModel, index: QModelIndex):
         """Sets the QColor displayed in the QItemDelegate when the QColorDialog is closed."""
         if self._colour_dialog.result():
             colour = editor.currentColor()
@@ -65,7 +66,7 @@ class DoubleItemDelegate(QStyledItemDelegate):
         """Handles when a table item is no longer hovered over."""
         self.hovered_row = -1
 
-    def createEditor(self, parent, style, index) -> None:
+    def createEditor(self, parent: QWidget, style: QStyleOptionViewItem, index: QModelIndex) -> QWidget:
         """Overrides the parent method to create a custom QDoubleSpinBox."""
         box = QDoubleSpinBox(parent)
         box.setDecimals(self.decimals)

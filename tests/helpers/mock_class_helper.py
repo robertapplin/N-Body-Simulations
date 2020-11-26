@@ -140,8 +140,8 @@ class MockNBodySimulationsView(QObject):
         pass
 
     @staticmethod
-    def selected_body():
-        return "Earth"
+    def selected_bodies():
+        return ["Earth"]
 
     @staticmethod
     def open_add_body_dialog():

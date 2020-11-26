@@ -2,7 +2,7 @@
 # Authored by Robert Applin, 2020
 import qtawesome as qta
 
-from n_body_simulations.body_data_table import ColourTableWidget, BodyDataTableWidget
+from n_body_simulations.body_data_table import BodyDataTableWidget, ColourTableWidget
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow

@@ -5,8 +5,8 @@ import random
 from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate, StringItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 
-from PyQt5.QtCore import pyqtSignal, QEvent, QModelIndex, QPersistentModelIndex, Qt
-from PyQt5.QtWidgets import QAbstractItemView, QTableWidget, QTableWidgetItem, QWidget
+from PyQt5.QtCore import pyqtSignal, QEvent, QModelIndex, QObject, QPersistentModelIndex, Qt
+from PyQt5.QtWidgets import QAbstractItemView, QTableWidget, QTableWidgetItem
 
 
 class TableColumn:
@@ -100,7 +100,7 @@ class BodyDataTableWidget(QTableWidget):
         self.setItemDelegateForColumn(self.vx_column.index, velocity_item_delegate)
         self.setItemDelegateForColumn(self.vy_column.index, velocity_item_delegate)
 
-    def eventFilter(self, widget: QWidget, event: QEvent) -> None:
+    def eventFilter(self, widget: QObject, event: QEvent) -> bool:
         """Emits a signal when a table cell is exited."""
         if widget is self.viewport():
             index = self._last_index
