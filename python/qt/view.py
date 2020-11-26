@@ -3,27 +3,17 @@
 import random
 import qtawesome as qta
 
+from n_body_simulations.body_data_table import BodyDataTableWidget, TableColumn
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_MainWindow
-from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate, StringItemDelegate
+from n_body_simulations.table_item_delegates import ColourItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTableWidgetItem, QToolButton
-
-
-class TableColumn:
-    """A class used to store the details of a column in the data table."""
-
-    def __init__(self, index: int, header: str, unit: str = None):
-        """Initialize the column details."""
-        self.index = index
-        self.header = header
-        if unit is not None:
-            self.header += " (" + unit + ")"
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
@@ -45,18 +35,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
     body_colours = get_user_interface_property("body-colours").split(",")
-    time_unit = get_user_interface_property("time-unit")
-    mass_unit = get_user_interface_property("mass-unit")
-    position_unit = get_user_interface_property("position-unit")
-    velocity_unit = position_unit + "/" + time_unit
 
     colour_column = TableColumn(0, "")
-    name_column = TableColumn(0, "Name")
-    mass_column = TableColumn(1, "Mass", mass_unit)
-    x_column = TableColumn(2, "X", position_unit)
-    y_column = TableColumn(3, "Y", position_unit)
-    vx_column = TableColumn(4, "Vx", velocity_unit)
-    vy_column = TableColumn(5, "Vy", velocity_unit)
 
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
@@ -71,13 +51,14 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.time_step_action = None
         self.duration_action = None
 
+        self.body_data_table = None
+        self.interactive_plot = None
+
         self.setup_icons()
         self.setup_table_widgets()
+        self.setup_interactive_plot_widget()
         self.setup_add_body_widget()
         self.setup_time_settings_widget()
-
-        self.interactive_plot = InteractivePlot()
-        self.plotLayout.addWidget(self.interactive_plot.canvas())
 
         self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
         self.pbInteractiveMode.clicked.connect(self.handle_interactive_mode_clicked)
@@ -89,8 +70,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.pbStop.clicked.connect(self.handle_stop_clicked)
         self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
         self.twBodyColours.cellChanged.connect(lambda row, column: self.handle_body_colour_changed(row, column))
-        self.twBodyData.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
-        self.twBodyData.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
+        self.body_data_table.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
+        self.body_data_table.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
         self.add_single_body_action.push_button.clicked.connect(self.emit_add_body_clicked)
         self.add_multiple_bodies_action.push_button.clicked.connect(self.emit_add_bodies_clicked)
         self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
@@ -118,23 +99,16 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def setup_table_widgets(self) -> None:
         """Setup the table widget."""
-        self.twBodyData.setHorizontalHeaderLabels([self.name_column.header, self.mass_column.header,
-                                                   self.x_column.header, self.y_column.header,
-                                                   self.vx_column.header, self.vy_column.header])
+        self.body_data_table = BodyDataTableWidget()
+        self.fBodyDataTable.layout().addWidget(self.body_data_table)
 
-        colour_item_delegate = ColourItemDelegate(self.twBodyData)
-        name_item_delegate = StringItemDelegate(self.twBodyData)
-        mass_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Mass)
-        position_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Position)
-        velocity_item_delegate = DoubleItemDelegate(self.twBodyData, DoubleItemDelegate.Velocity)
-
+        colour_item_delegate = ColourItemDelegate(self)
         self.twBodyColours.setItemDelegateForColumn(self.colour_column.index, colour_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(self.name_column.index, name_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(self.mass_column.index, mass_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(self.x_column.index, position_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(self.y_column.index, position_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(self.vx_column.index, velocity_item_delegate)
-        self.twBodyData.setItemDelegateForColumn(self.vy_column.index, velocity_item_delegate)
+
+    def setup_interactive_plot_widget(self) -> None:
+        """Setup the interactive plot widget."""
+        self.interactive_plot = InteractivePlot()
+        self.splitter.addWidget(self.interactive_plot.canvas())
 
     def setup_add_body_widget(self) -> None:
         """Setup the custom add body tool button widget."""
@@ -188,16 +162,16 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Handle when body data in the table is changed."""
         self.set_interactive_mode(True)
 
-        table_signals = {self.mass_column.index: self.massChangedSignal,
-                         self.x_column.index: self.xPositionChangedSignal,
-                         self.y_column.index: self.yPositionChangedSignal,
-                         self.vx_column.index: self.xVelocityChangedSignal,
-                         self.vy_column.index: self.yVelocityChangedSignal}
+        table_signals = {self.body_data_table.mass_column.index: self.massChangedSignal,
+                         self.body_data_table.x_column.index: self.xPositionChangedSignal,
+                         self.body_data_table.y_column.index: self.yPositionChangedSignal,
+                         self.body_data_table.vx_column.index: self.xVelocityChangedSignal,
+                         self.body_data_table.vy_column.index: self.yVelocityChangedSignal}
 
         signal = table_signals.get(column_index, None)
         if signal is not None:
             signal.emit(self._selected_body, self._get_cell_double(row_index, column_index))
-        elif column_index == self.name_column.index:
+        elif column_index == self.body_data_table.name_column.index:
             self.bodyNameChangedSignal.emit(self._selected_body, self._body_at_index(row_index))
 
     def handle_body_colour_changed(self, row_index: int, column_index: int) -> None:
@@ -236,25 +210,25 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
         """Handles when a body has been moved on the interactive plot."""
-        self.twBodyData.blockSignals(True)
+        self.body_data_table.blockSignals(True)
 
         row_index = self._index_of_body(body_name)
-        self.twBodyData.setItem(row_index, self.x_column.index, self._create_table_double(x))
-        self.twBodyData.setItem(row_index, self.y_column.index, self._create_table_double(y))
+        self.body_data_table.setItem(row_index, self.body_data_table.x_column.index, self._create_table_double(x))
+        self.body_data_table.setItem(row_index, self.body_data_table.y_column.index, self._create_table_double(y))
 
-        self.twBodyData.blockSignals(False)
+        self.body_data_table.blockSignals(False)
 
         self.bodyMovedSignal.emit(body_name, x, y)
 
     def handle_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
         """Handles when a bodies velocity has been changed on the interactive plot."""
-        self.twBodyData.blockSignals(True)
+        self.body_data_table.blockSignals(True)
 
         row_index = self._index_of_body(body_name)
-        self.twBodyData.setItem(row_index, self.vx_column.index, self._create_table_double(vx))
-        self.twBodyData.setItem(row_index, self.vy_column.index, self._create_table_double(vy))
+        self.body_data_table.setItem(row_index, self.body_data_table.vx_column.index, self._create_table_double(vx))
+        self.body_data_table.setItem(row_index, self.body_data_table.vy_column.index, self._create_table_double(vy))
 
-        self.twBodyData.blockSignals(False)
+        self.body_data_table.blockSignals(False)
 
         self.bodyVelocityChangedSignal.emit(body_name, vx, vy)
 
@@ -269,9 +243,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Removes the specified body from the view."""
         self.set_interactive_mode(True)
 
-        selected_row_index = self._selected_row_index()
-        self.twBodyColours.removeRow(selected_row_index)
-        self.twBodyData.removeRow(selected_row_index)
+        row_index = self._selected_row_index()
+
+        self.twBodyColours.removeRow(row_index)
+        self.body_data_table.removeRow(row_index)
 
         self.interactive_plot.remove_body(body_name)
         self.interactive_plot.update_axes_limits(initial_data=True)
@@ -303,22 +278,23 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def add_body_to_table(self, body_name: str, body_data: tuple, colour: str) -> None:
         """Adds the data of a body to the table of data."""
         self.twBodyColours.blockSignals(True)
-        self.twBodyData.blockSignals(True)
+        self.body_data_table.blockSignals(True)
 
-        row_index = self.twBodyData.rowCount()
+        row_index = self.body_data_table.rowCount()
+        body_table = self.body_data_table
 
+        self.body_data_table.insertRow(row_index)
         self.twBodyColours.insertRow(row_index)
-        self.twBodyData.insertRow(row_index)
-        self.twBodyData.setItem(row_index, self.name_column.index, QTableWidgetItem(body_name))
-        self.twBodyData.setItem(row_index, self.mass_column.index, self._create_table_double(body_data[0]))
-        self.twBodyData.setItem(row_index, self.x_column.index, self._create_table_double(body_data[1].x))
-        self.twBodyData.setItem(row_index, self.y_column.index, self._create_table_double(body_data[1].y))
-        self.twBodyData.setItem(row_index, self.vx_column.index, self._create_table_double(body_data[2].x))
-        self.twBodyData.setItem(row_index, self.vy_column.index, self._create_table_double(body_data[2].y))
+        self.body_data_table.setItem(row_index, body_table.name_column.index, QTableWidgetItem(body_name))
+        self.body_data_table.setItem(row_index, body_table.mass_column.index, self._create_table_double(body_data[0]))
+        self.body_data_table.setItem(row_index, body_table.x_column.index, self._create_table_double(body_data[1].x))
+        self.body_data_table.setItem(row_index, body_table.y_column.index, self._create_table_double(body_data[1].y))
+        self.body_data_table.setItem(row_index, body_table.vx_column.index, self._create_table_double(body_data[2].x))
+        self.body_data_table.setItem(row_index, body_table.vy_column.index, self._create_table_double(body_data[2].y))
         self.twBodyColours.setItem(row_index, self.colour_column.index, self._create_table_colour(colour))
 
         self.twBodyColours.blockSignals(False)
-        self.twBodyData.blockSignals(False)
+        self.body_data_table.blockSignals(False)
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
         """Updates the name of a body in the interactive plot when it is changed."""
@@ -340,9 +316,10 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def set_name(self, body_name: str) -> None:
         """Sets the name of a body in the table. Used to reset a bodies name when renaming it fails."""
-        self.twBodyData.blockSignals(True)
-        self.twBodyData.setItem(self._selected_row_index(), self.name_column.index, QTableWidgetItem(body_name))
-        self.twBodyData.blockSignals(False)
+        self.body_data_table.blockSignals(True)
+        self.body_data_table.setItem(self._selected_row_index(), self.body_data_table.name_column.index,
+                                     QTableWidgetItem(body_name))
+        self.body_data_table.blockSignals(False)
 
     def set_time_step(self, time_step: float) -> None:
         """Sets the time step shown in the view."""
@@ -375,7 +352,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def enable_view(self, enable: bool) -> None:
         """Enables or disables the widgets seen in the view."""
-        self.twBodyData.setEnabled(enable)
+        self.twBodyColours.setEnabled(enable)
+        self.body_data_table.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
         self.tbAddBody.setEnabled(enable)
         self.tbTimeSettings.setEnabled(enable)
@@ -429,7 +407,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def _get_cell_double(self, row_index: int, column_index: int) -> float:
         """Gets the float value of a table item."""
-        return float(self.twBodyData.item(row_index, column_index).text())
+        return float(self.body_data_table.item(row_index, column_index).text())
 
     def _get_cell_colour(self, row_index: int, column_index: int) -> str:
         """Gets the background colour of a table item in string format."""
@@ -437,18 +415,18 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
     def _body_at_index(self, row_index: int) -> str:
         """Returns the name of the body at a given row index."""
-        return self.twBodyData.item(row_index, self.name_column.index).text()
+        return self.body_data_table.item(row_index, self.body_data_table.name_column.index).text()
 
     def _index_of_body(self, body_name: str) -> int:
         """Returns the row index of a given body."""
-        for row_index in range(self.twBodyData.rowCount()):
-            if self.twBodyData.item(row_index, self.name_column.index).text() == body_name:
+        for row_index in range(self.body_data_table.rowCount()):
+            if self.body_data_table.item(row_index, self.body_data_table.name_column.index).text() == body_name:
                 return row_index
         return -1
 
     def _selected_row_index(self) -> int:
         """Returns the index of the selected row."""
-        selection_model = self.twBodyData.selectionModel()
+        selection_model = self.body_data_table.selectionModel()
         if selection_model.hasSelection():
             return selection_model.currentIndex().row()
         return -1

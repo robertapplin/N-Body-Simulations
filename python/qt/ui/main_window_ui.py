@@ -109,18 +109,16 @@ class Ui_MainWindow(object):
         self.splitter = QtWidgets.QSplitter(self.centralwidget)
         self.splitter.setOrientation(QtCore.Qt.Vertical)
         self.splitter.setObjectName("splitter")
-        self.fBodyData = QtWidgets.QFrame(self.splitter)
-        self.fBodyData.setStyleSheet("QFrame {\n"
+        self.fBodyDataTable = QtWidgets.QFrame(self.splitter)
+        self.fBodyDataTable.setStyleSheet("QFrame {\n"
 "    border: 1px solid #828790;\n"
 "}")
-        self.fBodyData.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.fBodyData.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.fBodyData.setObjectName("fBodyData")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.fBodyData)
+        self.fBodyDataTable.setObjectName("fBodyDataTable")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.fBodyDataTable)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.twBodyColours = QtWidgets.QTableWidget(self.fBodyData)
+        self.twBodyColours = QtWidgets.QTableWidget(self.fBodyDataTable)
         self.twBodyColours.setMinimumSize(QtCore.QSize(30, 0))
         self.twBodyColours.setMaximumSize(QtCore.QSize(30, 16777215))
         self.twBodyColours.setStyleSheet("QHeaderView::section {\n"
@@ -132,84 +130,18 @@ class Ui_MainWindow(object):
 "    border-left: 0px;\n"
 "}\n"
 "\n"
-"QTableWidget {\n"
-"    font-size: 8pt;\n"
-"}\n"
-"\n"
 "QFrame {\n"
 "    border: none;\n"
 "}")
-        self.twBodyColours.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.twBodyColours.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.twBodyColours.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        self.twBodyColours.setShowGrid(False)
         self.twBodyColours.setObjectName("twBodyColours")
         self.twBodyColours.setColumnCount(1)
         self.twBodyColours.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.twBodyColours.setHorizontalHeaderItem(0, item)
-        self.twBodyColours.horizontalHeader().setHighlightSections(False)
         self.twBodyColours.horizontalHeader().setStretchLastSection(True)
         self.twBodyColours.verticalHeader().setVisible(False)
         self.horizontalLayout.addWidget(self.twBodyColours)
-        self.twBodyData = QtWidgets.QTableWidget(self.fBodyData)
-        self.twBodyData.setStyleSheet("QFrame {\n"
-"    border: none;\n"
-"}\n"
-"\n"
-"QHeaderView::section {\n"
-"    font-size: 10pt;\n"
-"    background-color: #f0f0f0;\n"
-"    padding: 2px;\n"
-"    border: 1px solid #828790;\n"
-"    border-top: 0px;\n"
-"    border-left: 0px;\n"
-"}\n"
-"\n"
-"QHeaderView::section::last {\n"
-"    border-right: 0px;\n"
-"}\n"
-"\n"
-"QTableWidget {\n"
-"    font-size: 8pt;\n"
-"}\n"
-"\n"
-"QTableWidget::item:selected {\n"
-"    background-color: #c7e0ff;\n"
-"    color: #000000;\n"
-"}\n"
-"\n"
-"QTableWidget::item:hover {\n"
-"    background-color: #dcf5ff;\n"
-"}")
-        self.twBodyData.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.twBodyData.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        self.twBodyData.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.twBodyData.setShowGrid(False)
-        self.twBodyData.setObjectName("twBodyData")
-        self.twBodyData.setColumnCount(6)
-        self.twBodyData.setRowCount(0)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyData.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyData.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyData.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyData.setHorizontalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyData.setHorizontalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.twBodyData.setHorizontalHeaderItem(5, item)
-        self.twBodyData.horizontalHeader().setHighlightSections(False)
-        self.twBodyData.horizontalHeader().setStretchLastSection(True)
-        self.twBodyData.verticalHeader().setVisible(False)
-        self.horizontalLayout.addWidget(self.twBodyData)
-        self.layoutWidget_2 = QtWidgets.QWidget(self.splitter)
-        self.layoutWidget_2.setObjectName("layoutWidget_2")
-        self.plotLayout = QtWidgets.QGridLayout(self.layoutWidget_2)
-        self.plotLayout.setContentsMargins(0, 0, 0, 0)
-        self.plotLayout.setObjectName("plotLayout")
         self.verticalLayout.addWidget(self.splitter)
         MainWindow.setCentralWidget(self.centralwidget)
 

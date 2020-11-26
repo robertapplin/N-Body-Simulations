@@ -325,17 +325,11 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QFrame" name="fBodyData">
+      <widget class="QFrame" name="fBodyDataTable">
        <property name="styleSheet">
         <string notr="true">QFrame {
-	border: 1px solid #828790;
+    border: 1px solid #828790;
 }</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="spacing">
@@ -369,129 +363,27 @@
           </property>
           <property name="styleSheet">
            <string notr="true">QHeaderView::section {
-	font-size: 10pt;
+    font-size: 10pt;
     background-color: #f0f0f0;
     padding: 2px;
-	border: 1px solid #828790;
-	border-top: 0px;
-	border-left: 0px;
-}
-
-QTableWidget {
-	font-size: 8pt;
+    border: 1px solid #828790;
+    border-top: 0px;
+    border-left: 0px;
 }
 
 QFrame {
-	border: none;
+    border: none;
 }</string>
-          </property>
-          <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::NoSelection</enum>
           </property>
-          <property name="showGrid">
-           <bool>false</bool>
-          </property>
-          <attribute name="horizontalHeaderHighlightSections">
-           <bool>false</bool>
-          </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>
           </attribute>
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
           </attribute>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="twBodyData">
-          <property name="styleSheet">
-           <string notr="true">QFrame {
-	border: none;
-}
-
-QHeaderView::section {
-	font-size: 10pt;
-    background-color: #f0f0f0;
-    padding: 2px;
-	border: 1px solid #828790;
-	border-top: 0px;
-	border-left: 0px;
-}
-
-QHeaderView::section::last {
-	border-right: 0px;
-}
-
-QTableWidget {
-	font-size: 8pt;
-}
-
-QTableWidget::item:selected {
-	background-color: #c7e0ff;
-	color: #000000;
-}
-
-QTableWidget::item:hover {
-	background-color: #dcf5ff;
-}</string>
-          </property>
-          <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::SingleSelection</enum>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-          <property name="showGrid">
-           <bool>false</bool>
-          </property>
-          <attribute name="horizontalHeaderHighlightSections">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="horizontalHeaderStretchLastSection">
-           <bool>true</bool>
-          </attribute>
-          <attribute name="verticalHeaderVisible">
-           <bool>false</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
           <column>
            <property name="text">
             <string/>
@@ -500,9 +392,6 @@ QTableWidget::item:hover {
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_2">
-       <layout class="QGridLayout" name="plotLayout"/>
       </widget>
      </widget>
     </item>

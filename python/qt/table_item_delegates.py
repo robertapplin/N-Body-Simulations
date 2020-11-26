@@ -47,6 +47,7 @@ class DoubleItemDelegate(QStyledItemDelegate):
         self.table_widget = parent
         self.table_widget.setMouseTracking(True)
         self.table_widget.itemEntered.connect(lambda table_item: self.handle_item_entered(table_item))
+        self.table_widget.itemExited.connect(lambda table_item: self.handle_item_exited(table_item))
 
         self.min = float(get_user_interface_property(item_type + "-min"))
         self.max = float(get_user_interface_property(item_type + "-max"))
@@ -59,6 +60,10 @@ class DoubleItemDelegate(QStyledItemDelegate):
         """Handles when a table item is hovered over."""
         self.hovered_row = table_item.row()
         self.table_widget.viewport().update()
+
+    def handle_item_exited(self, _: QTableWidgetItem) -> None:
+        """Handles when a table item is no longer hovered over."""
+        self.hovered_row = -1
 
     def createEditor(self, parent, style, index) -> None:
         """Overrides the parent method to create a custom QDoubleSpinBox."""
@@ -89,6 +94,7 @@ class StringItemDelegate(QStyledItemDelegate):
         self.table_widget = parent
         self.table_widget.setMouseTracking(True)
         self.table_widget.itemEntered.connect(lambda table_item: self.handle_item_entered(table_item))
+        self.table_widget.itemExited.connect(lambda table_item: self.handle_item_exited(table_item))
 
         self.hovered_row = -1
 
@@ -96,6 +102,10 @@ class StringItemDelegate(QStyledItemDelegate):
         """Handles when a table item is hovered over."""
         self.hovered_row = table_item.row()
         self.table_widget.viewport().update()
+
+    def handle_item_exited(self, _: QTableWidgetItem) -> None:
+        """Handles when a table item is no longer hovered over."""
+        self.hovered_row = -1
 
     def paint(self, painter: QPainter, opt: QStyleOptionViewItem, index: QModelIndex) -> None:
         """Paints the table row colour when a hover event occurs."""
