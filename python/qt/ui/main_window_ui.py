@@ -11,17 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(658, 963)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setContentsMargins(9, 0, 9, 0)
+class Ui_NBodySimulator(object):
+    def setupUi(self, NBodySimulator):
+        NBodySimulator.setObjectName("NBodySimulator")
+        NBodySimulator.resize(658, 963)
+        self.verticalLayout = QtWidgets.QVBoxLayout(NBodySimulator)
+        self.verticalLayout.setContentsMargins(-1, 0, -1, 0)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.fSetup = QtWidgets.QFrame(self.centralwidget)
+        self.fSetup = QtWidgets.QFrame(NBodySimulator)
         self.fSetup.setObjectName("fSetup")
         self.gridLayout = QtWidgets.QGridLayout(self.fSetup)
         self.gridLayout.setContentsMargins(0, -1, 0, -1)
@@ -106,27 +104,26 @@ class Ui_MainWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.fSetup)
-        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(NBodySimulator)
+        QtCore.QMetaObject.connectSlotsByName(NBodySimulator)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, NBodySimulator):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "N-Body Simulations"))
-        self.pbShowVelocityArrows.setToolTip(_translate("MainWindow", "Show Body Velocity Arrows"))
-        self.cbVelocityArrowMagnification.setToolTip(_translate("MainWindow", "The factor to magnify the velocity arrows by"))
-        self.cbVelocityArrowMagnification.setItemText(0, _translate("MainWindow", "x1"))
-        self.cbVelocityArrowMagnification.setItemText(1, _translate("MainWindow", "x2"))
-        self.cbVelocityArrowMagnification.setItemText(2, _translate("MainWindow", "x4"))
-        self.cbVelocityArrowMagnification.setItemText(3, _translate("MainWindow", "x8"))
-        self.cbVelocityArrowMagnification.setItemText(4, _translate("MainWindow", "x16"))
-        self.cbVelocityArrowMagnification.setItemText(5, _translate("MainWindow", "x32"))
-        self.cbVelocityArrowMagnification.setItemText(6, _translate("MainWindow", "x64"))
-        self.pbShowPositionLabels.setToolTip(_translate("MainWindow", "Show Body Coordinate Labels"))
-        self.pbPlayPause.setToolTip(_translate("MainWindow", "Play"))
-        self.pbRemoveBody.setToolTip(_translate("MainWindow", "Remove Selected Body"))
-        self.tbAddBody.setToolTip(_translate("MainWindow", "Add Body Options"))
-        self.pbInteractiveMode.setToolTip(_translate("MainWindow", "Interactive Mode"))
-        self.pbStop.setToolTip(_translate("MainWindow", "Stop"))
-        self.tbTimeSettings.setToolTip(_translate("MainWindow", "Time Settings"))
+        NBodySimulator.setWindowTitle(_translate("NBodySimulator", "N-Body Simulator"))
+        self.pbShowVelocityArrows.setToolTip(_translate("NBodySimulator", "Show Body Velocity Arrows"))
+        self.cbVelocityArrowMagnification.setToolTip(_translate("NBodySimulator", "The factor to magnify the velocity arrows by"))
+        self.cbVelocityArrowMagnification.setItemText(0, _translate("NBodySimulator", "x1"))
+        self.cbVelocityArrowMagnification.setItemText(1, _translate("NBodySimulator", "x2"))
+        self.cbVelocityArrowMagnification.setItemText(2, _translate("NBodySimulator", "x4"))
+        self.cbVelocityArrowMagnification.setItemText(3, _translate("NBodySimulator", "x8"))
+        self.cbVelocityArrowMagnification.setItemText(4, _translate("NBodySimulator", "x16"))
+        self.cbVelocityArrowMagnification.setItemText(5, _translate("NBodySimulator", "x32"))
+        self.cbVelocityArrowMagnification.setItemText(6, _translate("NBodySimulator", "x64"))
+        self.pbShowPositionLabels.setToolTip(_translate("NBodySimulator", "Show Body Coordinate Labels"))
+        self.pbPlayPause.setToolTip(_translate("NBodySimulator", "Play"))
+        self.pbRemoveBody.setToolTip(_translate("NBodySimulator", "Remove Selected Body"))
+        self.tbAddBody.setToolTip(_translate("NBodySimulator", "Add Body Options"))
+        self.pbInteractiveMode.setToolTip(_translate("NBodySimulator", "Interactive Mode"))
+        self.pbStop.setToolTip(_translate("NBodySimulator", "Stop"))
+        self.tbTimeSettings.setToolTip(_translate("NBodySimulator", "Time Settings"))

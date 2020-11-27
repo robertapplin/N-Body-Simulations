@@ -7,16 +7,16 @@ from enum import Enum
 from n_body_simulations.body_data_table import BodyDataTableWidget, ColourTableWidget
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
-from n_body_simulations.main_window_ui import Ui_MainWindow
+from n_body_simulations.main_window_ui import Ui_NBodySimulator
 from n_body_simulations.splitter_widgets import Splitter
 from NBodySimulations import Vector2D
 
-from PyQt5.QtCore import QObject, Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, QToolButton
+from PyQt5.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, QToolButton, QWidget
 
 
-class NBodySimulationsView(Ui_MainWindow, QObject):
+class NBodySimulationsView(Ui_NBodySimulator, QWidget):
     """A class used as a view for the main GUI (MVP)."""
     class ViewEvent(Enum):
         RemoveBodyClicked = 1
@@ -37,7 +37,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
         super(NBodySimulationsView, self).__init__()
-        self.setupUi(parent)
+        self.setupUi(self)
 
         self.play_icon = None
         self.pause_icon = None
@@ -106,7 +106,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.splitter.setOrientation(Qt.Vertical)
         self.splitter.setStyleSheet("QSplitter::handle { background-color: transparent; }")
 
-        self.centralwidget.layout().addWidget(self.splitter)
+        self.layout().addWidget(self.splitter)
 
         self.table_frame = QFrame()
         self.table_frame.setStyleSheet("QFrame { border: 1px solid #828790; }")

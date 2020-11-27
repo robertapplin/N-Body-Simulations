@@ -26,7 +26,7 @@ class InteractivePlot(QObject):
         self._figure = Figure()
 
         # Modify margins around a figure
-        self._figure.subplots_adjust(left=0.004, bottom=0.015, right=0.996, top=0.996, wspace=0, hspace=0)
+        self._figure.subplots_adjust(left=0.003, bottom=0.015, right=0.997, top=0.997, wspace=0, hspace=0)
         self._figure.patch.set_facecolor("#f0f0f0")
 
         self._ax = self._figure.add_subplot(111)
