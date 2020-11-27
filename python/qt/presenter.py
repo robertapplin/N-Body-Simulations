@@ -5,7 +5,6 @@ import string
 
 from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.model import NBodySimulationsModel
-from n_body_simulations.view import NBodySimulationsView
 from n_body_simulations.xml_reader import get_simulation_setting, get_user_interface_property
 
 
@@ -30,22 +29,22 @@ class NBodySimulationsPresenter:
         self._add_new_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
         self._add_new_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 
-    def notify_presenter(self, event: NBodySimulationsView.ViewEvent, *args) -> None:
+    def notify_presenter(self, event, *args) -> None:
         """Notify the presenter when an event occurs in the view."""
-        handlers = {NBodySimulationsView.ViewEvent.RemoveBodyClicked: self.handle_remove_body_clicked,
-                    NBodySimulationsView.ViewEvent.AddBodyClicked: self.handle_add_body_clicked,
-                    NBodySimulationsView.ViewEvent.AddBodiesClicked: self.handle_add_bodies_clicked,
-                    NBodySimulationsView.ViewEvent.TimeStepChanged: self.handle_time_step_changed,
-                    NBodySimulationsView.ViewEvent.DurationChanged: self.handle_duration_changed,
-                    NBodySimulationsView.ViewEvent.NameChanged: self.handle_body_name_changed,
-                    NBodySimulationsView.ViewEvent.MassChanged: self.handle_mass_changed,
-                    NBodySimulationsView.ViewEvent.XPositionChanged: self.handle_x_position_changed,
-                    NBodySimulationsView.ViewEvent.YPositionChanged: self.handle_y_position_changed,
-                    NBodySimulationsView.ViewEvent.VxPositionChanged: self.handle_x_velocity_changed,
-                    NBodySimulationsView.ViewEvent.VyPositionChanged: self.handle_y_velocity_changed,
-                    NBodySimulationsView.ViewEvent.PlayPauseClicked: self.handle_play_pause_clicked,
-                    NBodySimulationsView.ViewEvent.BodyMovedOnPlot: self.handle_body_moved,
-                    NBodySimulationsView.ViewEvent.BodyVelocityChangedOnPlot: self.handle_body_velocity_changed}
+        handlers = {self.view.ViewEvent.RemoveBodyClicked: self.handle_remove_body_clicked,
+                    self.view.ViewEvent.AddBodyClicked: self.handle_add_body_clicked,
+                    self.view.ViewEvent.AddBodiesClicked: self.handle_add_bodies_clicked,
+                    self.view.ViewEvent.TimeStepChanged: self.handle_time_step_changed,
+                    self.view.ViewEvent.DurationChanged: self.handle_duration_changed,
+                    self.view.ViewEvent.NameChanged: self.handle_body_name_changed,
+                    self.view.ViewEvent.MassChanged: self.handle_mass_changed,
+                    self.view.ViewEvent.XPositionChanged: self.handle_x_position_changed,
+                    self.view.ViewEvent.YPositionChanged: self.handle_y_position_changed,
+                    self.view.ViewEvent.VxPositionChanged: self.handle_x_velocity_changed,
+                    self.view.ViewEvent.VyPositionChanged: self.handle_y_velocity_changed,
+                    self.view.ViewEvent.PlayPauseClicked: self.handle_play_pause_clicked,
+                    self.view.ViewEvent.BodyMovedOnPlot: self.handle_body_moved,
+                    self.view.ViewEvent.BodyVelocityChangedOnPlot: self.handle_body_velocity_changed}
 
         handler = handlers.get(event, None)
         if handler is not None:

@@ -1,8 +1,10 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from enum import Enum
+
 from NBodySimulations import Vector2D
 
-from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import QObject
 
 
 class MockNBodySimulationsModel:
@@ -57,11 +59,11 @@ class MockNBodySimulationsModel:
         pass
 
     @staticmethod
-    def initial_position(body_name: str) -> Vector2D:
+    def initial_position(_: str) -> Vector2D:
         return Vector2D(0.0, 0.0)
 
     @staticmethod
-    def initial_velocity(body_name: str) -> Vector2D:
+    def initial_velocity(_: str) -> Vector2D:
         return Vector2D(0.0, 0.0)
 
     def set_x_velocity(self, body_name: str, vx: float) -> None:
@@ -71,7 +73,7 @@ class MockNBodySimulationsModel:
         pass
 
     @staticmethod
-    def initial_data(body_name: str) -> tuple:
+    def initial_data(_: str) -> tuple:
         return tuple([1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0)])
 
     @staticmethod
@@ -89,21 +91,21 @@ class MockNBodySimulationsModel:
 
 class MockNBodySimulationsView(QObject):
     """A mock class used for mocking the view."""
-    removeBodyClickedSignal = pyqtSignal()
-    addBodyClickedSignal = pyqtSignal(str)
-    addBodiesClickedSignal = pyqtSignal(int)
-    bodyNameChangedSignal = pyqtSignal(str, str)
-    massChangedSignal = pyqtSignal(str, float)
-    xPositionChangedSignal = pyqtSignal(str, float)
-    yPositionChangedSignal = pyqtSignal(str, float)
-    xVelocityChangedSignal = pyqtSignal(str, float)
-    yVelocityChangedSignal = pyqtSignal(str, float)
-    timeStepChangedSignal = pyqtSignal(float)
-    durationChangedSignal = pyqtSignal(float)
-    playPauseClickedSignal = pyqtSignal()
-
-    bodyMovedSignal = pyqtSignal(str, float, float)
-    bodyVelocityChangedSignal = pyqtSignal(str, float, float)
+    class ViewEvent(Enum):
+        RemoveBodyClicked = 1
+        AddBodyClicked = 2
+        AddBodiesClicked = 3
+        TimeStepChanged = 4
+        DurationChanged = 5
+        NameChanged = 6
+        MassChanged = 7
+        XPositionChanged = 8
+        YPositionChanged = 9
+        VxPositionChanged = 10
+        VyPositionChanged = 11
+        PlayPauseClicked = 12
+        BodyMovedOnPlot = 13
+        BodyVelocityChangedOnPlot = 14
 
     def __init__(self):
         super(MockNBodySimulationsView, self).__init__()
