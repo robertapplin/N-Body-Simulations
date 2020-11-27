@@ -4,7 +4,7 @@ from enum import Enum
 
 from NBodySimulations import Vector2D
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtWidgets import QWidget
 
 
 class MockNBodySimulationsModel:
@@ -89,7 +89,7 @@ class MockNBodySimulationsModel:
         return dict()
 
 
-class MockNBodySimulationsView(QObject):
+class MockNBodySimulationsView(QWidget):
     """A mock class used for mocking the view."""
     class ViewEvent(Enum):
         RemoveBodyClicked = 1
@@ -167,3 +167,14 @@ class MockNBodySimulationsView(QObject):
     @staticmethod
     def get_axes_limits() -> tuple:
         return 0.0, 1.0, 0.0, 1.0
+
+
+class MockNBodySimulationsPresenter:
+    """A mock class used for mocking the presenter."""
+
+    def __init__(self, view, model):
+        self.view = view
+        self.model = model
+
+    def notify_presenter(self, event, *args) -> None:
+        pass

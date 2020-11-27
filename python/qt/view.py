@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, 
 
 
 class NBodySimulationsView(Ui_NBodySimulator, QWidget):
-    """A class used as a view for the main GUI (MVP)."""
+    """A class used as a view for the NBodySimulator (MVP)."""
     class ViewEvent(Enum):
         RemoveBodyClicked = 1
         AddBodyClicked = 2
@@ -36,7 +36,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
-        super(NBodySimulationsView, self).__init__()
+        super(NBodySimulationsView, self).__init__(parent)
         self.setupUi(self)
 
         self.play_icon = None
@@ -55,7 +55,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.body_data_table = None
         self.interactive_plot = None
 
-        self._presenter = None
+        self.presenter = None
 
         self.setup_icons()
         self.setup_splitter_widget()
@@ -159,30 +159,30 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
     def subscribe_presenter(self, presenter) -> None:
         """Subscribe the presenter for event notifications."""
-        self._presenter = presenter
+        self.presenter = presenter
 
     def on_remove_body_clicked(self) -> None:
         """Notify presenter that the remove body button was clicked."""
-        self._presenter.notify_presenter(self.ViewEvent.RemoveBodyClicked)
+        self.presenter.notify_presenter(self.ViewEvent.RemoveBodyClicked)
 
     def on_add_body_clicked(self) -> None:
         """Notify presenter that the add body button was clicked."""
-        self._presenter.notify_presenter(self.ViewEvent.AddBodyClicked, self.add_single_body_action.line_edit.text())
+        self.presenter.notify_presenter(self.ViewEvent.AddBodyClicked, self.add_single_body_action.line_edit.text())
         self.add_single_body_action.line_edit.setText("")
 
     def on_add_bodies_clicked(self) -> None:
         """Notify presenter that the add bodies button was clicked."""
-        self._presenter.notify_presenter(self.ViewEvent.AddBodiesClicked,
-                                         self.add_multiple_bodies_action.spin_box.value())
+        self.presenter.notify_presenter(self.ViewEvent.AddBodiesClicked,
+                                        self.add_multiple_bodies_action.spin_box.value())
         self.add_multiple_bodies_action.spin_box.setValue(1)
 
     def on_time_step_changed(self, value: float) -> None:
         """Notify presenter that the time step was changed."""
-        self._presenter.notify_presenter(self.ViewEvent.TimeStepChanged, value)
+        self.presenter.notify_presenter(self.ViewEvent.TimeStepChanged, value)
 
     def on_duration_changed(self, value: float) -> None:
         """Notify presenter that the duration was changed."""
-        self._presenter.notify_presenter(self.ViewEvent.DurationChanged, value)
+        self.presenter.notify_presenter(self.ViewEvent.DurationChanged, value)
 
     def on_body_colour_changed(self, row_index: int, column_index: int) -> None:
         """Handles updating the colour of a body on the interactive plot when it is changed."""
@@ -202,11 +202,11 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
         event = table_events.get(column_index, None)
         if event is not None:
-            self._presenter.notify_presenter(event, self._body_at_index(row_index),
-                                             self._get_cell_double(row_index, column_index))
+            self.presenter.notify_presenter(event, self._body_at_index(row_index),
+                                            self._get_cell_double(row_index, column_index))
         elif column_index == self.body_data_table.name_column.index:
-            self._presenter.notify_presenter(self.ViewEvent.NameChanged, self._last_selected_body_name,
-                                             self._body_at_index(row_index))
+            self.presenter.notify_presenter(self.ViewEvent.NameChanged, self._last_selected_body_name,
+                                            self._body_at_index(row_index))
 
     def on_velocity_magnification_changed(self, magnification: str) -> None:
         """Handles when the magnification of the velocity arrows is changed."""
@@ -238,7 +238,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
     def on_play_pause_clicked(self) -> None:
         """Notify presenter that the play/pause button was clicked."""
-        self._presenter.notify_presenter(self.ViewEvent.PlayPauseClicked)
+        self.presenter.notify_presenter(self.ViewEvent.PlayPauseClicked)
 
     def on_cell_clicked(self, row_index: int, _: int) -> None:
         """Handle when a table row is selected."""
@@ -254,7 +254,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
         self.body_data_table.blockSignals(False)
 
-        self._presenter.notify_presenter(self.ViewEvent.BodyMovedOnPlot, body_name, x, y)
+        self.presenter.notify_presenter(self.ViewEvent.BodyMovedOnPlot, body_name, x, y)
 
     def on_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
         """Handles when a bodies velocity has been changed on the interactive plot."""
@@ -266,7 +266,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
         self.body_data_table.blockSignals(False)
 
-        self._presenter.notify_presenter(self.ViewEvent.BodyVelocityChangedOnPlot, body_name, vx, vy)
+        self.presenter.notify_presenter(self.ViewEvent.BodyVelocityChangedOnPlot, body_name, vx, vy)
 
     def selected_bodies(self) -> list:
         """Returns the name of the bodies which are currently selected."""
