@@ -2,6 +2,8 @@
 # Authored by Robert Applin, 2020
 import qtawesome as qta
 
+from enum import Enum
+
 from n_body_simulations.body_data_table import BodyDataTableWidget, ColourTableWidget
 from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.interactive_plot import InteractivePlot
@@ -9,28 +11,28 @@ from n_body_simulations.main_window_ui import Ui_MainWindow
 from n_body_simulations.splitter_widgets import Splitter
 from NBodySimulations import Vector2D
 
-from PyQt5.QtCore import pyqtSignal, QObject, Qt
+from PyQt5.QtCore import QObject, Qt
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, QToolButton
 
 
 class NBodySimulationsView(Ui_MainWindow, QObject):
     """A class used as a view for the main GUI (MVP)."""
-    removeBodyClickedSignal = pyqtSignal()
-    addBodyClickedSignal = pyqtSignal(str)
-    addBodiesClickedSignal = pyqtSignal(int)
-    bodyNameChangedSignal = pyqtSignal(str, str)
-    massChangedSignal = pyqtSignal(str, float)
-    xPositionChangedSignal = pyqtSignal(str, float)
-    yPositionChangedSignal = pyqtSignal(str, float)
-    xVelocityChangedSignal = pyqtSignal(str, float)
-    yVelocityChangedSignal = pyqtSignal(str, float)
-    timeStepChangedSignal = pyqtSignal(float)
-    durationChangedSignal = pyqtSignal(float)
-    playPauseClickedSignal = pyqtSignal()
-
-    bodyMovedSignal = pyqtSignal(str, float, float)
-    bodyVelocityChangedSignal = pyqtSignal(str, float, float)
+    class ViewEvent(Enum):
+        RemoveBodyClicked = 1
+        AddBodyClicked = 2
+        AddBodiesClicked = 3
+        TimeStepChanged = 4
+        DurationChanged = 5
+        NameChanged = 6
+        MassChanged = 7
+        XPositionChanged = 8
+        YPositionChanged = 9
+        VxPositionChanged = 10
+        VyPositionChanged = 11
+        PlayPauseClicked = 12
+        BodyMovedOnPlot = 13
+        BodyVelocityChangedOnPlot = 14
 
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
@@ -53,6 +55,8 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.body_data_table = None
         self.interactive_plot = None
 
+        self._presenter = None
+
         self.setup_icons()
         self.setup_splitter_widget()
         self.setup_table_widgets()
@@ -60,26 +64,25 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.setup_add_body_widget()
         self.setup_time_settings_widget()
 
-        self.pbRemoveBody.clicked.connect(self.emit_remove_body_clicked)
-        self.pbInteractiveMode.clicked.connect(self.handle_interactive_mode_clicked)
-        self.pbShowPositionLabels.clicked.connect(self.handle_show_position_labels_clicked)
-        self.pbShowVelocityArrows.clicked.connect(self.handle_show_velocity_arrows_clicked)
-        self.cbVelocityArrowMagnification.currentTextChanged.connect(lambda magnification:
-                                                                     self.handle_velocity_magnification_changed(
-                                                                         magnification))
-        self.pbStop.clicked.connect(self.handle_stop_clicked)
-        self.pbPlayPause.clicked.connect(self.emit_play_pause_clicked)
-        self.colour_table.cellChanged.connect(lambda row, column: self.handle_body_colour_changed(row, column))
-        self.body_data_table.cellClicked.connect(lambda row, column: self.handle_cell_clicked(row, column))
-        self.body_data_table.cellChanged.connect(lambda row, column: self.handle_body_data_changed(row, column))
-        self.add_single_body_action.push_button.clicked.connect(self.emit_add_body_clicked)
-        self.add_multiple_bodies_action.push_button.clicked.connect(self.emit_add_bodies_clicked)
-        self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.emit_time_step_changed(value))
-        self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.emit_duration_changed(value))
+        self.pbRemoveBody.clicked.connect(self.on_remove_body_clicked)
+        self.add_single_body_action.push_button.clicked.connect(self.on_add_body_clicked)
+        self.add_multiple_bodies_action.push_button.clicked.connect(self.on_add_bodies_clicked)
+        self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.on_time_step_changed(value))
+        self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.on_duration_changed(value))
+        self.colour_table.cellChanged.connect(lambda row, column: self.on_body_colour_changed(row, column))
+        self.body_data_table.cellChanged.connect(lambda row, column: self.on_body_data_changed(row, column))
+        self.cbVelocityArrowMagnification.currentTextChanged.connect(lambda factor:
+                                                                     self.on_velocity_magnification_changed(factor))
+        self.pbShowPositionLabels.clicked.connect(self.on_show_position_labels_clicked)
+        self.pbShowVelocityArrows.clicked.connect(self.on_show_velocity_arrows_clicked)
+        self.pbInteractiveMode.clicked.connect(self.on_interactive_mode_clicked)
+        self.pbStop.clicked.connect(self.on_stop_clicked)
+        self.pbPlayPause.clicked.connect(self.on_play_pause_clicked)
+        self.body_data_table.cellClicked.connect(lambda row, column: self.on_cell_clicked(row, column))
 
-        self.interactive_plot.bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
+        self.interactive_plot.bodyMovedSignal.connect(lambda name, x, y: self.on_body_moved(name, x, y))
         self.interactive_plot.bodyVelocityChangedSignal.connect(lambda name, vx, vy:
-                                                                self.handle_body_velocity_changed(name, vx, vy))
+                                                                self.on_body_velocity_changed(name, vx, vy))
 
         self._last_selected_body_name = None
 
@@ -154,59 +157,73 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.tbTimeSettings.addAction(self.duration_action)
         self.tbTimeSettings.setPopupMode(QToolButton.InstantPopup)
 
-    def emit_remove_body_clicked(self) -> None:
-        """Emit that the remove body button was clicked."""
-        self.removeBodyClickedSignal.emit()
+    def subscribe_presenter(self, presenter) -> None:
+        """Subscribe the presenter for event notifications."""
+        self._presenter = presenter
 
-    def emit_add_body_clicked(self) -> None:
-        """Emit that the add body button was clicked."""
-        self.addBodyClickedSignal.emit(self.add_single_body_action.line_edit.text())
+    def on_remove_body_clicked(self) -> None:
+        """Notify presenter that the remove body button was clicked."""
+        self._presenter.notify_presenter(self.ViewEvent.RemoveBodyClicked)
+
+    def on_add_body_clicked(self) -> None:
+        """Notify presenter that the add body button was clicked."""
+        self._presenter.notify_presenter(self.ViewEvent.AddBodyClicked, self.add_single_body_action.line_edit.text())
         self.add_single_body_action.line_edit.setText("")
 
-    def emit_add_bodies_clicked(self) -> None:
-        """Emit that the add bodies button was clicked."""
-        self.addBodiesClickedSignal.emit(self.add_multiple_bodies_action.spin_box.value())
+    def on_add_bodies_clicked(self) -> None:
+        """Notify presenter that the add bodies button was clicked."""
+        self._presenter.notify_presenter(self.ViewEvent.AddBodiesClicked,
+                                         self.add_multiple_bodies_action.spin_box.value())
         self.add_multiple_bodies_action.spin_box.setValue(1)
 
-    def emit_play_pause_clicked(self) -> None:
-        """Emit that the play/pause button was clicked."""
-        self.playPauseClickedSignal.emit()
+    def on_time_step_changed(self, value: float) -> None:
+        """Notify presenter that the time step was changed."""
+        self._presenter.notify_presenter(self.ViewEvent.TimeStepChanged, value)
 
-    def emit_time_step_changed(self, value: float) -> None:
-        """Emit that the time step was changed."""
-        self.timeStepChangedSignal.emit(value)
+    def on_duration_changed(self, value: float) -> None:
+        """Notify presenter that the duration was changed."""
+        self._presenter.notify_presenter(self.ViewEvent.DurationChanged, value)
 
-    def emit_duration_changed(self, value: float) -> None:
-        """Emit that the duration was changed."""
-        self.durationChangedSignal.emit(value)
-
-    def handle_cell_clicked(self, row_index: int, _: int) -> None:
-        """Handle when a table row is selected."""
-        self._last_selected_body_name = self._body_at_index(row_index)
-
-    def handle_body_data_changed(self, row_index: int, column_index: int) -> None:
-        """Handle when body data in the table is changed."""
-        self.set_interactive_mode(True)
-
-        table_signals = {self.body_data_table.mass_column.index: self.massChangedSignal,
-                         self.body_data_table.x_column.index: self.xPositionChangedSignal,
-                         self.body_data_table.y_column.index: self.yPositionChangedSignal,
-                         self.body_data_table.vx_column.index: self.xVelocityChangedSignal,
-                         self.body_data_table.vy_column.index: self.yVelocityChangedSignal}
-
-        signal = table_signals.get(column_index, None)
-        if signal is not None:
-            signal.emit(self._body_at_index(row_index), self._get_cell_double(row_index, column_index))
-        elif column_index == self.body_data_table.name_column.index:
-            self.bodyNameChangedSignal.emit(self._last_selected_body_name, self._body_at_index(row_index))
-
-    def handle_body_colour_changed(self, row_index: int, column_index: int) -> None:
+    def on_body_colour_changed(self, row_index: int, column_index: int) -> None:
         """Handles updating the colour of a body on the interactive plot when it is changed."""
         new_colour = self._get_cell_colour(row_index, column_index)
         self.interactive_plot.update_body_colour(self._body_at_index(row_index), new_colour)
         self.interactive_plot.draw()
 
-    def handle_interactive_mode_clicked(self) -> None:
+    def on_body_data_changed(self, row_index: int, column_index: int) -> None:
+        """Notify presenter when body data in the table is changed."""
+        self.set_interactive_mode(True)
+
+        table_events = {self.body_data_table.mass_column.index: self.ViewEvent.MassChanged,
+                        self.body_data_table.x_column.index: self.ViewEvent.XPositionChanged,
+                        self.body_data_table.y_column.index: self.ViewEvent.YPositionChanged,
+                        self.body_data_table.vx_column.index: self.ViewEvent.VxPositionChanged,
+                        self.body_data_table.vy_column.index: self.ViewEvent.VyPositionChanged}
+
+        event = table_events.get(column_index, None)
+        if event is not None:
+            self._presenter.notify_presenter(event, self._body_at_index(row_index),
+                                             self._get_cell_double(row_index, column_index))
+        elif column_index == self.body_data_table.name_column.index:
+            self._presenter.notify_presenter(self.ViewEvent.NameChanged, self._last_selected_body_name,
+                                             self._body_at_index(row_index))
+
+    def on_velocity_magnification_changed(self, magnification: str) -> None:
+        """Handles when the magnification of the velocity arrows is changed."""
+        self.interactive_plot.set_velocity_arrow_magnification(int(magnification[1:]))
+        self.interactive_plot.draw()
+
+    def on_show_position_labels_clicked(self) -> None:
+        """Handle when the show position labels button is clicked."""
+        self.interactive_plot.show_position_labels(self.pbShowPositionLabels.isChecked())
+        self.interactive_plot.draw()
+
+    def on_show_velocity_arrows_clicked(self) -> None:
+        """Handle when the show velocity arrows button is clicked."""
+        self.interactive_plot.show_velocity_arrows(self.pbShowVelocityArrows.isChecked())
+        self.interactive_plot.draw()
+
+    def on_interactive_mode_clicked(self) -> None:
         """Handle when the interactive mode button is clicked."""
         self._show_position_labels_and_velocities(self.pbInteractiveMode.isChecked())
 
@@ -215,26 +232,19 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
-    def handle_show_position_labels_clicked(self) -> None:
-        """Handle when the show position labels button is clicked."""
-        self.interactive_plot.show_position_labels(self.pbShowPositionLabels.isChecked())
-        self.interactive_plot.draw()
-
-    def handle_show_velocity_arrows_clicked(self) -> None:
-        """Handle when the show velocity arrows button is clicked."""
-        self.interactive_plot.show_velocity_arrows(self.pbShowVelocityArrows.isChecked())
-        self.interactive_plot.draw()
-
-    def handle_velocity_magnification_changed(self, magnification: str) -> None:
-        """Handles when the magnification of the velocity arrows is changed."""
-        self.interactive_plot.set_velocity_arrow_magnification(int(magnification[1:]))
-        self.interactive_plot.draw()
-
-    def handle_stop_clicked(self) -> None:
+    def on_stop_clicked(self) -> None:
         """Handle when the stop button is clicked."""
         self.set_interactive_mode(True)
 
-    def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
+    def on_play_pause_clicked(self) -> None:
+        """Notify presenter that the play/pause button was clicked."""
+        self._presenter.notify_presenter(self.ViewEvent.PlayPauseClicked)
+
+    def on_cell_clicked(self, row_index: int, _: int) -> None:
+        """Handle when a table row is selected."""
+        self._last_selected_body_name = self._body_at_index(row_index)
+
+    def on_body_moved(self, body_name: str, x: float, y: float) -> None:
         """Handles when a body has been moved on the interactive plot."""
         self.body_data_table.blockSignals(True)
 
@@ -244,9 +254,9 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.body_data_table.blockSignals(False)
 
-        self.bodyMovedSignal.emit(body_name, x, y)
+        self._presenter.notify_presenter(self.ViewEvent.BodyMovedOnPlot, body_name, x, y)
 
-    def handle_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
+    def on_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
         """Handles when a bodies velocity has been changed on the interactive plot."""
         self.body_data_table.blockSignals(True)
 
@@ -256,7 +266,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
 
         self.body_data_table.blockSignals(False)
 
-        self.bodyVelocityChangedSignal.emit(body_name, vx, vy)
+        self._presenter.notify_presenter(self.ViewEvent.BodyVelocityChangedOnPlot, body_name, vx, vy)
 
     def selected_bodies(self) -> list:
         """Returns the name of the bodies which are currently selected."""
@@ -363,7 +373,7 @@ class NBodySimulationsView(Ui_MainWindow, QObject):
         """Sets the view to be in interactive mode. This is required to prevent interference from the animator."""
         self.pbInteractiveMode.setChecked(interactive_mode)
         if interactive_mode:
-            self.handle_interactive_mode_clicked()
+            self.on_interactive_mode_clicked()
 
     def set_as_playing(self, playing: bool) -> None:
         """Sets the current role of the play/pause button."""
