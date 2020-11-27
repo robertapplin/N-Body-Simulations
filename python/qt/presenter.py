@@ -4,7 +4,6 @@ import random
 import string
 
 from n_body_simulations.error_catcher import catch_errors
-from n_body_simulations.model import NBodySimulationsModel
 from n_body_simulations.xml_reader import get_simulation_setting, get_user_interface_property
 
 
@@ -18,7 +17,7 @@ class NBodySimulationsPresenter:
     body_vx_default = float(get_simulation_setting("body-vx-default"))
     body_vy_default = float(get_simulation_setting("body-vy-default"))
 
-    def __init__(self, view, model=NBodySimulationsModel()):
+    def __init__(self, view, model):
         """Initializes the presenter by creating a view and model."""
         self.view = view
         self.model = model
@@ -28,6 +27,10 @@ class NBodySimulationsPresenter:
         # Temporarily here for development
         self._add_new_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
         self._add_new_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
+
+    def open_widget(self) -> None:
+        """Opens the widget in a window."""
+        self.view.show()
 
     def notify_presenter(self, event, *args) -> None:
         """Notify the presenter when an event occurs in the view."""

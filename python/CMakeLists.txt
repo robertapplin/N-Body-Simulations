@@ -8,7 +8,6 @@ set(PYTHON_FILES
     qt/body_data_table.py
     qt/custom_actions.py
     qt/error_catcher.py
-    qt/main_gui.py
     qt/model.py
     qt/presenter.py
     qt/splitter_widgets.py
