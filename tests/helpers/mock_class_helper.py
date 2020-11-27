@@ -110,6 +110,9 @@ class MockNBodySimulationsView(QObject):
     def __init__(self):
         super(MockNBodySimulationsView, self).__init__()
 
+    def subscribe_presenter(self, _):
+        pass
+
     def reset_view(self, bodies: dict, time_step: float, duration: float):
         pass
 
