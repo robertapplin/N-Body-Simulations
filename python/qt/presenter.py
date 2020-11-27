@@ -5,6 +5,7 @@ import string
 
 from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.model import NBodySimulationsModel
+from n_body_simulations.view import NBodySimulationsView
 from n_body_simulations.xml_reader import get_simulation_setting, get_user_interface_property
 
 
@@ -23,27 +24,35 @@ class NBodySimulationsPresenter:
         self.view = view
         self.model = model
 
+        self.view.subscribe_presenter(self)
+
         # Temporarily here for development
         self._add_new_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
         self._add_new_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
 
-        self.view.removeBodyClickedSignal.connect(self.handle_remove_body_clicked)
-        self.view.addBodyClickedSignal.connect(lambda body_name: self.handle_add_body_clicked(body_name))
-        self.view.addBodiesClickedSignal.connect(lambda n_bodies: self.handle_add_bodies_clicked(n_bodies))
-        self.view.bodyNameChangedSignal.connect(lambda old_name, new_name: self.handle_body_name_changed(old_name,
-                                                                                                         new_name))
-        self.view.massChangedSignal.connect(lambda body_name, mass: self.handle_mass_changed(body_name, mass))
-        self.view.xPositionChangedSignal.connect(lambda body_name, x: self.handle_x_position_changed(body_name, x))
-        self.view.yPositionChangedSignal.connect(lambda body_name, y: self.handle_y_position_changed(body_name, y))
-        self.view.xVelocityChangedSignal.connect(lambda body_name, vx: self.handle_x_velocity_changed(body_name, vx))
-        self.view.yVelocityChangedSignal.connect(lambda body_name, vy: self.handle_y_velocity_changed(body_name, vy))
-        self.view.timeStepChangedSignal.connect(lambda time_step: self.handle_time_step_changed(time_step))
-        self.view.durationChangedSignal.connect(lambda duration: self.handle_duration_changed(duration))
-        self.view.playPauseClickedSignal.connect(self.handle_play_pause_clicked)
+    def notify_presenter(self, event: NBodySimulationsView.ViewEvent, *args) -> None:
+        """Notify the presenter when an event occurs in the view."""
+        handlers = {NBodySimulationsView.ViewEvent.RemoveBodyClicked: self.handle_remove_body_clicked,
+                    NBodySimulationsView.ViewEvent.AddBodyClicked: self.handle_add_body_clicked,
+                    NBodySimulationsView.ViewEvent.AddBodiesClicked: self.handle_add_bodies_clicked,
+                    NBodySimulationsView.ViewEvent.TimeStepChanged: self.handle_time_step_changed,
+                    NBodySimulationsView.ViewEvent.DurationChanged: self.handle_duration_changed,
+                    NBodySimulationsView.ViewEvent.NameChanged: self.handle_body_name_changed,
+                    NBodySimulationsView.ViewEvent.MassChanged: self.handle_mass_changed,
+                    NBodySimulationsView.ViewEvent.XPositionChanged: self.handle_x_position_changed,
+                    NBodySimulationsView.ViewEvent.YPositionChanged: self.handle_y_position_changed,
+                    NBodySimulationsView.ViewEvent.VxPositionChanged: self.handle_x_velocity_changed,
+                    NBodySimulationsView.ViewEvent.VyPositionChanged: self.handle_y_velocity_changed,
+                    NBodySimulationsView.ViewEvent.PlayPauseClicked: self.handle_play_pause_clicked,
+                    NBodySimulationsView.ViewEvent.BodyMovedOnPlot: self.handle_body_moved,
+                    NBodySimulationsView.ViewEvent.BodyVelocityChangedOnPlot: self.handle_body_velocity_changed}
 
-        self.view.bodyMovedSignal.connect(lambda body_name, x, y: self.handle_body_moved(body_name, x, y))
-        self.view.bodyVelocityChangedSignal.connect(lambda body_name, vx, vy:
-                                                    self.handle_body_velocity_changed(body_name, vx, vy))
+        handler = handlers.get(event, None)
+        if handler is not None:
+            if args:
+                handler(*args)
+            else:
+                handler()
 
     def handle_remove_body_clicked(self) -> None:
         """Handles the removal of the selected bodies."""
