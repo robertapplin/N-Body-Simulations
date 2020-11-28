@@ -3,12 +3,17 @@
 from n_body_simulations.error_catcher import catch_errors
 from NBodySimulations import NBodySimulator, Vector2D
 
+from PyQt5.QtCore import pyqtSignal, QThread
 
-class NBodySimulationsModel:
+
+class NBodySimulationsModel(QThread):
     """A class used as a model for the main GUI (MVP)."""
+    simulationFinished = pyqtSignal()
+    simulationError = pyqtSignal(str)
 
     def __init__(self):
         """Initialize the model with an empty NBodySimulator."""
+        super(NBodySimulationsModel, self).__init__(None)
         self._simulator = NBodySimulator()
 
     def initial_body_parameters(self) -> dict:
@@ -106,18 +111,17 @@ class NBodySimulationsModel:
         """Returns the initial data of the specified body stored by the simulator."""
         return tuple([self.mass(body_name), self.initial_position(body_name), self.initial_velocity(body_name)])
 
-    @catch_errors()
-    def run_simulation(self) -> bool:
-        """Run the simulation if the data has changed since the last simulation."""
-        if self.has_data_changed():
-            self._simulator.runSimulation()
-
-        # If this point is reached, the simulation has been successfully
-        return True
-
     def has_data_changed(self) -> bool:
         """Returns true if the data held by the simulator has changed since the last simulation."""
         return self._simulator.hasDataChanged()
+
+    def run(self) -> None:
+        """Run the simulation if the data has changed since the last simulation."""
+        try:
+            self._simulator.runSimulation()
+            self.simulationFinished.emit()
+        except Exception as ex:
+            self.simulationError.emit(str(ex))
 
     @catch_errors()
     def simulation_results(self) -> dict:
