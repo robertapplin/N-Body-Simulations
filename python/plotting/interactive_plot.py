@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
-from PyQt5.QtGui import QCursor, QMouseEvent
+from PyQt5.QtGui import QCursor, QMouseEvent, QResizeEvent
 from PyQt5.QtWidgets import QApplication
 
 AXIS_MARGIN = 0.16  # 16% axis margin
@@ -39,6 +39,7 @@ class InteractivePlot(QObject):
         self._ax.get_xaxis().set_visible(False)
         self._ax.get_yaxis().set_visible(False)
 
+        self.canvas_resize_connection = self._figure.canvas.mpl_connect("resize_event", self.handle_canvas_resize_event)
         self.mouse_move_connection = self._figure.canvas.mpl_connect("motion_notify_event", self.handle_mouse_event)
         self.mouse_press_connection = self._figure.canvas.mpl_connect("button_press_event", self.handle_mouse_event)
         self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event", self.handle_mouse_event)
@@ -52,6 +53,11 @@ class InteractivePlot(QObject):
         self._axes_resized = False
 
         self._animator = SimulationAnimator(self._figure)
+
+    def handle_canvas_resize_event(self, _: QResizeEvent) -> None:
+        """Handles the redraw of body markers when the canvas is resized."""
+        self._refresh_body_markers()
+        self._canvas.draw()
 
     def handle_mouse_event(self, event: QMouseEvent) -> None:
         """Handles mouse events such as movement, pressing and releasing the mouse button."""
@@ -106,9 +112,9 @@ class InteractivePlot(QObject):
             del self._body_markers[body_name]
             del self._initial_data[body_name]
 
-    def add_body(self, body_name: str, position: Vector2D, velocity: Vector2D, colour: str) -> None:
+    def add_body(self, body_name: str, mass: float, position: Vector2D, velocity: Vector2D, colour: str) -> None:
         """Adds a body to the interactive plot."""
-        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, velocity, colour)
+        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, mass, position, velocity, colour)
         self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
         self._body_markers[body_name].bodyVelocityChangedSignal.connect(lambda name, vx, vy:
                                                                         self.handle_body_velocity_changed(name, vx, vy))
@@ -138,15 +144,19 @@ class InteractivePlot(QObject):
     def disable_animation(self) -> None:
         """Disables the animator and re-plots the bodies in their initial positions."""
         if self._animator.is_enabled():
+            self.canvas_resize_connection = self._figure.canvas.mpl_connect("resize_event",
+                                                                            self.handle_canvas_resize_event)
             self.mouse_move_connection = self._figure.canvas.mpl_connect("motion_notify_event", self.handle_mouse_event)
             self.mouse_press_connection = self._figure.canvas.mpl_connect("button_press_event", self.handle_mouse_event)
-            self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event", self.handle_mouse_event)
+            self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event",
+                                                                            self.handle_mouse_event)
 
             self._animator.disable()
             self._initialize_bodies()
 
     def start_animation(self) -> None:
         """Starts the animation for the first time."""
+        self._canvas.mpl_disconnect(self.canvas_resize_connection)
         self._canvas.mpl_disconnect(self.mouse_move_connection)
         self._canvas.mpl_disconnect(self.mouse_press_connection)
         self._canvas.mpl_disconnect(self.mouse_release_connection)
@@ -206,6 +216,12 @@ class InteractivePlot(QObject):
 
             self._initial_data[new_name] = self._initial_data[old_name]
             del self._initial_data[old_name]
+
+    def update_body_mass(self, body_name: str, mass: float, draw: bool = True) -> None:
+        """Updates the mass of a body."""
+        self._body_markers[body_name].set_mass(mass)
+        if draw:
+            self._canvas.draw()
 
     def update_body_position(self, body_name: str, position: Vector2D, draw: bool = True) -> None:
         """Updates the position of a body."""

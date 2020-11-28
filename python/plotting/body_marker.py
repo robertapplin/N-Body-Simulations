@@ -9,7 +9,6 @@ from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor
 
 ARROW_HEAD_WIDTH_PIXELS = 7
-BODY_RADIUS_PIXELS = 3
 BODY_LABEL_SPACING_PIXELS = 5
 FONT_SIZE = 9
 MARKER_SENSITIVITY = 5
@@ -21,7 +20,8 @@ class BodyMarker(QObject):
     bodyMovedSignal = pyqtSignal(str, float, float)
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
-    def __init__(self, canvas: FigureCanvas, name: str, position: Vector2D, velocity: Vector2D, colour: str):
+    def __init__(self, canvas: FigureCanvas, name: str, mass: float, position: Vector2D, velocity: Vector2D,
+                 colour: str):
         """Initializes the body marker with a patch and a coordinate label."""
         super(BodyMarker, self).__init__()
 
@@ -29,6 +29,7 @@ class BodyMarker(QObject):
         self._axis = self._canvas.figure.get_axes()[0]
 
         self._name = name
+        self._mass = mass
         self._position = position
         self._velocity = velocity
         self._colour = colour
@@ -137,6 +138,12 @@ class BodyMarker(QObject):
         """Returns the colour used for this body marker."""
         return self._colour
 
+    def set_mass(self, mass: float) -> None:
+        """Sets the mass of a body marker."""
+        self.remove_body()
+        self._mass = mass
+        self.create_body()
+
     def set_position(self, x: float, y: float, emit_signal: bool = True) -> None:
         """Sets a new position for this body marker, and emits a signal."""
         self.remove_body()
@@ -180,7 +187,7 @@ class BodyMarker(QObject):
 
     def _create_position_circle(self) -> None:
         """Creates a circle used to mark the position of a body."""
-        self._body_patch = Circle((self._position.x, self._position.y), self._pixels_to_distance(BODY_RADIUS_PIXELS),
+        self._body_patch = Circle((self._position.x, self._position.y), self._pixels_to_distance(self._body_radius()),
                                   facecolor=self._colour)
         self._axis.add_patch(self._body_patch)
 
@@ -203,6 +210,22 @@ class BodyMarker(QObject):
             self._override_cursor = Qt.OpenHandCursor
         else:
             self._override_cursor = None
+
+    def _body_radius(self):
+        """Returns the body radius to use in pixels."""
+        if self._mass <= 0.0001:
+            return 2
+        elif self._mass <= 0.001:
+            return 3
+        elif self._mass <= 0.01:
+            return 4
+        elif self._mass <= 0.1:
+            return 5
+        elif self._mass <= 1.0:
+            return 6
+        elif self._mass <= 10.0:
+            return 7
+        return 8
 
     def _is_velocity_arrow_above_minimum(self) -> bool:
         """Returns true if the velocity arrow is large enough to be plotted."""

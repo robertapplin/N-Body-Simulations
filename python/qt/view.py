@@ -295,7 +295,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         for body_name, parameters in body_parameters.items():
             random_colour = self.colour_table.random_colour()
             self.add_body_to_table(body_name, parameters, random_colour)
-            self.interactive_plot.add_body(body_name, parameters[1], parameters[2], random_colour)
+            self.interactive_plot.add_body(body_name, parameters[0], parameters[1], parameters[2], random_colour)
 
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
@@ -307,7 +307,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         random_colour = self.colour_table.random_colour()
         self.add_body_to_table(body_name, initial_data, random_colour)
 
-        self.interactive_plot.add_body(body_name, initial_data[1], initial_data[2], random_colour)
+        self.interactive_plot.add_body(body_name, initial_data[0], initial_data[1], initial_data[2], random_colour)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
@@ -335,6 +335,12 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
     def update_body_name(self, old_name: str, new_name: str) -> None:
         """Updates the name of a body in the interactive plot when it is changed."""
         self.interactive_plot.update_body_name(old_name, new_name)
+        self.interactive_plot.update_axes_limits(initial_data=True)
+        self.interactive_plot.draw()
+
+    def update_body_mass(self, body_name: str, mass: float) -> None:
+        """Updates the mass of a body in the interactive plot when it is changed."""
+        self.interactive_plot.update_body_mass(body_name, mass)
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 

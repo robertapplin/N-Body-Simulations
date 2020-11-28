@@ -79,10 +79,12 @@ def test_that_handle_mass_changed_calls_the_expected_methods(mocker):
     view, model, presenter = setup_presenter()
 
     model_set_mass = mocker.spy(model, 'set_mass')
+    view_update_body_mass = mocker.spy(view, 'update_body_mass')
 
     presenter.handle_mass_changed("Earth", 1.0)
 
     model_set_mass.assert_called_once_with("Earth", 1.0)
+    view_update_body_mass.assert_called_once_with("Earth", 1.0)
 
 
 def test_that_handle_x_position_changed_calls_the_expected_methods(mocker):

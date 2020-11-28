@@ -16,7 +16,7 @@ class SplitterHandle(QSplitterHandle):
     def paintEvent(self, event: QPaintEvent) -> None:
         """Override the paint event method to paint an icon onto the splitter handle."""
         super().paintEvent(event)
-        self.icon.paint(QPainter(self), int(self.size().width() / 2), -9, 24, 24)
+        self.icon.paint(QPainter(self), int(self.size().width() / 2) - 10, -9, 24, 24)
 
 
 class Splitter(QSplitter):
