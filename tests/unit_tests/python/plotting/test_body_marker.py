@@ -22,6 +22,11 @@ def test_that_set_colour_will_set_the_colour_of_the_body_marker(dummy_plot):
     assert dummy_plot.body_markers["Sun"].get_colour() == "red"
 
 
+def test_that_set_mass_will_set_the_mass_of_the_body(dummy_plot):
+    dummy_plot.body_markers["Sun"].set_mass(5.0)
+    assert dummy_plot.body_markers["Sun"]._mass == 5.0
+
+
 def test_that_set_position_will_set_the_position_of_the_body(dummy_plot):
     dummy_plot.body_markers["Sun"].set_position(1.0, 1.0)
     assert dummy_plot.body_markers["Sun"].mouse_drag_start(1.0, 1.0)

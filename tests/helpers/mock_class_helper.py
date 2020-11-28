@@ -125,6 +125,9 @@ class MockNBodySimulationsView(QWidget):
     def update_body_name(self, old_name: str, new_name: str) -> None:
         pass
 
+    def update_body_mass(self, body_name: str, mass: float) -> None:
+        pass
+
     def update_body_position(self, body_name: str, position: Vector2D) -> None:
         pass
 
