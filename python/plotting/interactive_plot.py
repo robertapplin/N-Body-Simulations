@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
-from PyQt5.QtGui import QCursor, QMouseEvent
+from PyQt5.QtGui import QCursor, QMouseEvent, QResizeEvent
 from PyQt5.QtWidgets import QApplication
 
 AXIS_MARGIN = 0.16  # 16% axis margin
@@ -39,6 +39,7 @@ class InteractivePlot(QObject):
         self._ax.get_xaxis().set_visible(False)
         self._ax.get_yaxis().set_visible(False)
 
+        self.canvas_resize_connection = self._figure.canvas.mpl_connect("resize_event", self.handle_canvas_resize_event)
         self.mouse_move_connection = self._figure.canvas.mpl_connect("motion_notify_event", self.handle_mouse_event)
         self.mouse_press_connection = self._figure.canvas.mpl_connect("button_press_event", self.handle_mouse_event)
         self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event", self.handle_mouse_event)
@@ -52,6 +53,11 @@ class InteractivePlot(QObject):
         self._axes_resized = False
 
         self._animator = SimulationAnimator(self._figure)
+
+    def handle_canvas_resize_event(self, _: QResizeEvent) -> None:
+        """Handles the redraw of body markers when the canvas is resized."""
+        self._refresh_body_markers()
+        self._canvas.draw()
 
     def handle_mouse_event(self, event: QMouseEvent) -> None:
         """Handles mouse events such as movement, pressing and releasing the mouse button."""
@@ -138,15 +144,19 @@ class InteractivePlot(QObject):
     def disable_animation(self) -> None:
         """Disables the animator and re-plots the bodies in their initial positions."""
         if self._animator.is_enabled():
+            self.canvas_resize_connection = self._figure.canvas.mpl_connect("resize_event",
+                                                                            self.handle_canvas_resize_event)
             self.mouse_move_connection = self._figure.canvas.mpl_connect("motion_notify_event", self.handle_mouse_event)
             self.mouse_press_connection = self._figure.canvas.mpl_connect("button_press_event", self.handle_mouse_event)
-            self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event", self.handle_mouse_event)
+            self.mouse_release_connection = self._figure.canvas.mpl_connect("button_release_event",
+                                                                            self.handle_mouse_event)
 
             self._animator.disable()
             self._initialize_bodies()
 
     def start_animation(self) -> None:
         """Starts the animation for the first time."""
+        self._canvas.mpl_disconnect(self.canvas_resize_connection)
         self._canvas.mpl_disconnect(self.mouse_move_connection)
         self._canvas.mpl_disconnect(self.mouse_press_connection)
         self._canvas.mpl_disconnect(self.mouse_release_connection)
