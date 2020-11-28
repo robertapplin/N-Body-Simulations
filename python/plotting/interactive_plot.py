@@ -106,9 +106,9 @@ class InteractivePlot(QObject):
             del self._body_markers[body_name]
             del self._initial_data[body_name]
 
-    def add_body(self, body_name: str, position: Vector2D, velocity: Vector2D, colour: str) -> None:
+    def add_body(self, body_name: str, mass: float, position: Vector2D, velocity: Vector2D, colour: str) -> None:
         """Adds a body to the interactive plot."""
-        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, position, velocity, colour)
+        self._body_markers[body_name] = BodyMarker(self._canvas, body_name, mass, position, velocity, colour)
         self._body_markers[body_name].bodyMovedSignal.connect(lambda name, x, y: self.handle_body_moved(name, x, y))
         self._body_markers[body_name].bodyVelocityChangedSignal.connect(lambda name, vx, vy:
                                                                         self.handle_body_velocity_changed(name, vx, vy))
@@ -206,6 +206,12 @@ class InteractivePlot(QObject):
 
             self._initial_data[new_name] = self._initial_data[old_name]
             del self._initial_data[old_name]
+
+    def update_body_mass(self, body_name: str, mass: float, draw: bool = True) -> None:
+        """Updates the mass of a body."""
+        self._body_markers[body_name].set_mass(mass)
+        if draw:
+            self._canvas.draw()
 
     def update_body_position(self, body_name: str, position: Vector2D, draw: bool = True) -> None:
         """Updates the position of a body."""

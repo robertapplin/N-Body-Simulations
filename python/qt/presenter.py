@@ -87,6 +87,7 @@ class NBodySimulationsPresenter:
     def handle_mass_changed(self, body_name: str, mass: float) -> None:
         """Handles when the mass of a body is changed."""
         self.model.set_mass(body_name, mass)
+        self.view.update_body_mass(body_name, mass)
 
     def handle_x_position_changed(self, body_name: str, x: float) -> None:
         """Handles when the x position of a body is changed."""
