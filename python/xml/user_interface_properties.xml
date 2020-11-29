@@ -41,5 +41,8 @@
         <item name="mass-dp">6</item>
         <item name="position-dp">6</item>
         <item name="velocity-dp">6</item>
+
+        <!--Default animation values.-->
+        <item name="frame-delay-default">3</item>
     </items>
 </data>

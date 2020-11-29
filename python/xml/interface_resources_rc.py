@@ -2,7 +2,7 @@
 
 # Resource object code
 #
-# Created: Wed Nov 11 20:59:32 2020
+# Created: Sun Nov 29 15:35:42 2020
 #      by: The Resource Compiler for PySide2 (Qt v5.12.9)
 #
 # WARNING! All changes made in this file will be lost!
@@ -10,7 +10,7 @@
 from PySide2 import QtCore
 
 qt_resource_data = b"\
-\x00\x00\x07V\
+\x00\x00\x07\xb5\
 <\
 ?xml version = \x22\
 1.0\x22 encoding = \
@@ -127,9 +127,15 @@ ame=\x22mass-dp\x22>6<\
 tion-dp\x22>6</item\
 >\x0d\x0a        <item\
  name=\x22velocity-\
-dp\x22>6</item>\x0d\x0a  \
-  </items>\x0d\x0a</da\
-ta>\x0d\x0a\
+dp\x22>6</item>\x0d\x0a\x0d\x0a\
+        <!--Defa\
+ult animation va\
+lues.-->\x0d\x0a      \
+  <item name=\x22fr\
+ame-delay-defaul\
+t\x22>3</item>\x0d\x0a   \
+ </items>\x0d\x0a</dat\
+a>\x0d\x0a\
 \x00\x00\x01\x82\
 <\
 ?xml version = \x22\
@@ -174,7 +180,7 @@ qt_resource_name = b"\
 
 qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x01\
-\x00\x00\x00@\x00\x00\x00\x00\x00\x01\x00\x00\x07Z\
+\x00\x00\x00@\x00\x00\x00\x00\x00\x01\x00\x00\x07\xb9\
 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
 "
 

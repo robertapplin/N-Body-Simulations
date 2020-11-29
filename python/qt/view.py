@@ -5,7 +5,9 @@ import qtawesome as qta
 from enum import Enum
 
 from n_body_simulations.body_data_table import BodyDataTableWidget, ColourTableWidget
-from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
+from n_body_simulations.custom_actions import (AnimationFrameDelayAction, DoubleSpinBoxAction, LineEditButtonAction,
+                                               PositionPlotOptionsAction, SpinBoxButtonAction,
+                                               VelocityPlotOptionsAction)
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_NBodySimulator
 from n_body_simulations.splitter_widgets import Splitter
@@ -46,6 +48,9 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.add_multiple_bodies_action = None
         self.time_step_action = None
         self.duration_action = None
+        self.animation_frame_delay_action = None
+        self.position_plot_options_action = None
+        self.velocity_plot_options_action = None
 
         self.splitter = None
         self.plot_frame = None
@@ -63,18 +68,21 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.setup_interactive_plot_widget()
         self.setup_add_body_widget()
         self.setup_time_settings_widget()
+        self.setup_plot_options_widget()
 
         self.pbRemoveBody.clicked.connect(self.on_remove_body_clicked)
         self.add_single_body_action.push_button.clicked.connect(self.on_add_body_clicked)
         self.add_multiple_bodies_action.push_button.clicked.connect(self.on_add_bodies_clicked)
         self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.on_time_step_changed(value))
         self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.on_duration_changed(value))
+        self.animation_frame_delay_action.delay_slider.valueChanged.connect(
+            lambda value: self.on_animation_frame_delay_changed(value))
+        self.position_plot_options_action.show_labels_button.clicked.connect(self.on_show_position_labels_clicked)
+        self.velocity_plot_options_action.show_arrows_button.clicked.connect(self.on_show_velocity_arrows_clicked)
+        self.velocity_plot_options_action.arrow_magnification.currentTextChanged.connect(
+            lambda factor: self.on_velocity_magnification_changed(factor))
         self.colour_table.cellChanged.connect(lambda row, column: self.on_body_colour_changed(row, column))
         self.body_data_table.cellChanged.connect(lambda row, column: self.on_body_data_changed(row, column))
-        self.cbVelocityArrowMagnification.currentTextChanged.connect(lambda factor:
-                                                                     self.on_velocity_magnification_changed(factor))
-        self.pbShowPositionLabels.clicked.connect(self.on_show_position_labels_clicked)
-        self.pbShowVelocityArrows.clicked.connect(self.on_show_velocity_arrows_clicked)
         self.pbInteractiveMode.clicked.connect(self.on_interactive_mode_clicked)
         self.pbStop.clicked.connect(self.on_stop_clicked)
         self.pbPlayPause.clicked.connect(self.on_play_pause_clicked)
@@ -91,14 +99,13 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
         self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
 
-        self.pbPlayPause.setIcon(self.play_icon)
-        self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
-        self.pbInteractiveMode.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
-        self.pbShowPositionLabels.setIcon(qta.icon('mdi.numeric', scale_factor=1.4))
-        self.pbShowVelocityArrows.setIcon(qta.icon('mdi.arrow-top-right', scale_factor=1.2))
-        self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
-        self.tbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
+        self.tbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
+        self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
+        self.tbPlotOptions.setIcon(qta.icon('mdi.chart-scatter-plot', scale_factor=1.2))
+        self.pbInteractiveMode.setIcon(qta.icon('mdi.gesture-tap', scale_factor=1.4))
+        self.pbStop.setIcon(qta.icon('mdi.stop', scale_factor=1.5, color='red'))
+        self.pbPlayPause.setIcon(self.play_icon)
 
     def setup_splitter_widget(self) -> None:
         """Setup the splitter widget."""
@@ -157,6 +164,17 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.tbTimeSettings.addAction(self.duration_action)
         self.tbTimeSettings.setPopupMode(QToolButton.InstantPopup)
 
+    def setup_plot_options_widget(self) -> None:
+        """Setup the custom plot options widget."""
+        self.animation_frame_delay_action = AnimationFrameDelayAction()
+        self.position_plot_options_action = PositionPlotOptionsAction()
+        self.velocity_plot_options_action = VelocityPlotOptionsAction()
+
+        self.tbPlotOptions.addAction(self.animation_frame_delay_action)
+        self.tbPlotOptions.addAction(self.position_plot_options_action)
+        self.tbPlotOptions.addAction(self.velocity_plot_options_action)
+        self.tbPlotOptions.setPopupMode(QToolButton.InstantPopup)
+
     def subscribe_presenter(self, presenter) -> None:
         """Subscribe the presenter for event notifications."""
         self.presenter = presenter
@@ -213,14 +231,28 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.interactive_plot.set_velocity_arrow_magnification(int(magnification[1:]))
         self.interactive_plot.draw()
 
+    def on_animation_frame_delay_changed(self, value: int) -> None:
+        """Handles when the frame delay of the animation is changed."""
+        self.set_interactive_mode(True)
+        self.animation_frame_delay_action.delay_slider.setToolTip(f"Animation frame delay in milliseconds. "
+                                                                  f"Current delay is {value} ms.")
+        self.animation_frame_delay_action.delay_label.setText(f"{value} ms")
+        self.interactive_plot.set_animation_interval(value)
+
     def on_show_position_labels_clicked(self) -> None:
         """Handle when the show position labels button is clicked."""
-        self.interactive_plot.show_position_labels(self.pbShowPositionLabels.isChecked())
+        showing_labels = self.position_plot_options_action.showing_position_labels()
+        self.position_plot_options_action.set_is_showing_labels(showing_labels)
+
+        self.interactive_plot.show_position_labels(showing_labels)
         self.interactive_plot.draw()
 
     def on_show_velocity_arrows_clicked(self) -> None:
         """Handle when the show velocity arrows button is clicked."""
-        self.interactive_plot.show_velocity_arrows(self.pbShowVelocityArrows.isChecked())
+        showing_arrows = self.velocity_plot_options_action.showing_velocity_arrows()
+        self.velocity_plot_options_action.set_is_showing_arrows(showing_arrows)
+
+        self.interactive_plot.show_velocity_arrows(showing_arrows)
         self.interactive_plot.draw()
 
     def on_interactive_mode_clicked(self) -> None:
@@ -399,9 +431,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.pbRemoveBody.setEnabled(enable)
         self.tbAddBody.setEnabled(enable)
         self.tbTimeSettings.setEnabled(enable)
-        self.cbVelocityArrowMagnification.setEnabled(enable)
-        self.pbShowVelocityArrows.setEnabled(enable)
-        self.pbShowPositionLabels.setEnabled(enable)
+        self.tbPlotOptions.setEnabled(enable)
         self.pbInteractiveMode.setEnabled(enable)
         self.pbStop.setEnabled(enable)
         self.pbPlayPause.setEnabled(enable)
@@ -432,9 +462,9 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
     def _show_position_labels_and_velocities(self, show_visuals: bool) -> None:
         """Shows or hides the position labels and velocity arrows on the interactive plot."""
         self.interactive_plot.show_position_labels(show_visuals)
-        self.pbShowPositionLabels.setChecked(show_visuals)
+        self.position_plot_options_action.set_is_showing_labels(show_visuals)
         self.interactive_plot.show_velocity_arrows(show_visuals)
-        self.pbShowVelocityArrows.setChecked(show_visuals)
+        self.velocity_plot_options_action.set_is_showing_arrows(show_visuals)
 
     @staticmethod
     def _create_table_double(value: float) -> QTableWidgetItem:
