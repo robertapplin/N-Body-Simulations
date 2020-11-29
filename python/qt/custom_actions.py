@@ -4,7 +4,7 @@ from n_body_simulations.xml_reader import get_user_interface_property
 
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
-from PyQt5.QtWidgets import (QDoubleSpinBox, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSpinBox, QWidget,
+from PyQt5.QtWidgets import (QDoubleSpinBox, QComboBox, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSpinBox, QWidget,
                              QWidgetAction)
 
 
@@ -58,6 +58,38 @@ class LineEditButtonAction(QWidgetAction):
         self.setDefaultWidget(self.widget)
 
 
+class PositionPlotOptionsAction(QWidgetAction):
+    """A class which creates a custom action used for position plotting options."""
+
+    def __init__(self):
+        """Initializes the QPushbutton and layout of this custom action."""
+        super(QWidgetAction, self).__init__(None)
+
+        self.show_labels_button = QPushButton("Hide Position Labels")
+        self.show_labels_button.setFixedSize(150, 23)
+
+        self.label_spacer = QLabel()
+        self.label_spacer.setMinimumWidth(42)
+        self.label_spacer.setMaximumWidth(42)
+
+        self.layout = QHBoxLayout()
+        self.layout.addWidget(self.label_spacer)
+        self.layout.addWidget(self.show_labels_button)
+
+        self.widget = QWidget()
+        self.widget.setLayout(self.layout)
+
+        self.setDefaultWidget(self.widget)
+
+    def set_is_showing_labels(self, is_showing_labels: bool) -> None:
+        """Set the text shown on the button."""
+        self.show_labels_button.setText("Hide Position Labels" if is_showing_labels else "Show Position Labels")
+
+    def showing_position_labels(self) -> bool:
+        """Checks if the position labels are being shown."""
+        return self.show_labels_button.text() == "Show Position Labels"
+
+
 class SpinBoxButtonAction(QWidgetAction):
     """A class which creates a custom QMenu action made up of a QSpinBox and QPushbutton."""
 
@@ -80,3 +112,37 @@ class SpinBoxButtonAction(QWidgetAction):
         self.widget.setLayout(self.layout)
 
         self.setDefaultWidget(self.widget)
+
+
+class VelocityPlotOptionsAction(QWidgetAction):
+    """A class which creates a custom action used for velocity plotting options."""
+
+    def __init__(self):
+        """Initializes the QPushbutton and layout of this custom action."""
+        super(QWidgetAction, self).__init__(None)
+
+        self.show_arrows_button = QPushButton("Hide Velocity Arrows")
+        self.show_arrows_button.setFixedSize(150, 23)
+
+        self.arrow_magnification = QComboBox()
+        self.arrow_magnification.setMinimumWidth(42)
+        self.arrow_magnification.setMaximumWidth(42)
+        self.arrow_magnification.addItems(["x1", "x2", "x4", "x8", "x16", "x32", "x64"])
+        self.arrow_magnification.setToolTip("The factor to magnify the velocity arrows by.")
+
+        self.layout = QHBoxLayout()
+        self.layout.addWidget(self.arrow_magnification)
+        self.layout.addWidget(self.show_arrows_button)
+
+        self.widget = QWidget()
+        self.widget.setLayout(self.layout)
+
+        self.setDefaultWidget(self.widget)
+
+    def set_is_showing_arrows(self, is_showing_arrows: bool) -> None:
+        """Set the text shown on the button."""
+        self.show_arrows_button.setText("Hide Velocity Arrows" if is_showing_arrows else "Show Velocity Arrows")
+
+    def showing_velocity_arrows(self) -> bool:
+        """Checks if the velocity arrows are being shown."""
+        return self.show_arrows_button.text() == "Show Velocity Arrows"
