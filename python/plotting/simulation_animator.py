@@ -1,9 +1,9 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.xml_reader import get_user_interface_property
+
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-
-ANIMATION_INTERVAL = 3
 
 
 class SimulationAnimator:
@@ -13,6 +13,7 @@ class SimulationAnimator:
         """Initialize the animator using the InteractivePlot figure."""
         self._figure = figure
         self._animation = None
+        self._animation_interval = int(get_user_interface_property("frame-delay-default"))
 
         self._body_markers = dict()
 
@@ -40,11 +41,16 @@ class SimulationAnimator:
 
         self._active = True
         self._body_markers = body_markers
-        self._animation = FuncAnimation(self._figure, self._update_bodies, self._time, interval=ANIMATION_INTERVAL)
+        self._animation = FuncAnimation(self._figure, self._update_bodies, self._time,
+                                        interval=self._animation_interval)
 
     def is_enabled(self) -> bool:
         """Returns whether the animator is active or not."""
         return self._active
+
+    def set_animation_interval(self, interval: int) -> None:
+        """Set the frame delay of the animation in milliseconds."""
+        self._animation_interval = interval
 
     def set_simulation_data(self, simulation_data: tuple) -> None:
         """Sets the simulated position and velocity data to be animated."""

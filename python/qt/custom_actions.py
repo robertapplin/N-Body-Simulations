@@ -2,10 +2,37 @@
 # Authored by Robert Applin, 2020
 from n_body_simulations.xml_reader import get_user_interface_property
 
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp, Qt
 from PyQt5.QtGui import QRegExpValidator
-from PyQt5.QtWidgets import (QDoubleSpinBox, QComboBox, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSpinBox, QWidget,
-                             QWidgetAction)
+from PyQt5.QtWidgets import (QDoubleSpinBox, QComboBox, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSlider, QSpinBox,
+                             QWidget, QWidgetAction)
+
+
+class AnimationFrameDelayAction(QWidgetAction):
+    """A class which creates a custom action used for adjusting the speed of the animation."""
+
+    def __init__(self):
+        """Initializes the QSlider and layout of this custom action."""
+        super(QWidgetAction, self).__init__(None)
+
+        self.delay_slider = QSlider(Qt.Horizontal)
+        self.delay_slider.setValue(int(get_user_interface_property("frame-delay-default")))
+        self.delay_slider.setToolTip(f"Animation frame delay in milliseconds. "
+                                     f"Current delay is {self.delay_slider.value()} ms.")
+
+        self.delay_label = QLabel()
+        self.delay_label.setText(f"{self.delay_slider.value()} ms")
+        self.delay_label.setMinimumWidth(42)
+        self.delay_label.setMaximumWidth(42)
+
+        self.layout = QHBoxLayout()
+        self.layout.addWidget(self.delay_slider)
+        self.layout.addWidget(self.delay_label)
+
+        self.widget = QWidget()
+        self.widget.setLayout(self.layout)
+
+        self.setDefaultWidget(self.widget)
 
 
 class DoubleSpinBoxAction(QWidgetAction):
@@ -73,8 +100,8 @@ class PositionPlotOptionsAction(QWidgetAction):
         self.label_spacer.setMaximumWidth(42)
 
         self.layout = QHBoxLayout()
-        self.layout.addWidget(self.label_spacer)
         self.layout.addWidget(self.show_labels_button)
+        self.layout.addWidget(self.label_spacer)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
@@ -131,8 +158,8 @@ class VelocityPlotOptionsAction(QWidgetAction):
         self.arrow_magnification.setToolTip("The factor to magnify the velocity arrows by.")
 
         self.layout = QHBoxLayout()
-        self.layout.addWidget(self.arrow_magnification)
         self.layout.addWidget(self.show_arrows_button)
+        self.layout.addWidget(self.arrow_magnification)
 
         self.widget = QWidget()
         self.widget.setLayout(self.layout)

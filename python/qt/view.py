@@ -5,8 +5,9 @@ import qtawesome as qta
 from enum import Enum
 
 from n_body_simulations.body_data_table import BodyDataTableWidget, ColourTableWidget
-from n_body_simulations.custom_actions import (DoubleSpinBoxAction, LineEditButtonAction, PositionPlotOptionsAction,
-                                               SpinBoxButtonAction, VelocityPlotOptionsAction)
+from n_body_simulations.custom_actions import (AnimationFrameDelayAction, DoubleSpinBoxAction, LineEditButtonAction,
+                                               PositionPlotOptionsAction, SpinBoxButtonAction,
+                                               VelocityPlotOptionsAction)
 from n_body_simulations.interactive_plot import InteractivePlot
 from n_body_simulations.main_window_ui import Ui_NBodySimulator
 from n_body_simulations.splitter_widgets import Splitter
@@ -47,6 +48,7 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.add_multiple_bodies_action = None
         self.time_step_action = None
         self.duration_action = None
+        self.animation_frame_delay_action = None
         self.position_plot_options_action = None
         self.velocity_plot_options_action = None
 
@@ -73,6 +75,8 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.add_multiple_bodies_action.push_button.clicked.connect(self.on_add_bodies_clicked)
         self.time_step_action.double_spin_box.valueChanged.connect(lambda value: self.on_time_step_changed(value))
         self.duration_action.double_spin_box.valueChanged.connect(lambda value: self.on_duration_changed(value))
+        self.animation_frame_delay_action.delay_slider.valueChanged.connect(
+            lambda value: self.on_animation_frame_delay_changed(value))
         self.position_plot_options_action.show_labels_button.clicked.connect(self.on_show_position_labels_clicked)
         self.velocity_plot_options_action.show_arrows_button.clicked.connect(self.on_show_velocity_arrows_clicked)
         self.velocity_plot_options_action.arrow_magnification.currentTextChanged.connect(
@@ -162,9 +166,11 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
     def setup_plot_options_widget(self) -> None:
         """Setup the custom plot options widget."""
+        self.animation_frame_delay_action = AnimationFrameDelayAction()
         self.position_plot_options_action = PositionPlotOptionsAction()
         self.velocity_plot_options_action = VelocityPlotOptionsAction()
 
+        self.tbPlotOptions.addAction(self.animation_frame_delay_action)
         self.tbPlotOptions.addAction(self.position_plot_options_action)
         self.tbPlotOptions.addAction(self.velocity_plot_options_action)
         self.tbPlotOptions.setPopupMode(QToolButton.InstantPopup)
@@ -224,6 +230,14 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         """Handles when the magnification of the velocity arrows is changed."""
         self.interactive_plot.set_velocity_arrow_magnification(int(magnification[1:]))
         self.interactive_plot.draw()
+
+    def on_animation_frame_delay_changed(self, value: int) -> None:
+        """Handles when the frame delay of the animation is changed."""
+        self.set_interactive_mode(True)
+        self.animation_frame_delay_action.delay_slider.setToolTip(f"Animation frame delay in milliseconds. "
+                                                                  f"Current delay is {value} ms.")
+        self.animation_frame_delay_action.delay_label.setText(f"{value} ms")
+        self.interactive_plot.set_animation_interval(value)
 
     def on_show_position_labels_clicked(self) -> None:
         """Handle when the show position labels button is clicked."""
