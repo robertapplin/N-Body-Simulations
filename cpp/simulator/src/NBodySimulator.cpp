@@ -147,7 +147,8 @@ void NBodySimulator::validateSimulationParameters() const {
   else if (m_timeStep > m_duration)
     throw std::invalid_argument(
         "The time step cannot be larger than the duration.");
-  else if (std::fmod(m_duration, m_timeStep) != 0.0)
+  else if (std::fmod(static_cast<int>(m_duration * 10.0),
+                     static_cast<int>(m_timeStep * 10.0)) != 0.0)
     throw std::invalid_argument(
         "The duration must be evenly divisible by the time step.");
 }

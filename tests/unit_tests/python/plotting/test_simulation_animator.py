@@ -35,8 +35,8 @@ def test_that_set_simulation_data_will_set_the_simulation_data_in_the_animator(d
 
 
 def test_that_time_step_will_return_the_expected_time_step(dummy_plot):
-    assert dummy_plot.animator.time_step() == 1.0
+    assert dummy_plot.animator._time_step == 1.0
 
 
 def test_that_duration_will_return_the_expected_simulation_duration(dummy_plot):
-    assert dummy_plot.animator.duration() == 3.0
+    assert dummy_plot.animator._duration == 3.0

@@ -9,6 +9,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 class SimulationAnimator:
     """A class used for animating the simulation data."""
 
+    time_dp = int(get_user_interface_property("time-dp"))
+
     def __init__(self, figure: FigureCanvas):
         """Initialize the animator using the InteractivePlot figure."""
         self._figure = figure
@@ -56,6 +58,8 @@ class SimulationAnimator:
         """Sets the simulated position and velocity data to be animated."""
         self._position_data = simulation_data[0]
         self._velocity_data = simulation_data[1]
+        self._update_time_step()
+        self._update_duration()
 
     def positional_data(self) -> dict:
         """Returns the simulated positional data currently being animated."""
@@ -79,14 +83,14 @@ class SimulationAnimator:
         """Plays the animation."""
         self._playing = True
 
-    def time_step(self) -> float:
-        """Returns the time step used for the simulation."""
+    def _update_time_step(self):
+        """Updates the time step of the simulation."""
         times = list(list(self._position_data.values())[0].keys())
-        return abs(times[-1] / (len(times) - 1))
+        self._time_step = round(abs(times[-1] / (len(times) - 1)), self.time_dp)
 
-    def duration(self) -> float:
+    def _update_duration(self) -> float:
         """Returns the duration of the simulation."""
-        return list(list(self._position_data.values())[0].keys())[-1]
+        self._duration = round(list(list(self._position_data.values())[0].keys())[-1], self.time_dp)
 
     def _update_bodies(self, time: float) -> dict:
         """Updates the positions and velocities of the bodies in the animation."""
@@ -115,10 +119,8 @@ class SimulationAnimator:
     def _time(self) -> float:
         """A generator for stepping through each time step for the simulation."""
         self._t = 0.0
-        t_max = self.duration()
-        time_step = self.time_step()
 
-        while self._t < t_max:
+        while self._t < self._duration:
             if self._playing:
-                self._t += time_step
-            yield self._t
+                self._t += self._time_step
+            yield round(self._t, self.time_dp)

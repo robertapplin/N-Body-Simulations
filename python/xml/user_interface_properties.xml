@@ -37,7 +37,7 @@
         <item name="position-unit">au</item>
 
         <!--Number of decimal places.-->
-        <item name="time-dp">2</item>
+        <item name="time-dp">1</item>
         <item name="mass-dp">6</item>
         <item name="position-dp">6</item>
         <item name="velocity-dp">6</item>
