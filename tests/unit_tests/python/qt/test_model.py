@@ -180,31 +180,5 @@ def test_that_set_y_velocity_fails_silently_if_an_invalid_body_name_is_provided(
     model.set_y_velocity("Not a body", 5.0)
 
 
-def test_that_run_simulation_returns_true_when_a_successful_simulation_is_run(model):
-    assert model.run_simulation()
-
-
-def test_that_run_simulation_fails_silently_and_returns_none_when_the_simulation_fails(model):
-    # Venus has the same position as the Earth so this should fail
-    model.add_body("Venus", 0.000003, 1.0, 0.0, 0.0, 0.015)
-    assert model.run_simulation() is None
-
-
-def test_that_simulation_results_returns_a_dict_with_the_correct_number_of_bodies_and_positions(model):
-    model.run_simulation()
-    results = model.simulation_results()
-
-    number_of_steps = int(model.duration() / model.time_step()) + 1
-    assert len(results[0]) == model.number_of_bodies()
-    assert len(results[0]["Sun"]) == number_of_steps
-    assert len(results[0]["Earth"]) == number_of_steps
-
-
-def test_that_simulation_results_contains_the_initial_positions_of_the_bodies(model):
-    model.run_simulation()
-    results = model.simulation_results()
-
-    assert results[0]["Sun"][0] == Vector2D(0.0, 0.0)
-    assert results[0]["Earth"][0] == Vector2D(1.0, 0.0)
-    assert results[1]["Sun"][0] == Vector2D(0.0, 0.0)
-    assert results[1]["Earth"][0] == Vector2D(0.0, 0.015)
+def test_that_running_a_simulation_does_not_raise_when_a_successful_simulation_is_run(model):
+    model.start()

@@ -4,14 +4,17 @@ from enum import Enum
 
 from NBodySimulations import Vector2D
 
+from PyQt5.QtCore import pyqtSignal, QThread
 from PyQt5.QtWidgets import QWidget
 
 
-class MockNBodySimulationsModel:
+class MockNBodySimulationsModel(QThread):
     """A mock class used for mocking the model."""
+    simulationFinished = pyqtSignal()
+    simulationError = pyqtSignal(str)
 
     def __init__(self):
-        pass
+        super(MockNBodySimulationsModel, self).__init__(None)
 
     @staticmethod
     def initial_body_parameters() -> dict:
@@ -77,8 +80,8 @@ class MockNBodySimulationsModel:
         return tuple([1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0)])
 
     @staticmethod
-    def run_simulation() -> bool:
-        return True
+    def run() -> None:
+        pass
 
     @staticmethod
     def has_data_changed() -> bool:

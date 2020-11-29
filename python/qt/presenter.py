@@ -24,6 +24,11 @@ class NBodySimulationsPresenter:
 
         self.view.subscribe_presenter(self)
 
+        self.model.simulationFinished.connect(self.handle_simulation_finished)
+        self.model.simulationError.connect(lambda error_message: self.handle_simulation_error(error_message))
+
+        self.play_clicked = False
+
         # Temporarily here for development
         self._add_new_body("Sun", 1.0, 0.0, 0.0, 0.0, 0.0)
         self._add_new_body("Earth", 0.000003, 1.0, 0.0, 0.0, 0.015)
@@ -119,15 +124,14 @@ class NBodySimulationsPresenter:
 
     def handle_play_pause_clicked(self) -> None:
         """Handles when the play/pause button is clicked."""
-        play_clicked = not self.view.is_simulating()
-        self.view.set_as_playing(play_clicked)
+        self.play_clicked = not self.view.is_simulating()
+        self.view.set_as_playing(self.play_clicked)
 
-        success = True
-        if play_clicked and self.model.has_data_changed():
+        if self.play_clicked and self.model.has_data_changed():
             self.view.stop_simulation()
-            success = self._run_simulation()
-
-        if play_clicked and success:
+            self.view.enable_view(False)
+            self.model.start()
+        elif self.play_clicked:
             self.view.play_simulation()
         else:
             self.view.pause_simulation()
@@ -142,6 +146,23 @@ class NBodySimulationsPresenter:
         self.model.set_x_velocity(body_name, vx)
         self.model.set_y_velocity(body_name, vy)
 
+    def handle_simulation_finished(self) -> None:
+        """Handles when the simulation thread finishes."""
+        self.view.enable_view(True)
+        self.view.start_simulation(self.model.simulation_results())
+
+        if self.play_clicked:
+            self.view.play_simulation()
+        else:
+            self.view.pause_simulation()
+
+    @catch_errors()
+    def handle_simulation_error(self, error_message: str) -> None:
+        """Handles when an error occurs during a simulation."""
+        self.view.enable_view(True)
+        self.view.set_as_playing(False)
+        raise RuntimeError(error_message)
+
     def _add_body(self, body_name: str) -> None:
         """Adds a new body with a random position to the model and view."""
         if body_name != "":
@@ -154,17 +175,6 @@ class NBodySimulationsPresenter:
         """Adds a new body to the model and view."""
         if body_name != "" and self.model.add_body(body_name, mass, x, y, vx, vy):
             self.view.add_body(body_name, self.model.initial_data(body_name))
-
-    def _run_simulation(self) -> bool:
-        """Runs a simulation and starts an animation of it in the view."""
-        self.view.enable_view(False)
-        success = self.model.run_simulation()
-        self.view.enable_view(True)
-        if success:
-            self.view.start_simulation(self.model.simulation_results())
-        else:
-            self.view.set_as_playing(False)
-        return success
 
     def _generate_new_random_name(self):
         """Keeps generating a random name until an unused name is found."""

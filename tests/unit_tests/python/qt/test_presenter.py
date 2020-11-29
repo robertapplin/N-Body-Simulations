@@ -167,20 +167,6 @@ def test_that_handle_play_pause_clicked_will_set_as_playing(mocker):
     view_set_as_playing.assert_called_once_with(True)
 
 
-def test_that_handle_play_pause_clicked_will_run_the_simulation(mocker):
-    view, model, presenter = setup_presenter()
-
-    model_has_data_changed = mocker.spy(model, 'has_data_changed')
-    view_stop_simulation = mocker.spy(view, 'stop_simulation')
-    model_run_simulation = mocker.spy(model, 'run_simulation')
-
-    presenter.handle_play_pause_clicked()
-
-    model_has_data_changed.assert_called_once()
-    view_stop_simulation.assert_called_once()
-    model_run_simulation.assert_called_once()
-
-
 def test_that_handle_body_moved_will_set_the_position_in_the_model(mocker):
     view, model, presenter = setup_presenter()
 
