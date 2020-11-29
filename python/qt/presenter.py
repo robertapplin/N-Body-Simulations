@@ -146,7 +146,7 @@ class NBodySimulationsPresenter:
         self.model.set_x_velocity(body_name, vx)
         self.model.set_y_velocity(body_name, vy)
 
-    def handle_simulation_finished(self):
+    def handle_simulation_finished(self) -> None:
         """Handles when the simulation thread finishes."""
         self.view.enable_view(True)
         self.view.start_simulation(self.model.simulation_results())

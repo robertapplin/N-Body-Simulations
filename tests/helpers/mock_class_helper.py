@@ -14,7 +14,7 @@ class MockNBodySimulationsModel(QThread):
     simulationError = pyqtSignal(str)
 
     def __init__(self):
-        pass
+        super(MockNBodySimulationsModel, self).__init__(None)
 
     @staticmethod
     def initial_body_parameters() -> dict:
@@ -80,8 +80,8 @@ class MockNBodySimulationsModel(QThread):
         return tuple([1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0)])
 
     @staticmethod
-    def run() -> bool:
-        return True
+    def run() -> None:
+        pass
 
     @staticmethod
     def has_data_changed() -> bool:
