@@ -51,7 +51,6 @@ class InteractivePlot(QObject):
         self._body_markers = dict()
         self._initial_data = dict()
         self._axes_resized = False
-        self._is_simulating_label = None
 
         self._animator = SimulationAnimator(self._figure)
 
@@ -138,18 +137,6 @@ class InteractivePlot(QObject):
             body_marker.set_velocity_arrow_magnification(magnification)
             body_marker.refresh()
 
-    def show_simulating_label(self, is_simulating: bool) -> None:
-        """Show the 'Simulating...' label on the interactive plot."""
-        if is_simulating:
-            x_min, x_max, y_min, y_max = self.get_axes_limits(exclude_margin=False)
-            x_pos = x_min + (x_max - x_min) / 50.0
-            y_pos = y_min + (y_max - y_min) / 50.0
-
-            self._is_simulating_label = self._ax.annotate("Simulating...", (x_pos, y_pos), fontsize=15)
-        elif self._is_simulating_label is not None:
-            self._is_simulating_label.remove()
-        self._canvas.draw()
-
     def set_simulation_data(self, simulation_data: tuple) -> None:
         """Sets the simulation data in the animator."""
         self._animator.set_simulation_data(simulation_data)
@@ -199,13 +186,10 @@ class InteractivePlot(QObject):
             self._axes_resized = False
         self._canvas.draw()
 
-    def get_axes_limits(self, exclude_margin: bool = True) -> tuple:
+    def get_axes_limits(self) -> tuple:
         """Returns the axes limits currently being used for the plot (minus the margin)."""
         x_min, x_max = self._ax.get_xlim()
         y_min, y_max = self._ax.get_ylim()
-
-        if not exclude_margin:
-            return tuple([x_min, x_max, y_min, y_max])
 
         x_diff = abs(x_max - x_min)
         y_diff = abs(y_max - y_min)

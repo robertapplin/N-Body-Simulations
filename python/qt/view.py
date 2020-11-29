@@ -394,7 +394,6 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
     def enable_view(self, enable: bool) -> None:
         """Enables or disables the widgets seen in the view."""
-        self.interactive_plot.show_simulating_label(not enable)
         self.colour_table.setEnabled(enable)
         self.body_data_table.setEnabled(enable)
         self.pbRemoveBody.setEnabled(enable)
