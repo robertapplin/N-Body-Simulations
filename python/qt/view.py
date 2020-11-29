@@ -257,8 +257,6 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
     def on_interactive_mode_clicked(self) -> None:
         """Handle when the interactive mode button is clicked."""
-        self._show_position_labels_and_velocities(self.pbInteractiveMode.isChecked())
-
         self.set_as_playing(False)
         self.interactive_plot.disable_animation()
         self.interactive_plot.update_axes_limits(initial_data=True)
@@ -458,13 +456,6 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
     def get_axes_limits(self) -> tuple:
         """Returns the axes limits currently being used for the interactive plot."""
         return self.interactive_plot.get_axes_limits()
-
-    def _show_position_labels_and_velocities(self, show_visuals: bool) -> None:
-        """Shows or hides the position labels and velocity arrows on the interactive plot."""
-        self.interactive_plot.show_position_labels(show_visuals)
-        self.position_plot_options_action.set_is_showing_labels(show_visuals)
-        self.interactive_plot.show_velocity_arrows(show_visuals)
-        self.velocity_plot_options_action.set_is_showing_arrows(show_visuals)
 
     @staticmethod
     def _create_table_double(value: float) -> QTableWidgetItem:

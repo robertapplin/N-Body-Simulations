@@ -211,7 +211,7 @@ class BodyMarker(QObject):
         else:
             self._override_cursor = None
 
-    def _body_radius(self):
+    def _body_radius(self) -> int:
         """Returns the body radius to use in pixels."""
         if self._mass <= 0.0001:
             return 2

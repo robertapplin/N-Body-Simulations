@@ -21,13 +21,13 @@ class ColourItemDelegate(QStyledItemDelegate):
         self._colour_dialog = QColorDialog(parent)
         return self._colour_dialog
 
-    def setEditorData(self, editor: QWidget, index: QModelIndex):
+    def setEditorData(self, editor: QWidget, index: QModelIndex) -> None:
         """Sets the QColor displayed in the QColorDialog when it opens."""
         colour = index.data(Qt.BackgroundRole)
         if colour is not None:
             editor.setCurrentColor(colour)
 
-    def setModelData(self, editor: QWidget, model: QAbstractItemModel, index: QModelIndex):
+    def setModelData(self, editor: QWidget, model: QAbstractItemModel, index: QModelIndex) -> None:
         """Sets the QColor displayed in the QItemDelegate when the QColorDialog is closed."""
         if self._colour_dialog.result():
             colour = editor.currentColor()

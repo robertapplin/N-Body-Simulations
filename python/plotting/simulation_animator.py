@@ -83,7 +83,7 @@ class SimulationAnimator:
         """Plays the animation."""
         self._playing = True
 
-    def _update_time_step(self):
+    def _update_time_step(self) -> None:
         """Updates the time step of the simulation."""
         times = list(list(self._position_data.values())[0].keys())
         self._time_step = round(abs(times[-1] / (len(times) - 1)), self.time_dp)
