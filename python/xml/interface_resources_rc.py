@@ -2,7 +2,7 @@
 
 # Resource object code
 #
-# Created: Sun Nov 29 15:35:42 2020
+# Created: Sun Nov 29 16:41:00 2020
 #      by: The Resource Compiler for PySide2 (Qt v5.12.9)
 #
 # WARNING! All changes made in this file will be lost!
@@ -119,7 +119,7 @@ t\x22>au</item>\x0d\x0a\x0d\x0a\
 er of decimal pl\
 aces.-->\x0d\x0a      \
   <item name=\x22ti\
-me-dp\x22>2</item>\x0d\
+me-dp\x22>1</item>\x0d\
 \x0a        <item n\
 ame=\x22mass-dp\x22>6<\
 /item>\x0d\x0a        \

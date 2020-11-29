@@ -48,6 +48,7 @@ class DoubleSpinBoxAction(QWidgetAction):
         self.double_spin_box = QDoubleSpinBox(None)
         self.double_spin_box.setMinimum(float(get_user_interface_property(item_type + "-min")))
         self.double_spin_box.setMaximum(float(get_user_interface_property(item_type + "-max")))
+        self.double_spin_box.setDecimals(int(get_user_interface_property("time-dp")))
         self.double_spin_box.setSingleStep(float(get_user_interface_property(item_type + "-step")))
         self.double_spin_box.setValue(float(get_user_interface_property(item_type + "-default")))
         self.double_spin_box.setSuffix(" " + get_user_interface_property("time-unit"))

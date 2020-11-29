@@ -1,6 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 from n_body_simulations.error_catcher import catch_errors
+from n_body_simulations.xml_reader import get_user_interface_property
 from NBodySimulations import NBodySimulator, Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QThread
@@ -10,6 +11,8 @@ class NBodySimulationsModel(QThread):
     """A class used as a model for the main GUI (MVP)."""
     simulationFinished = pyqtSignal()
     simulationError = pyqtSignal(str)
+
+    time_dp = int(get_user_interface_property("time-dp"))
 
     def __init__(self):
         """Initialize the model with an empty NBodySimulator."""
@@ -128,6 +131,16 @@ class NBodySimulationsModel(QThread):
         """Collect the simulation results from the simulator."""
         position_data, velocity_data = dict(), dict()
         for body_name in self._simulator.bodyNames():
-            position_data[body_name] = self._simulator.simulatedPositions(body_name)
-            velocity_data[body_name] = self._simulator.simulatedVelocities(body_name)
+            position_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedPositions(body_name))
+            velocity_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedVelocities(body_name))
         return position_data, velocity_data
+
+    def _round_time_decimal_places(self, simulated_data: dict) -> dict:
+        """
+        This is necessary to prevent a bug caused by the infinite-length representation of some decimal numbers. For
+        instance, 0.2 is represented as 0.200000000000001 and this can cause certain 'time' dict keys to not be found.
+        """
+        rounded_data = dict()
+        for time, position in simulated_data.items():
+            rounded_data[round(time, self.time_dp)] = position
+        return rounded_data
