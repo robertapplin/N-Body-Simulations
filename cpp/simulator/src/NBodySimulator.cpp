@@ -22,7 +22,7 @@ NBodySimulator::NBodySimulator()
 NBodySimulator::~NBodySimulator() { m_bodyData.clear(); }
 
 void NBodySimulator::removeBody(std::string const &name) {
-  m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));
+  m_bodyData.erase(m_bodyData.cbegin() + findBodyIndex(name));
   m_dataChanged = true;
 }
 
@@ -231,7 +231,7 @@ std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
   auto const iter =
       std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasName);
   if (iter != m_bodyData.cend())
-    return iter - m_bodyData.cbegin();
+    return std::distance(m_bodyData.cbegin(), iter);
 
   throw std::invalid_argument("The body '" + name + "' could not be found.");
 }
