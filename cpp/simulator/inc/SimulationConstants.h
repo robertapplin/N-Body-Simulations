@@ -15,7 +15,7 @@ static double AU(1.49598e+11);      // Astronomical unit (m)
 static double DAY(60.0 * 60.0 * 24.0); // Day (s)
 
 // Calculates the gravitational constant for the specified time unit.
-double gravitationalConstant(TimeUnit const &timeUnit);
+[[nodiscard]] double gravitationalConstant(TimeUnit const &timeUnit);
 
 } // namespace Constants
 } // namespace Simulator

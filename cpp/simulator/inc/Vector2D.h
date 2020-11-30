@@ -8,7 +8,7 @@ namespace Simulator {
 // A struct used for two dimensional vector operations.
 struct Vector2D {
   // Calculates the magnitude of the two dimensional vector.
-  double magnitude() const;
+  [[nodiscard]] double magnitude() const;
 
   // Used to simplify vector operations.
   Vector2D operator-(Vector2D const &otherVector);
