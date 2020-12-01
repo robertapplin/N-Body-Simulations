@@ -22,8 +22,8 @@ BodyPositionsAndVelocities::~BodyPositionsAndVelocities() {
 }
 
 void BodyPositionsAndVelocities::resetParameters() {
-  m_positions.erase(std::next(m_positions.begin()), m_positions.end());
-  m_velocities.erase(std::next(m_velocities.begin()), m_velocities.end());
+  m_positions.erase(std::next(m_positions.cbegin()), m_positions.cend());
+  m_velocities.erase(std::next(m_velocities.cbegin()), m_velocities.cend());
   m_body->resetBody();
 }
 
@@ -31,7 +31,7 @@ Body &BodyPositionsAndVelocities::body() const { return *m_body.get(); }
 
 void BodyPositionsAndVelocities::addPosition(double time,
                                              Vector2D const &position) {
-  if (m_positions.find(time) != m_positions.end())
+  if (m_positions.find(time) != m_positions.cend())
     throw std::runtime_error("A position for " + m_body->name() + " at time " +
                              std::to_string(time) + " already exists.");
 
@@ -40,7 +40,7 @@ void BodyPositionsAndVelocities::addPosition(double time,
 
 void BodyPositionsAndVelocities::addVelocity(double time,
                                              Vector2D const &velocity) {
-  if (m_velocities.find(time) != m_velocities.end())
+  if (m_velocities.find(time) != m_velocities.cend())
     throw std::runtime_error("A velocity for " + m_body->name() + " at time " +
                              std::to_string(time) + " already exists.");
 

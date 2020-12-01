@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
 #include <stdexcept>
 
 namespace Simulator {
@@ -21,7 +22,7 @@ NBodySimulator::NBodySimulator()
 NBodySimulator::~NBodySimulator() { m_bodyData.clear(); }
 
 void NBodySimulator::removeBody(std::string const &name) {
-  m_bodyData.erase(m_bodyData.begin() + findBodyIndex(name));
+  m_bodyData.erase(m_bodyData.cbegin() + findBodyIndex(name));
   m_dataChanged = true;
 }
 
@@ -53,11 +54,15 @@ double NBodySimulator::duration() const { return m_duration; }
 std::size_t NBodySimulator::numberOfBodies() const { return m_bodyData.size(); }
 
 std::vector<std::string> NBodySimulator::bodyNames() const {
+  auto const getName =
+      [](std::unique_ptr<BodyPositionsAndVelocities> const &data) {
+        return data->body().name();
+      };
+
   std::vector<std::string> names;
   names.reserve(numberOfBodies());
-
-  for (auto const &data : m_bodyData)
-    names.emplace_back(data->body().name());
+  std::transform(m_bodyData.cbegin(), m_bodyData.cend(),
+                 std::back_inserter(names), getName);
   return names;
 }
 
@@ -154,7 +159,6 @@ void NBodySimulator::validateSimulationParameters() const {
 }
 
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
-
   for (auto const &targetBodyName : bodyNames())
     calculateNewPositions(stepNumber, findBodyIndex(targetBodyName),
                           findBody(targetBodyName));
@@ -210,8 +214,8 @@ std::size_t NBodySimulator::numberOfSteps() const {
 
 bool NBodySimulator::hasBody(std::string const &name) const {
   auto const names = bodyNames();
-  auto const iter = std::find(names.begin(), names.end(), name);
-  return iter != names.end();
+  auto const iter = std::find(names.cbegin(), names.cend(), name);
+  return iter != names.cend();
 }
 
 Body &NBodySimulator::findBody(std::string const &name) const {
@@ -220,13 +224,14 @@ Body &NBodySimulator::findBody(std::string const &name) const {
 
 std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
   auto const hasName =
-      [&](std::unique_ptr<BodyPositionsAndVelocities> const &parameters) {
-        return parameters->body().name() == name;
+      [&](std::unique_ptr<BodyPositionsAndVelocities> const &data) {
+        return data->body().name() == name;
       };
 
-  auto const iter = std::find_if(m_bodyData.begin(), m_bodyData.end(), hasName);
-  if (iter != m_bodyData.end())
-    return iter - m_bodyData.begin();
+  auto const iter =
+      std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasName);
+  if (iter != m_bodyData.cend())
+    return std::distance(m_bodyData.cbegin(), iter);
 
   throw std::invalid_argument("The body '" + name + "' could not be found.");
 }

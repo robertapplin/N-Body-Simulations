@@ -176,14 +176,14 @@ class NBodySimulationsPresenter:
         if body_name != "" and self.model.add_body(body_name, mass, x, y, vx, vy):
             self.view.add_body(body_name, self.model.initial_data(body_name))
 
-    def _generate_new_random_name(self):
+    def _generate_new_random_name(self) -> str:
         """Keeps generating a random name until an unused name is found."""
         random_name = self._generate_random_name()
         while random_name in self.model.body_names():
             random_name = self._generate_random_name()
         return random_name
 
-    def _generate_random_name(self):
+    def _generate_random_name(self) -> str:
         """Generates a random body name."""
         random_name = self.body_names[random.randint(0, len(self.body_names) - 1)]
         random_number = random.randint(1, 100)

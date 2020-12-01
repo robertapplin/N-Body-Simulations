@@ -40,7 +40,7 @@ class NBodySimulationsModel(QThread):
         # If this point is reached, the body has been added successfully
         return True
 
-    def body_names(self):
+    def body_names(self) -> list:
         """Returns the body names stored by the simulator."""
         return self._simulator.bodyNames()
 

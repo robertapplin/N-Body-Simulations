@@ -31,18 +31,18 @@ public:
   // Set the time step used by the simulator.
   void setTimeStep(double timeStep);
   // Return the time step stored by the simulator.
-  double timeStep() const;
+  [[nodiscard]] double timeStep() const;
 
   // Set the simulation duration used by the simulator.
   void setDuration(double duration);
   // Return the simulation duration stored by the simulator.
-  double duration() const;
+  [[nodiscard]] double duration() const;
 
   // Return the number of bodies in the simulation setup.
-  std::size_t numberOfBodies() const;
+  [[nodiscard]] std::size_t numberOfBodies() const;
 
   // Returns the names of the bodies in the simulator.
-  std::vector<std::string> bodyNames() const;
+  [[nodiscard]] std::vector<std::string> bodyNames() const;
 
   // Set a new name for the specified body in the simulator.
   void setName(std::string const &oldName, std::string const &newName);
@@ -68,7 +68,7 @@ public:
   Vector2D initialVelocity(std::string const &bodyName) const;
 
   // Returns true if the initial parameters changed since the last simulation.
-  bool hasDataChanged() const;
+  [[nodiscard]] bool hasDataChanged() const;
 
   // Run the simulation using the currently stored initial parameters.
   void runSimulation();
@@ -99,10 +99,10 @@ private:
   void resetSimulation();
 
   // Returns the number of steps to take in the simulation.
-  std::size_t numberOfSteps() const;
+  [[nodiscard]] std::size_t numberOfSteps() const;
 
   // Returns true if the simulator contains a body with the given name.
-  bool hasBody(std::string const &name) const;
+  [[nodiscard]] bool hasBody(std::string const &name) const;
 
   // Finds the Body data object given a bodies name.
   Body &findBody(std::string const &name) const;

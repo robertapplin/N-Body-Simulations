@@ -23,7 +23,7 @@ public:
   void resetParameters();
 
   // Return the body associated with the position and velocity coordinates.
-  Body &body() const;
+  [[nodiscard]] Body &body() const;
 
   // Add a position coordinate for a specific time.
   void addPosition(double time, Vector2D const &position);
@@ -31,12 +31,12 @@ public:
   void addVelocity(double time, Vector2D const &velocity);
 
   // Returns the body locations calculated during a simulation.
-  inline std::map<double, Vector2D> positions() const noexcept {
+  [[nodiscard]] inline std::map<double, Vector2D> positions() const noexcept {
     return m_positions;
   }
 
   // Returns the body velocities calculated during a simulation.
-  inline std::map<double, Vector2D> velocities() const noexcept {
+  [[nodiscard]] inline std::map<double, Vector2D> velocities() const noexcept {
     return m_velocities;
   }
 
