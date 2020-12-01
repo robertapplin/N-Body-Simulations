@@ -13,6 +13,7 @@ void export_NBodySimulator(py::module &m) {
 
   py::class_<Simulator::NBodySimulator>(m, "NBodySimulator")
       .def(py::init<>())
+      .def("clear", py::overload_cast<>(&Simulator::NBodySimulator::clear))
       .def("removeBody",
            py::overload_cast<std::string const &>(
                &Simulator::NBodySimulator::removeBody),

@@ -22,6 +22,9 @@ public:
   NBodySimulator();
   ~NBodySimulator();
 
+  // Clear all the data from the simulator
+  void clear();
+
   // Removes the body with the specified name from the simulator.
   void removeBody(std::string const &name);
   // Adds a body to the simulator.

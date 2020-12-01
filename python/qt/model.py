@@ -19,6 +19,10 @@ class NBodySimulationsModel(QThread):
         super(NBodySimulationsModel, self).__init__(None)
         self._simulator = NBodySimulator()
 
+    def clear(self) -> None:
+        """Clear all the data from the simulator."""
+        self._simulator.clear()
+
     def initial_body_parameters(self) -> dict:
         """Return the initial body parameters (mass, position and velocity) of all bodies."""
         initial_body_parameters = dict()

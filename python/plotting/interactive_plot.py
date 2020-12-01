@@ -105,6 +105,12 @@ class InteractivePlot(QObject):
         """Returns the canvas used for the interactive plot."""
         return self._canvas
 
+    def clear(self) -> None:
+        """Clears the interactive plot."""
+        self._ax.clear()
+        self._body_markers.clear()
+        self._initial_data.clear()
+
     def set_animation_interval(self, interval: int) -> None:
         """Set the frame delay of the animation in milliseconds."""
         self._animator.set_animation_interval(interval)
