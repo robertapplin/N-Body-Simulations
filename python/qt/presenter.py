@@ -13,12 +13,14 @@ class NBodySimulationsPresenter:
     body_colours = get_user_interface_property("body-colours").split(",")
     body_names = get_user_interface_property("body-names").split(",")
 
-    time_step_default = float(get_user_interface_property("time-step-default"))
-    duration_default = float(get_user_interface_property("duration-default"))
+    file_verification_stamp = get_user_interface_property("file-verification-stamp")
+
     max_number_of_bodies = int(get_simulation_setting("max-number-of-bodies"))
     body_mass_default = float(get_simulation_setting("body-mass-default"))
     body_vx_default = float(get_simulation_setting("body-vx-default"))
     body_vy_default = float(get_simulation_setting("body-vy-default"))
+    time_step_default = float(get_simulation_setting("time-step-default"))
+    duration_default = float(get_simulation_setting("duration-default"))
 
     def __init__(self, view, model):
         """Initializes the presenter by creating a view and model."""
@@ -73,11 +75,16 @@ class NBodySimulationsPresenter:
             self.model.clear()
             self._load_project(file_path)
 
+    @catch_errors()
     def handle_save_project_clicked(self) -> None:
         """Handles the saving of a project."""
-        file_path = self.view.open_file_dialog_for_saving()
-        if file_path is not None:
-            self._save_project(file_path, self.model.initial_body_parameters())
+        initial_data = self.model.initial_body_parameters()
+        if len(initial_data.keys()) > 0:
+            file_path = self.view.open_file_dialog_for_saving()
+            if file_path is not None:
+                self._save_project(file_path, initial_data)
+        else:
+            raise RuntimeError("Cannot save an empty project.")
 
     def handle_remove_body_clicked(self) -> None:
         """Handles the removal of the selected bodies."""
@@ -181,23 +188,31 @@ class NBodySimulationsPresenter:
         self.view.set_as_playing(False)
         raise RuntimeError(error_message)
 
+    @catch_errors()
     def _load_project(self, file_path: str) -> None:
         """Loads the body data from a .txt file."""
         with open(file_path, "r") as file:
             file_lines = list(filter(None, file.read().split("\n")))
-            first_line_split = file_lines[0].split(" ")
+            if file_lines[0] == self.file_verification_stamp:
+                first_line_split = file_lines[1].split(" ")
+                self._load_project_data(float(first_line_split[0]), float(first_line_split[1]), file_lines[2:])
+            else:
+                raise RuntimeError(f"The file verification stamp at the start of this file is incorrect. "
+                                   f"It should say:\n'{self.file_verification_stamp}'.")
 
-            self._set_time_step(float(first_line_split[0]))
-            self._set_duration(float(first_line_split[1]))
+    def _load_project_data(self, time_step: float, duration: float, initial_data: list) -> None:
+        """Loads body data into the view and model."""
+        self._set_time_step(time_step)
+        self._set_duration(duration)
 
-            for line in file_lines[1:]:
-                line_split = line.split(" ")
-                self._add_new_body(line_split[0], line_split[1], float(line_split[2]), float(line_split[3]),
-                                   float(line_split[4]), float(line_split[5]), float(line_split[6]))
+        for line in initial_data:
+            line_split = line.split(" ")
+            self._add_new_body(line_split[0], line_split[1], float(line_split[2]), float(line_split[3]),
+                               float(line_split[4]), float(line_split[5]), float(line_split[6]))
 
     def _save_project(self, file_path: str, initial_data: dict) -> None:
         """Saves the body data into a .txt file."""
-        lines = [f"{self.model.time_step()} {self.model.duration()}\n"]
+        lines = [f"{self.file_verification_stamp}\n", f"{self.model.time_step()} {self.model.duration()}\n"]
         for body_name, initial_data in initial_data.items():
             colour = self.view.get_body_colour(body_name)
             mass, position, velocity = initial_data[0], initial_data[1], initial_data[2]

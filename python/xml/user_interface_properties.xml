@@ -2,13 +2,12 @@
 <!--Interface properties are stored here to avoid hard-coded values.-->
 <data>
     <items>
+		<!--The string used to verify that a .txt file has the correct format.-->
+		<item name="file-verification-stamp">I declare that the data in this *.txt file is correctly formatted for the N-Body Simulator.</item>
+
         <!--Body Properties that are randomly chosen when adding a body.-->
 		<item name="body-colours">lightgreen,green,darkgreen,magenta,red,darkred,deepskyblue,blue,darkblue,orange,purple,yellow,gold,black,brown</item>
         <item name="body-names">Nevis,Lobiuvis,Ennuter,Vivis,Delia,Cerilia,Pagoria,Drigolara,Geonia,Coovis</item>
-
-		<!--Default values.-->
-		<item name="time-step-default">1.0</item>
-        <item name="duration-default">500.0</item>
 
         <!--Step between values when using a QDoubleSpinBox.-->
         <item name="time-step-step">1.0</item>
