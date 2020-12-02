@@ -1,7 +1,5 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import random
-
 from n_body_simulations.table_item_delegates import ColourItemDelegate, DoubleItemDelegate, StringItemDelegate
 from n_body_simulations.xml_reader import get_user_interface_property
 
@@ -119,7 +117,6 @@ class BodyDataTableWidget(QTableWidget):
 class ColourTableWidget(QTableWidget):
     """A class derived from a QTableWidget to display body colours."""
     colour_column = TableColumn(0, "")
-    body_colours = get_user_interface_property("body-colours").split(",")
 
     def __init__(self, parent=None):
         """Initialize the table widget for displaying body colours."""
@@ -150,7 +147,3 @@ class ColourTableWidget(QTableWidget):
 
         colour_item_delegate = ColourItemDelegate(self)
         self.setItemDelegateForColumn(self.colour_column.index, colour_item_delegate)
-
-    def random_colour(self) -> str:
-        """Returns a random colour to be used for a body."""
-        return self.body_colours[random.randint(0, len(self.body_colours) - 1)]

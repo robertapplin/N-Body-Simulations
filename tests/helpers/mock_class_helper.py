@@ -95,20 +95,22 @@ class MockNBodySimulationsModel(QThread):
 class MockNBodySimulationsView(QWidget):
     """A mock class used for mocking the view."""
     class ViewEvent(Enum):
-        RemoveBodyClicked = 1
-        AddBodyClicked = 2
-        AddBodiesClicked = 3
-        TimeStepChanged = 4
-        DurationChanged = 5
-        NameChanged = 6
-        MassChanged = 7
-        XPositionChanged = 8
-        YPositionChanged = 9
-        VxPositionChanged = 10
-        VyPositionChanged = 11
-        PlayPauseClicked = 12
-        BodyMovedOnPlot = 13
-        BodyVelocityChangedOnPlot = 14
+        LoadProjectClicked = 1
+        SaveProjectClicked = 2
+        RemoveBodyClicked = 3
+        AddBodyClicked = 4
+        AddBodiesClicked = 5
+        TimeStepChanged = 6
+        DurationChanged = 7
+        NameChanged = 8
+        MassChanged = 9
+        XPositionChanged = 10
+        YPositionChanged = 11
+        VxPositionChanged = 12
+        VyPositionChanged = 13
+        PlayPauseClicked = 14
+        BodyMovedOnPlot = 15
+        BodyVelocityChangedOnPlot = 16
 
     def __init__(self):
         super(MockNBodySimulationsView, self).__init__()
@@ -122,7 +124,7 @@ class MockNBodySimulationsView(QWidget):
     def remove_body(self, body_name: str) -> None:
         pass
 
-    def add_body(self, body_name: str, initial_data: tuple) -> None:
+    def add_body(self, colour: str, body_name: str, initial_data: tuple) -> None:
         pass
 
     def update_body_name(self, old_name: str, new_name: str) -> None:

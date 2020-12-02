@@ -25,6 +25,11 @@ def test_that_number_of_bodies_returns_the_expected_value(model):
     assert model.number_of_bodies() == 2
 
 
+def test_that_clear_will_clear_the_simulator(model):
+    model.clear()
+    assert model.number_of_bodies() == 0
+
+
 def test_that_mass_returns_the_expected_value(model):
     assert model.mass("Earth") == 0.000003
 
@@ -85,7 +90,7 @@ def test_that_body_names_will_return_the_expected_body_names(model):
 
 
 def test_that_time_step_returns_the_expected_value(model):
-    assert model.time_step() == 1.0
+    assert model.time_step() == 0.0
 
 
 def test_that_set_time_step_will_set_the_time_step(model):
@@ -94,7 +99,7 @@ def test_that_set_time_step_will_set_the_time_step(model):
 
 
 def test_that_duration_returns_the_expected_value(model):
-    assert model.duration() == 500.0
+    assert model.duration() == 0.0
 
 
 def test_that_set_duration_will_set_the_duration(model):

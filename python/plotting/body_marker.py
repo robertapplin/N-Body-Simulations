@@ -20,19 +20,19 @@ class BodyMarker(QObject):
     bodyMovedSignal = pyqtSignal(str, float, float)
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
-    def __init__(self, canvas: FigureCanvas, name: str, mass: float, position: Vector2D, velocity: Vector2D,
-                 colour: str):
+    def __init__(self, canvas: FigureCanvas, colour: str, name: str, mass: float, position: Vector2D,
+                 velocity: Vector2D):
         """Initializes the body marker with a patch and a coordinate label."""
         super(BodyMarker, self).__init__()
 
         self._canvas = canvas
         self._axis = self._canvas.figure.get_axes()[0]
 
+        self._colour = colour
         self._name = name
         self._mass = mass
         self._position = position
         self._velocity = velocity
-        self._colour = colour
 
         self._body_patch = None
         self._velocity_patch = None

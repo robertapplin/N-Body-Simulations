@@ -2,7 +2,7 @@
 
 # Resource object code
 #
-# Created: Sun Nov 29 16:41:00 2020
+# Created: Wed Dec 2 20:20:28 2020
 #      by: The Resource Compiler for PySide2 (Qt v5.12.9)
 #
 # WARNING! All changes made in this file will be lost!
@@ -10,7 +10,7 @@
 from PySide2 import QtCore
 
 qt_resource_data = b"\
-\x00\x00\x07\xb5\
+\x00\x00\x08$\
 <\
 ?xml version = \x22\
 1.0\x22 encoding = \
@@ -21,122 +21,129 @@ here to avoid ha\
 rd-coded values.\
 -->\x0d\x0a<data>\x0d\x0a   \
  <items>\x0d\x0a      \
-  <!--Body Prope\
-rties that are r\
-andomly chosen w\
-hen adding a bod\
-y.-->\x0d\x0a\x09\x09<item n\
-ame=\x22body-colour\
-s\x22>lightgreen,gr\
-een,darkgreen,ma\
-genta,red,darkre\
-d,deepskyblue,bl\
-ue,darkblue,oran\
-ge,purple,yellow\
-,gold,black,brow\
-n</item>\x0d\x0a      \
-  <item name=\x22bo\
-dy-names\x22>Nevis,\
-Lobiuvis,Ennuter\
-,Vivis,Delia,Cer\
-ilia,Pagoria,Dri\
-golara,Geonia,Co\
-ovis</item>\x0d\x0a\x0d\x0a\x09\
-\x09<!--Default val\
-ues.-->\x0d\x0a\x09\x09<item\
- name=\x22time-step\
--default\x22>1.0</i\
+  <!--The string\
+ used to verify \
+that a .txt file\
+ has the correct\
+ format.-->\x0d\x0a   \
+     <item name=\
+\x22file-verificati\
+on-stamp\x22>I decl\
+are that the dat\
+a in this *.txt \
+file is correctl\
+y formatted for \
+the N-Body Simul\
+ator.</item>\x0d\x0a\x0d\x0a\
+        <!--Body\
+ Properties that\
+ are randomly ch\
+osen when adding\
+ a body.-->\x0d\x0a   \
+     <item name=\
+\x22body-colours\x22>l\
+ightgreen,green,\
+darkgreen,magent\
+a,red,darkred,de\
+epskyblue,blue,d\
+arkblue,orange,p\
+urple,yellow,gol\
+d,black,brown</i\
 tem>\x0d\x0a        <i\
-tem name=\x22durati\
-on-default\x22>500.\
-0</item>\x0d\x0a\x0d\x0a    \
-    <!--Step bet\
-ween values when\
- using a QDouble\
-SpinBox.-->\x0d\x0a   \
-     <item name=\
-\x22time-step-step\x22\
->1.0</item>\x0d\x0a   \
-     <item name=\
-\x22duration-step\x22>\
-10.0</item>\x0d\x0a   \
-     <item name=\
-\x22mass-step\x22>0.1<\
-/item>\x0d\x0a        \
-<item name=\x22posi\
-tion-step\x22>0.1</\
-item>\x0d\x0a        <\
-item name=\x22veloc\
-ity-step\x22>0.1</i\
-tem>\x0d\x0a\x0d\x0a        \
-<!--Minimum allo\
-wed values.-->\x0d\x0a\
-        <item na\
-me=\x22time-step-mi\
-n\x22>0.0</item>\x0d\x0a \
-       <item nam\
-e=\x22duration-min\x22\
->0.0</item>\x0d\x0a   \
-     <item name=\
-\x22mass-min\x22>0.000\
-001</item>\x0d\x0a    \
+tem name=\x22body-n\
+ames\x22>Nevis,Lobi\
+uvis,Ennuter,Viv\
+is,Delia,Cerilia\
+,Pagoria,Drigola\
+ra,Geonia,Coovis\
+</item>\x0d\x0a\x0d\x0a     \
+   <!--Step betw\
+een values when \
+using a QDoubleS\
+pinBox.-->\x0d\x0a    \
     <item name=\x22\
-position-min\x22>-1\
-000.0</item>\x0d\x0a  \
+time-step-step\x22>\
+1.0</item>\x0d\x0a    \
+    <item name=\x22\
+duration-step\x22>1\
+0.0</item>\x0d\x0a    \
+    <item name=\x22\
+mass-step\x22>0.1</\
+item>\x0d\x0a        <\
+item name=\x22posit\
+ion-step\x22>0.1</i\
+tem>\x0d\x0a        <i\
+tem name=\x22veloci\
+ty-step\x22>0.1</it\
+em>\x0d\x0a\x0d\x0a        <\
+!--Minimum allow\
+ed values.-->\x0d\x0a \
+       <item nam\
+e=\x22time-step-min\
+\x22>0.0</item>\x0d\x0a  \
       <item name\
-=\x22velocity-min\x22>\
--1000.0</item>\x0d\x0a\
-\x0d\x0a        <!--Ma\
-ximum allowed va\
-lues.-->\x0d\x0a      \
-  <item name=\x22ti\
-me-step-max\x22>500\
-.0</item>\x0d\x0a     \
-   <item name=\x22d\
-uration-max\x22>100\
+=\x22duration-min\x22>\
+0.0</item>\x0d\x0a    \
+    <item name=\x22\
+mass-min\x22>0.0000\
+01</item>\x0d\x0a     \
+   <item name=\x22p\
+osition-min\x22>-10\
 00.0</item>\x0d\x0a   \
      <item name=\
-\x22mass-max\x22>100.0\
-</item>\x0d\x0a       \
- <item name=\x22pos\
-ition-max\x22>1000.\
+\x22velocity-min\x22>-\
+1000.0</item>\x0d\x0a\x0d\
+\x0a        <!--Max\
+imum allowed val\
+ues.-->\x0d\x0a       \
+ <item name=\x22tim\
+e-step-max\x22>500.\
 0</item>\x0d\x0a      \
-  <item name=\x22ve\
-locity-max\x22>1000\
-.0</item>\x0d\x0a\x0d\x0a   \
-     <!--Units f\
-or different par\
-ameters.-->\x0d\x0a   \
-     <item name=\
-\x22time-unit\x22>d</i\
-tem>\x0d\x0a        <i\
-tem name=\x22mass-u\
-nit\x22>M*</item>\x0d\x0a\
-        <item na\
-me=\x22position-uni\
-t\x22>au</item>\x0d\x0a\x0d\x0a\
-        <!--Numb\
-er of decimal pl\
-aces.-->\x0d\x0a      \
-  <item name=\x22ti\
-me-dp\x22>1</item>\x0d\
-\x0a        <item n\
-ame=\x22mass-dp\x22>6<\
+  <item name=\x22du\
+ration-max\x22>1000\
+0.0</item>\x0d\x0a    \
+    <item name=\x22\
+mass-max\x22>100.0<\
 /item>\x0d\x0a        \
 <item name=\x22posi\
-tion-dp\x22>6</item\
->\x0d\x0a        <item\
- name=\x22velocity-\
-dp\x22>6</item>\x0d\x0a\x0d\x0a\
-        <!--Defa\
-ult animation va\
-lues.-->\x0d\x0a      \
-  <item name=\x22fr\
-ame-delay-defaul\
-t\x22>3</item>\x0d\x0a   \
- </items>\x0d\x0a</dat\
-a>\x0d\x0a\
-\x00\x00\x01\x82\
+tion-max\x22>1000.0\
+</item>\x0d\x0a       \
+ <item name=\x22vel\
+ocity-max\x22>1000.\
+0</item>\x0d\x0a\x0d\x0a    \
+    <!--Units fo\
+r different para\
+meters.-->\x0d\x0a    \
+    <item name=\x22\
+time-unit\x22>d</it\
+em>\x0d\x0a        <it\
+em name=\x22mass-un\
+it\x22>M*</item>\x0d\x0a \
+       <item nam\
+e=\x22position-unit\
+\x22>au</item>\x0d\x0a\x0d\x0a \
+       <!--Numbe\
+r of decimal pla\
+ces.-->\x0d\x0a       \
+ <item name=\x22tim\
+e-dp\x22>1</item>\x0d\x0a\
+        <item na\
+me=\x22mass-dp\x22>6</\
+item>\x0d\x0a        <\
+item name=\x22posit\
+ion-dp\x22>6</item>\
+\x0d\x0a        <item \
+name=\x22velocity-d\
+p\x22>6</item>\x0d\x0a\x0d\x0a \
+       <!--Defau\
+lt animation val\
+ues.-->\x0d\x0a       \
+ <item name=\x22fra\
+me-delay-default\
+\x22>3</item>\x0d\x0a    \
+</items>\x0d\x0a</data\
+>\x0d\x0a\
+\x00\x00\x01\xe9\
 <\
 ?xml version = \x22\
 1.0\x22 encoding = \
@@ -160,9 +167,15 @@ ss-default\x22>1.0<\
 </item>\x0d\x0a       \
  <item name=\x22bod\
 y-vy-default\x22>0.\
-0</item>\x0d\x0a    </\
-items>\x0d\x0a</data>\x0d\
-\x0a\
+0</item>\x0d\x0a      \
+  <item name=\x22ti\
+me-step-default\x22\
+>1.0</item>\x0d\x0a   \
+     <item name=\
+\x22duration-defaul\
+t\x22>500.0</item>\x0d\
+\x0a    </items>\x0d\x0a<\
+/data>\x0d\x0a\
 "
 
 qt_resource_name = b"\
@@ -180,7 +193,7 @@ qt_resource_name = b"\
 
 qt_resource_struct = b"\
 \x00\x00\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x01\
-\x00\x00\x00@\x00\x00\x00\x00\x00\x01\x00\x00\x07\xb9\
+\x00\x00\x00@\x00\x00\x00\x00\x00\x01\x00\x00\x08(\
 \x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
 "
 

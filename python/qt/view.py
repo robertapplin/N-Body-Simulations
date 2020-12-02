@@ -15,26 +15,30 @@ from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, QToolButton, QWidget
+from PyQt5.QtWidgets import QFileDialog, QFrame, QGridLayout, QHBoxLayout, QTableWidgetItem, QToolButton, QWidget
+
+FILENAME_FILTERS = ["Text files (*.txt)"]
 
 
 class NBodySimulationsView(Ui_NBodySimulator, QWidget):
     """A class used as a view for the NBodySimulator (MVP)."""
     class ViewEvent(Enum):
-        RemoveBodyClicked = 1
-        AddBodyClicked = 2
-        AddBodiesClicked = 3
-        TimeStepChanged = 4
-        DurationChanged = 5
-        NameChanged = 6
-        MassChanged = 7
-        XPositionChanged = 8
-        YPositionChanged = 9
-        VxPositionChanged = 10
-        VyPositionChanged = 11
-        PlayPauseClicked = 12
-        BodyMovedOnPlot = 13
-        BodyVelocityChangedOnPlot = 14
+        LoadProjectClicked = 1
+        SaveProjectClicked = 2
+        RemoveBodyClicked = 3
+        AddBodyClicked = 4
+        AddBodiesClicked = 5
+        TimeStepChanged = 6
+        DurationChanged = 7
+        NameChanged = 8
+        MassChanged = 9
+        XPositionChanged = 10
+        YPositionChanged = 11
+        VxPositionChanged = 12
+        VyPositionChanged = 13
+        PlayPauseClicked = 14
+        BodyMovedOnPlot = 15
+        BodyVelocityChangedOnPlot = 16
 
     def __init__(self, parent=None):
         """Initialize the view and perform basic setup of the widgets."""
@@ -70,6 +74,8 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.setup_time_settings_widget()
         self.setup_plot_options_widget()
 
+        self.pbLoadProject.clicked.connect(self.on_load_project_clicked)
+        self.pbSaveProject.clicked.connect(self.on_save_project_clicked)
         self.pbRemoveBody.clicked.connect(self.on_remove_body_clicked)
         self.add_single_body_action.push_button.clicked.connect(self.on_add_body_clicked)
         self.add_multiple_bodies_action.push_button.clicked.connect(self.on_add_bodies_clicked)
@@ -99,6 +105,8 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.play_icon = qta.icon('mdi.play', scale_factor=1.5, color='green')
         self.pause_icon = qta.icon('mdi.pause', scale_factor=1.5, color='blue')
 
+        self.pbLoadProject.setIcon(qta.icon('mdi.file-download', scale_factor=1.3))
+        self.pbSaveProject.setIcon(qta.icon('mdi.content-save', scale_factor=1.3))
         self.pbRemoveBody.setIcon(qta.icon('mdi.minus', scale_factor=1.5))
         self.tbAddBody.setIcon(qta.icon('mdi.plus', scale_factor=1.5))
         self.tbTimeSettings.setIcon(qta.icon('mdi.timer', scale_factor=1.3))
@@ -178,6 +186,26 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
     def subscribe_presenter(self, presenter) -> None:
         """Subscribe the presenter for event notifications."""
         self.presenter = presenter
+
+    def clear(self) -> None:
+        """Clear all the data from the view."""
+        self.colour_table.blockSignals(True)
+        self.body_data_table.blockSignals(True)
+
+        self.interactive_plot.clear()
+        self.colour_table.setRowCount(0)
+        self.body_data_table.setRowCount(0)
+
+        self.colour_table.blockSignals(False)
+        self.body_data_table.blockSignals(False)
+
+    def on_load_project_clicked(self) -> None:
+        """Notify presenter that the load project button was clicked."""
+        self.presenter.notify_presenter(self.ViewEvent.LoadProjectClicked)
+
+    def on_save_project_clicked(self) -> None:
+        """Notify presenter that the save project button was clicked."""
+        self.presenter.notify_presenter(self.ViewEvent.SaveProjectClicked)
 
     def on_remove_body_clicked(self) -> None:
         """Notify presenter that the remove body button was clicked."""
@@ -298,6 +326,30 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
         self.presenter.notify_presenter(self.ViewEvent.BodyVelocityChangedOnPlot, body_name, vx, vy)
 
+    @staticmethod
+    def open_file_dialog_for_loading() -> str:
+        """Opens a QFileDialog to get a file name for loading data."""
+        dialog = QFileDialog()
+        dialog.setAcceptMode(QFileDialog.AcceptOpen)
+        dialog.setFileMode(QFileDialog.ExistingFile)
+        dialog.setNameFilters(FILENAME_FILTERS)
+
+        if dialog.exec_():
+            return dialog.selectedFiles()[0]
+        return None
+
+    @staticmethod
+    def open_file_dialog_for_saving() -> str:
+        """Opens a QFileDialog to get a file name for saving data."""
+        dialog = QFileDialog()
+        dialog.setAcceptMode(QFileDialog.AcceptSave)
+        dialog.setFileMode(QFileDialog.AnyFile)
+        dialog.setNameFilters(FILENAME_FILTERS)
+
+        if dialog.exec_():
+            return dialog.selectedFiles()[0]
+        return None
+
     def selected_bodies(self) -> list:
         """Returns the name of the bodies which are currently selected."""
         selected_indices = self._selected_row_indices()
@@ -318,26 +370,13 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
-    def add_bodies(self, body_parameters: dict) -> None:
-        """Adds a number of bodies to the view."""
-        self.set_interactive_mode(True)
-
-        for body_name, parameters in body_parameters.items():
-            random_colour = self.colour_table.random_colour()
-            self.add_body_to_table(body_name, parameters, random_colour)
-            self.interactive_plot.add_body(body_name, parameters[0], parameters[1], parameters[2], random_colour)
-
-        self.interactive_plot.update_axes_limits(initial_data=True)
-        self.interactive_plot.draw()
-
-    def add_body(self, body_name: str, initial_data: tuple) -> None:
+    def add_body(self, colour: str, body_name: str, initial_data: tuple) -> None:
         """Adds a body to the view."""
         self.set_interactive_mode(True)
 
-        random_colour = self.colour_table.random_colour()
-        self.add_body_to_table(body_name, initial_data, random_colour)
+        self.add_body_to_table(body_name, initial_data, colour)
 
-        self.interactive_plot.add_body(body_name, initial_data[0], initial_data[1], initial_data[2], random_colour)
+        self.interactive_plot.add_body(colour, body_name, initial_data[0], initial_data[1], initial_data[2])
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
@@ -452,6 +491,10 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         """Plays the animation of a simulation."""
         self.interactive_plot.update_axes_limits(initial_data=False)
         self.interactive_plot.play_animation()
+
+    def get_body_colour(self, body_name: str) -> str:
+        """Returns the colour of a body."""
+        return self.interactive_plot.get_body_colour(body_name)
 
     def get_axes_limits(self) -> tuple:
         """Returns the axes limits currently being used for the interactive plot."""

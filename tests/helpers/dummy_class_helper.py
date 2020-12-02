@@ -63,4 +63,4 @@ class DummyInteractivePlot:
 
         self.lines = {"Sun": self._ax.plot(0.0, 0.0)[0]}
         self.body_markers = {"Sun":
-                             BodyMarker(self._canvas, "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), "green")}
+                             BodyMarker(self._canvas, "green", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))}
