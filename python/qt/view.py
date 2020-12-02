@@ -370,25 +370,13 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 
-    def add_bodies(self, body_parameters: dict) -> None:
-        """Adds a number of bodies to the view."""
-        self.set_interactive_mode(True)
-
-        for body_name, parameters in body_parameters.items():
-            random_colour = self.colour_table.random_colour()
-            self.add_body_to_table(body_name, parameters, random_colour)
-            self.interactive_plot.add_body(body_name, parameters[0], parameters[1], parameters[2], random_colour)
-
-        self.interactive_plot.update_axes_limits(initial_data=True)
-        self.interactive_plot.draw()
-
     def add_body(self, colour: str, body_name: str, initial_data: tuple) -> None:
         """Adds a body to the view."""
         self.set_interactive_mode(True)
 
         self.add_body_to_table(body_name, initial_data, colour)
 
-        self.interactive_plot.add_body(body_name, initial_data[0], initial_data[1], initial_data[2], colour)
+        self.interactive_plot.add_body(colour, body_name, initial_data[0], initial_data[1], initial_data[2])
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 

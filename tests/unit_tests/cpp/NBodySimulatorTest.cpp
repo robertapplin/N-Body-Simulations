@@ -175,6 +175,8 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(NBodySimulatorTest,
        test_that_runSimulation_will_not_throw_if_the_data_is_all_correct) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
   ASSERT_NO_THROW(m_simulator->runSimulation());
 }
@@ -182,6 +184,8 @@ TEST_F(NBodySimulatorTest,
 TEST_F(
     NBodySimulatorTest,
     test_that_runSimulation_will_throw_if_two_bodies_have_the_same_position) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {0.0, 0.0}, {0.0, 0.015});
   ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
 }
@@ -223,6 +227,8 @@ TEST_F(
 TEST_F(
     NBodySimulatorTest,
     test_that_simulatedPositions_will_return_a_map_of_positions_with_the_correct_size) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
 
   m_simulator->runSimulation();
@@ -237,6 +243,8 @@ TEST_F(
 TEST_F(
     NBodySimulatorTest,
     test_that_simulatedPositions_will_return_the_initial_positions_in_a_map) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
 
   m_simulator->runSimulation();
@@ -257,6 +265,8 @@ TEST_F(
 TEST_F(
     NBodySimulatorTest,
     test_that_simulatedVelocities_will_return_a_map_of_velocities_with_the_correct_size) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
 
   m_simulator->runSimulation();
@@ -271,6 +281,8 @@ TEST_F(
 TEST_F(
     NBodySimulatorTest,
     test_that_simulatedVelocities_will_return_the_initial_positions_in_a_map) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
 
   m_simulator->runSimulation();

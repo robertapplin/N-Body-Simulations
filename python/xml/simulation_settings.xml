@@ -7,7 +7,7 @@
         <item name="body-mass-default">1.0</item>
         <item name="body-vx-default">0.0</item>
         <item name="body-vy-default">0.0</item>
-		<item name="time-step-default">1.0</item>
+        <item name="time-step-default">1.0</item>
         <item name="duration-default">500.0</item>
     </items>
 </data>
