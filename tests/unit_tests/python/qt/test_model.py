@@ -90,7 +90,7 @@ def test_that_body_names_will_return_the_expected_body_names(model):
 
 
 def test_that_time_step_returns_the_expected_value(model):
-    assert model.time_step() == 1.0
+    assert model.time_step() == 0.0
 
 
 def test_that_set_time_step_will_set_the_time_step(model):
@@ -99,7 +99,7 @@ def test_that_set_time_step_will_set_the_time_step(model):
 
 
 def test_that_duration_returns_the_expected_value(model):
-    assert model.duration() == 500.0
+    assert model.duration() == 0.0
 
 
 def test_that_set_duration_will_set_the_duration(model):

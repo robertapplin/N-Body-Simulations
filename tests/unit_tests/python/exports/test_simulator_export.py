@@ -26,7 +26,7 @@ def test_that_removeBody_is_exposed_to_python(simulator):
 
 
 def test_that_timeStep_is_exposed_to_python(simulator):
-    assert simulator.timeStep() == 1.0
+    assert simulator.timeStep() == 0.0
 
 
 def test_that_setTimeStep_is_exposed_to_python(simulator):
@@ -35,7 +35,7 @@ def test_that_setTimeStep_is_exposed_to_python(simulator):
 
 
 def test_that_duration_is_exposed_to_python(simulator):
-    assert simulator.duration() == 500.0
+    assert simulator.duration() == 0.0
 
 
 def test_that_setDuration_is_exposed_to_python(simulator):
@@ -124,12 +124,18 @@ def test_that_hasDataChanged_is_exposed_to_python(simulator):
 
 
 def test_that_runSimulation_is_exposed_to_python(simulator):
+    simulator.setTimeStep(1.0)
+    simulator.setDuration(500.0)
     simulator.runSimulation()
+
     assert not simulator.hasDataChanged()
 
 
 def test_that_simulatedPositions_is_exposed_to_python(simulator):
+    simulator.setTimeStep(1.0)
+    simulator.setDuration(500.0)
     simulator.runSimulation()
+
     results = simulator.simulatedPositions("Sun")
 
     assert results[0.0] == Vector2D(0.0, 0.0)
@@ -138,7 +144,10 @@ def test_that_simulatedPositions_is_exposed_to_python(simulator):
 
 
 def test_that_simulatedVelocities_is_exposed_to_python(simulator):
+    simulator.setTimeStep(1.0)
+    simulator.setDuration(500.0)
     simulator.runSimulation()
+
     results = simulator.simulatedVelocities("Sun")
 
     assert results[0.0] == Vector2D(0.0, 0.0)

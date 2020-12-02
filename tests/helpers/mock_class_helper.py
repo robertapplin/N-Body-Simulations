@@ -124,7 +124,7 @@ class MockNBodySimulationsView(QWidget):
     def remove_body(self, body_name: str) -> None:
         pass
 
-    def add_body(self, body_name: str, initial_data: tuple) -> None:
+    def add_body(self, colour: str, body_name: str, initial_data: tuple) -> None:
         pass
 
     def update_body_name(self, old_name: str, new_name: str) -> None:
