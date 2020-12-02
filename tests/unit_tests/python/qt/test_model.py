@@ -25,6 +25,11 @@ def test_that_number_of_bodies_returns_the_expected_value(model):
     assert model.number_of_bodies() == 2
 
 
+def test_that_clear_will_clear_the_simulator(model):
+    model.clear()
+    assert model.number_of_bodies() == 0
+
+
 def test_that_mass_returns_the_expected_value(model):
     assert model.mass("Earth") == 0.000003
 

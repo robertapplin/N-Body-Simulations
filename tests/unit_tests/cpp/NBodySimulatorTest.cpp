@@ -300,3 +300,18 @@ TEST_F(
   ASSERT_THROW(m_simulator->simulatedVelocities("Earth"),
                std::invalid_argument);
 }
+
+TEST_F(NBodySimulatorTest,
+       test_that_clear_will_clear_all_the_data_from_the_simulator) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
+  m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
+
+  m_simulator->runSimulation();
+
+  m_simulator->clear();
+
+  ASSERT_TRUE(0.0 == m_simulator->timeStep());
+  ASSERT_TRUE(0.0 == m_simulator->duration());
+  ASSERT_TRUE(0 == m_simulator->numberOfBodies());
+}
