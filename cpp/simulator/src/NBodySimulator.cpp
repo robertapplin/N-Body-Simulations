@@ -139,6 +139,12 @@ void NBodySimulator::runSimulation() {
   m_dataChanged = false;
 }
 
+std::map<double, double>
+NBodySimulator::simulatedMasses(std::string const &bodyName) const {
+  auto const bodyIndex = findBodyIndex(bodyName);
+  return m_bodyData[bodyIndex]->masses();
+}
+
 std::map<double, Vector2D>
 NBodySimulator::simulatedPositions(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
@@ -186,6 +192,8 @@ void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
   auto &position = targetBody.position();
   position += velocity * m_timeStep;
 
+  m_bodyData[targetBodyIndex]->addMass(stepNumber * m_timeStep,
+                                       targetBody.mass());
   m_bodyData[targetBodyIndex]->addPosition(stepNumber * m_timeStep, position);
   m_bodyData[targetBodyIndex]->addVelocity(stepNumber * m_timeStep, velocity);
 }

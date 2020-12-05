@@ -19,6 +19,8 @@ class SimulationAnimator:
 
         self._body_markers = dict()
 
+        # Dict("Body Name": Dict(Time: Mass))
+        self._mass_data = dict()
         # Dict("Body Name": Dict(Time: Position))
         self._position_data = dict()
         # Dict("Body Name": Dict(Time: Velocity))
@@ -56,8 +58,9 @@ class SimulationAnimator:
 
     def set_simulation_data(self, simulation_data: tuple) -> None:
         """Sets the simulated position and velocity data to be animated."""
-        self._position_data = simulation_data[0]
-        self._velocity_data = simulation_data[1]
+        self._mass_data = simulation_data[0]
+        self._position_data = simulation_data[1]
+        self._velocity_data = simulation_data[2]
         self._update_time_step()
         self._update_duration()
 
@@ -101,10 +104,12 @@ class SimulationAnimator:
         """Updates the positions and velocities of the bodies in the animation."""
         patches = []
         for body_name in self._position_data.keys():
+            masses = self._mass_data[body_name]
             positions = self._position_data[body_name]
             velocities = self._velocity_data[body_name]
 
-            if time in positions and time in velocities:
+            if time in masses and time in positions and time in velocities:
+                self._body_markers[body_name].set_mass(masses[time], recreate_body=False)
                 self._body_markers[body_name].set_position(positions[time].x, positions[time].y,
                                                            emit_signal=False, recreate_body=False)
                 self._body_markers[body_name].set_velocity(velocities[time].x, velocities[time].y,

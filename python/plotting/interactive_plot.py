@@ -93,12 +93,14 @@ class InteractivePlot(QObject):
 
     def handle_body_moved(self, body_name: str, x: float, y: float) -> None:
         """Handles when a body has been moved on the interactive plot."""
-        self._initial_data[body_name] = tuple([Vector2D(x, y), self._initial_data[body_name][1]])
+        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], Vector2D(x, y),
+                                               self._initial_data[body_name][2]])
         self.bodyMovedSignal.emit(body_name, x, y)
 
     def handle_body_velocity_changed(self, body_name: str, vx: float, vy: float) -> None:
         """Handles when a bodies velocity is changed on the interactive plot."""
-        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], Vector2D(vx, vy)])
+        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], self._initial_data[body_name][1],
+                                               Vector2D(vx, vy)])
         self.bodyVelocityChangedSignal.emit(body_name, vx, vy)
 
     def canvas(self) -> FigureCanvas:
@@ -129,7 +131,7 @@ class InteractivePlot(QObject):
         self._body_markers[body_name].bodyVelocityChangedSignal.connect(lambda name, vx, vy:
                                                                         self.handle_body_velocity_changed(name, vx, vy))
 
-        self._initial_data[body_name] = tuple([position, velocity])
+        self._initial_data[body_name] = tuple([mass, position, velocity])
 
     def show_position_labels(self, show_labels: bool) -> None:
         """Show or hide the position labels on the interactive plot."""
@@ -236,14 +238,16 @@ class InteractivePlot(QObject):
     def update_body_position(self, body_name: str, position: Vector2D, draw: bool = True) -> None:
         """Updates the position of a body."""
         self._body_markers[body_name].set_position(position.x, position.y, emit_signal=False)
-        self._initial_data[body_name] = tuple([position, self._initial_data[body_name][1]])
+        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], position,
+                                               self._initial_data[body_name][2]])
         if draw:
             self._canvas.draw()
 
     def update_body_velocity(self, body_name: str, velocity: Vector2D, draw: bool = True) -> None:
         """Updates the velocity of a body."""
         self._body_markers[body_name].set_velocity(velocity.x, velocity.y, emit_signal=False)
-        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], velocity])
+        self._initial_data[body_name] = tuple([self._initial_data[body_name][0], self._initial_data[body_name][1],
+                                               velocity])
         if draw:
             self._canvas.draw()
 
@@ -285,8 +289,8 @@ class InteractivePlot(QObject):
         """Calculates the min-max of both axes based on the initial body data."""
         xs, ys = [], []
         for parameters in self._initial_data.values():
-            xs.append(parameters[0].x)
-            ys.append(parameters[0].y)
+            xs.append(parameters[1].x)
+            ys.append(parameters[1].y)
 
         if len(xs) == 0:
             xs = [0.0]
@@ -319,8 +323,9 @@ class InteractivePlot(QObject):
     def _initialize_bodies(self) -> None:
         """Re-plots the bodies using their initial positions."""
         for body_name, parameters in self._initial_data.items():
-            self.update_body_position(body_name, parameters[0], draw=False)
-            self.update_body_velocity(body_name, parameters[1], draw=False)
+            self.update_body_mass(body_name, parameters[0], draw=False)
+            self.update_body_position(body_name, parameters[1], draw=False)
+            self.update_body_velocity(body_name, parameters[2], draw=False)
         self._canvas.draw()
 
     def _update_cursor(self) -> None:

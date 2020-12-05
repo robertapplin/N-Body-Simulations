@@ -133,11 +133,12 @@ class NBodySimulationsModel(QThread):
     @catch_errors()
     def simulation_results(self) -> dict:
         """Collect the simulation results from the simulator."""
-        position_data, velocity_data = dict(), dict()
+        mass_data, position_data, velocity_data = dict(), dict(), dict()
         for body_name in self._simulator.bodyNames():
+            mass_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedMasses(body_name))
             position_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedPositions(body_name))
             velocity_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedVelocities(body_name))
-        return position_data, velocity_data
+        return mass_data, position_data, velocity_data
 
     def _round_time_decimal_places(self, simulated_data: dict) -> dict:
         """

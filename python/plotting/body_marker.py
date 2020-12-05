@@ -144,11 +144,13 @@ class BodyMarker(QObject):
         """Returns the colour used for this body marker."""
         return self._colour
 
-    def set_mass(self, mass: float) -> None:
+    def set_mass(self, mass: float, recreate_body: bool = True) -> None:
         """Sets the mass of a body marker."""
-        self.remove_body()
         self._mass = mass
-        self.create_body()
+
+        if recreate_body:
+            self.remove_body()
+            self.create_body()
 
     def set_position(self, x: float, y: float, emit_signal: bool = True, recreate_body: bool = True) -> None:
         """Sets a new position for this body marker, and emits a signal."""

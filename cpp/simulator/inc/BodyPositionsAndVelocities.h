@@ -25,10 +25,17 @@ public:
   // Return the body associated with the position and velocity coordinates.
   [[nodiscard]] Body &body() const;
 
+  // Add a mass for a specific time.
+  void addMass(double time, double mass);
   // Add a position coordinate for a specific time.
   void addPosition(double time, Vector2D const &position);
   // Add a velocity for a specific time.
   void addVelocity(double time, Vector2D const &velocity);
+
+  // Returns the bodies mass at the different times during the a simulation.
+  [[nodiscard]] inline std::map<double, double> masses() const noexcept {
+    return m_masses;
+  }
 
   // Returns the body locations calculated during a simulation.
   [[nodiscard]] inline std::map<double, Vector2D> positions() const noexcept {
@@ -42,6 +49,7 @@ public:
 
 private:
   std::unique_ptr<Body> m_body;
+  std::map<double, double> m_masses;
   std::map<double, Vector2D> m_positions;
   std::map<double, Vector2D> m_velocities;
 };

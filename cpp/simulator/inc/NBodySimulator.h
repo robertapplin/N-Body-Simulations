@@ -76,6 +76,8 @@ public:
   // Run the simulation using the currently stored initial parameters.
   void runSimulation();
 
+  // Return the simulated masses of the specified body.
+  std::map<double, double> simulatedMasses(std::string const &bodyName) const;
   // Return the simulated locations of the specified body.
   std::map<double, Vector2D>
   simulatedPositions(std::string const &bodyName) const;
