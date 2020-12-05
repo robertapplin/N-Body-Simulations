@@ -24,7 +24,7 @@ protected:
 TEST_F(BodyPositionsTest,
        test_that_BodyPositions_has_been_instantiated_with_the_correct_body) {
   ASSERT_EQ("Earth", m_bodyPositions->body().name());
-  ASSERT_EQ(0.01, m_bodyPositions->body().mass());
+  ASSERT_EQ(0.01, m_bodyPositions->body().initialMass());
 }
 
 TEST_F(

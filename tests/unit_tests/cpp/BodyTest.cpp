@@ -29,12 +29,12 @@ TEST_F(BodyTest, test_that_setName_will_set_the_name_of_the_body) {
 }
 
 TEST_F(BodyTest, test_that_mass_returns_the_mass_of_the_body) {
-  ASSERT_EQ(0.01, m_body->mass());
+  ASSERT_EQ(0.01, m_body->initialMass());
 }
 
 TEST_F(BodyTest, test_that_setMass_will_set_the_mass_of_the_body) {
-  m_body->setMass(5.0);
-  ASSERT_EQ(5.0, m_body->mass());
+  m_body->setInitialMass(5.0);
+  ASSERT_EQ(5.0, m_body->initialMass());
 }
 
 TEST_F(BodyTest,

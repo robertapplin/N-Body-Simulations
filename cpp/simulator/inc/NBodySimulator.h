@@ -53,7 +53,7 @@ public:
   // Set the mass of the specified body in the simulator.
   void setMass(std::string const &bodyName, double mass);
   // Return the mass of the specified body stored by the simulator.
-  double mass(std::string const &bodyName) const;
+  double initialMass(std::string const &bodyName) const;
 
   // Set the x position of the specified body in the simulator.
   void setXPosition(std::string const &bodyName, double x);
@@ -91,12 +91,16 @@ private:
   void calculateNewPositions(std::size_t const &stepNumber);
   // Calculates the new positions of a target body at the next time step.
   void calculateNewPositions(std::size_t const &stepNumber,
-                             std::size_t const &bodyIndex, Body &targetBody);
+                             std::size_t const &targetBodyIndex,
+                             Body &targetBody);
   // Calculates the accelerations of the bodies at the next time step.
-  Vector2D calculateAcceleration(Body &targetBody) const;
+  Vector2D calculateAcceleration(Body &targetBody);
   // Calculates the acceleration of a target body at the next time step.
   void calculateAcceleration(Vector2D &acceleration, Body &targetBody,
-                             Body &otherBody) const;
+                             Body &otherBody);
+
+  // Returns a reference to the body at a given index.
+  Body &body(std::size_t const &bodyIndex);
 
   // Removes the data calculated during previous simulations.
   void resetSimulation();

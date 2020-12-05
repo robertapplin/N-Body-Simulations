@@ -97,7 +97,7 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(NBodySimulatorTest, test_that_setMass_will_set_the_mass_of_a_body) {
   m_simulator->setMass("Sun", 2.0);
-  ASSERT_EQ(2.0, m_simulator->mass("Sun"));
+  ASSERT_EQ(2.0, m_simulator->initialMass("Sun"));
   ASSERT_TRUE(m_simulator->hasDataChanged());
 }
 
@@ -108,7 +108,7 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(NBodySimulatorTest,
        test_that_mass_will_throw_if_the_body_name_does_not_exist) {
-  ASSERT_THROW(m_simulator->mass("Neptune"), std::invalid_argument);
+  ASSERT_THROW(m_simulator->initialMass("Neptune"), std::invalid_argument);
 }
 
 TEST_F(NBodySimulatorTest,

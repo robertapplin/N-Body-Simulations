@@ -13,8 +13,8 @@ namespace Simulator {
 class Body {
 
 public:
-  Body(std::string const &name, double mass, Vector2D const &initialPosition,
-       Vector2D const &initialVelocity);
+  Body(std::string const &name, double initialMass,
+       Vector2D const &initialPosition, Vector2D const &initialVelocity);
   ~Body() = default;
 
   // Sets the name of the body.
@@ -22,9 +22,16 @@ public:
   // Returns the name of the body.
   [[nodiscard]] inline std::string name() const noexcept { return m_name; }
 
-  // Sets the mass of the body.
-  void setMass(double mass);
+  // Sets the initial mass of the body.
+  void setInitialMass(double mass);
   // Returns the mass of the body.
+  [[nodiscard]] inline double initialMass() const noexcept {
+    return m_initialMass;
+  }
+
+  // Sets the current mass of the body.
+  void setMass(double mass);
+  // Returns the current mass of the body.
   [[nodiscard]] inline double mass() const noexcept { return m_mass; }
 
   // Returns the initial position of the body.
@@ -44,17 +51,26 @@ public:
   // Reset the position and velocity of the body to the initial values.
   void resetBody();
 
+  // Sets the body as having been engulfed by a larger body.
+  void setAsMerged(bool merged);
+  // Returns true if this body has merged into a larger body.
+  [[nodiscard]] inline bool isMerged() const noexcept { return m_isMerged; }
+
   bool operator!=(Body const &otherBody);
 
 private:
   std::string m_name;
-  double m_mass;
+  double m_initialMass;
 
   Vector2D m_initialPosition;
   Vector2D m_initialVelocity;
 
+  double m_mass;
+
   Vector2D m_position;
   Vector2D m_velocity;
+
+  bool m_isMerged;
 };
 
 } // namespace Simulator

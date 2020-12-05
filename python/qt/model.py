@@ -79,9 +79,9 @@ class NBodySimulationsModel(QThread):
         self._simulator.setMass(body_name, mass)
 
     @catch_errors()
-    def mass(self, body_name: str) -> float:
-        """Return the mass of the specified body stored by the simulator."""
-        return self._simulator.mass(body_name)
+    def initial_mass(self, body_name: str) -> float:
+        """Return the initial mass of the specified body stored by the simulator."""
+        return self._simulator.initialMass(body_name)
 
     @catch_errors()
     def set_x_position(self, body_name: str, x: float) -> None:
@@ -116,7 +116,7 @@ class NBodySimulationsModel(QThread):
     @catch_errors()
     def initial_data(self, body_name: str) -> tuple:
         """Returns the initial data of the specified body stored by the simulator."""
-        return tuple([self.mass(body_name), self.initial_position(body_name), self.initial_velocity(body_name)])
+        return tuple([self.initial_mass(body_name), self.initial_position(body_name), self.initial_velocity(body_name)])
 
     def has_data_changed(self) -> bool:
         """Returns true if the data held by the simulator has changed since the last simulation."""

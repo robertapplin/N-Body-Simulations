@@ -83,12 +83,14 @@ void NBodySimulator::setName(std::string const &oldName,
 }
 
 void NBodySimulator::setMass(std::string const &bodyName, double mass) {
-  findBody(bodyName).setMass(mass);
+  auto &body = findBody(bodyName);
+  body.setInitialMass(mass);
+  body.setMass(mass);
   m_dataChanged = true;
 }
 
-double NBodySimulator::mass(std::string const &bodyName) const {
-  return findBody(bodyName).mass();
+double NBodySimulator::initialMass(std::string const &bodyName) const {
+  return findBody(bodyName).initialMass();
 }
 
 void NBodySimulator::setXPosition(std::string const &bodyName, double x) {
@@ -166,13 +168,15 @@ void NBodySimulator::validateSimulationParameters() const {
 }
 
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
-  for (auto const &targetBodyName : bodyNames())
-    calculateNewPositions(stepNumber, findBodyIndex(targetBodyName),
-                          findBody(targetBodyName));
+  for (auto const &targetBodyName : bodyNames()) {
+    auto const targetBodyIndex = findBodyIndex(targetBodyName);
+    if (!body(targetBodyIndex).isMerged())
+      calculateNewPositions(stepNumber, targetBodyIndex, body(targetBodyIndex));
+  }
 }
 
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
-                                           std::size_t const &bodyIndex,
+                                           std::size_t const &targetBodyIndex,
                                            Body &targetBody) {
   auto acceleration = calculateAcceleration(targetBody);
 
@@ -182,32 +186,40 @@ void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
   auto &position = targetBody.position();
   position += velocity * m_timeStep;
 
-  m_bodyData[bodyIndex]->addPosition(stepNumber * m_timeStep, position);
-  m_bodyData[bodyIndex]->addVelocity(stepNumber * m_timeStep, velocity);
+  m_bodyData[targetBodyIndex]->addPosition(stepNumber * m_timeStep, position);
+  m_bodyData[targetBodyIndex]->addVelocity(stepNumber * m_timeStep, velocity);
 }
 
-Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) const {
+Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) {
   Vector2D acceleration = {0.0, 0.0};
 
-  for (auto const &data : m_bodyData)
-    calculateAcceleration(acceleration, targetBody, data->body());
+  for (auto const &data : m_bodyData) {
+    if (!data->body().isMerged())
+      calculateAcceleration(acceleration, targetBody, data->body());
+  }
   return acceleration;
 }
 
 void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
-                                           Body &targetBody,
-                                           Body &otherBody) const {
+                                           Body &targetBody, Body &otherBody) {
   if (targetBody != otherBody) {
     auto relativePosition = otherBody.position() - targetBody.position();
     auto const r = relativePosition.magnitude();
-    if (r == 0.0)
-      throw std::runtime_error("Cannot divide by zero: " + targetBody.name() +
-                               " and " + otherBody.name() +
-                               " have the same position.");
+    if (r < 0.1) {
+      targetBody.setMass(targetBody.mass() + otherBody.mass());
+      otherBody.setAsMerged(true);
 
-    acceleration += relativePosition *
-                    (m_gravitationalConstant * otherBody.mass() / pow(r, 3));
+      auto &velocity = targetBody.velocity();
+      velocity += otherBody.velocity() * (otherBody.mass() / targetBody.mass());
+    } else {
+      acceleration += relativePosition *
+                      (m_gravitationalConstant * otherBody.mass() / pow(r, 3));
+    }
   }
+}
+
+Body &NBodySimulator::body(std::size_t const &bodyIndex) {
+  return m_bodyData[bodyIndex]->body();
 }
 
 void NBodySimulator::resetSimulation() {
