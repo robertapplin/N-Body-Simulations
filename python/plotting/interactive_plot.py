@@ -232,6 +232,8 @@ class InteractivePlot(QObject):
     def update_body_mass(self, body_name: str, mass: float, draw: bool = True) -> None:
         """Updates the mass of a body."""
         self._body_markers[body_name].set_mass(mass)
+        self._initial_data[body_name] = tuple([mass, self._initial_data[body_name][1],
+                                               self._initial_data[body_name][2]])
         if draw:
             self._canvas.draw()
 
