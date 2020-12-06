@@ -183,11 +183,11 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(
     NBodySimulatorTest,
-    test_that_runSimulation_will_throw_if_two_bodies_have_the_same_position) {
+    test_that_runSimulation_will_not_throw_if_two_bodies_have_the_same_position) {
   m_simulator->setTimeStep(1.0);
   m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {0.0, 0.0}, {0.0, 0.015});
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_NO_THROW(m_simulator->runSimulation());
 }
 
 TEST_F(NBodySimulatorTest,
