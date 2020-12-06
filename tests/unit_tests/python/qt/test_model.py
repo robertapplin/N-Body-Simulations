@@ -31,11 +31,11 @@ def test_that_clear_will_clear_the_simulator(model):
 
 
 def test_that_mass_returns_the_expected_value(model):
-    assert model.mass("Earth") == 0.000003
+    assert model.initial_mass("Earth") == 0.000003
 
 
 def test_that_mass_fails_silently_if_an_invalid_body_name_is_provided(model):
-    _ = model.mass("Not a body")
+    _ = model.initial_mass("Not a body")
 
 
 def test_that_initial_position_returns_the_expected_value(model):
@@ -59,7 +59,7 @@ def test_that_initial_velocity_fails_silently_if_an_invalid_body_name_is_provide
 def test_that_add_body_will_add_a_body_as_expected(model):
     model.add_body("Mars", 0.2, 3.0, 4.0, 0.0, 0.0)
 
-    mass = model.mass("Mars")
+    mass = model.initial_mass("Mars")
     position = model.initial_position("Mars")
     velocity = model.initial_velocity("Mars")
 
@@ -138,7 +138,7 @@ def test_that_set_name_will_change_the_name_of_a_body_as_expected(model):
 
 def test_that_set_mass_will_set_the_mass_of_a_body_as_expected(model):
     model.set_mass("Earth", 5.0)
-    assert model.mass("Earth") == 5.0
+    assert model.initial_mass("Earth") == 5.0
 
 
 def test_that_set_x_position_will_set_the_x_position_of_a_body_as_expected(model):

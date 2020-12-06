@@ -500,6 +500,12 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
         """Returns the axes limits currently being used for the interactive plot."""
         return self.interactive_plot.get_axes_limits()
 
+    def reset_plot_options(self) -> None:
+        """Resets the plot options to their default states."""
+        self.position_plot_options_action.set_is_showing_labels(True)
+        self.velocity_plot_options_action.set_is_showing_arrows(True)
+        self.velocity_plot_options_action.arrow_magnification.setCurrentIndex(0)
+
     @staticmethod
     def _create_table_double(value: float) -> QTableWidgetItem:
         """Creates a table item and sets its role."""

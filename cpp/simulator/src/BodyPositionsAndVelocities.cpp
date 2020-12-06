@@ -10,24 +10,35 @@ namespace Simulator {
 
 BodyPositionsAndVelocities::BodyPositionsAndVelocities(
     std::unique_ptr<Body> body)
-    : m_body(std::move(body)), m_positions(), m_velocities() {
+    : m_body(std::move(body)), m_masses(), m_positions(), m_velocities() {
+  m_masses[0.0] = m_body->initialMass();
   m_positions[0.0] = m_body->initialPosition();
   m_velocities[0.0] = m_body->initialVelocity();
 }
 
 BodyPositionsAndVelocities::~BodyPositionsAndVelocities() {
   m_body.reset();
+  m_masses.clear();
   m_positions.clear();
   m_velocities.clear();
 }
 
 void BodyPositionsAndVelocities::resetParameters() {
+  m_masses.erase(std::next(m_masses.cbegin()), m_masses.cend());
   m_positions.erase(std::next(m_positions.cbegin()), m_positions.cend());
   m_velocities.erase(std::next(m_velocities.cbegin()), m_velocities.cend());
   m_body->resetBody();
 }
 
 Body &BodyPositionsAndVelocities::body() const { return *m_body.get(); }
+
+void BodyPositionsAndVelocities::addMass(double time, double mass) {
+  if (m_masses.find(time) != m_masses.cend())
+    throw std::runtime_error("A mass for " + m_body->name() + " at time " +
+                             std::to_string(time) + " already exists.");
+
+  m_masses[time] = mass;
+}
 
 void BodyPositionsAndVelocities::addPosition(double time,
                                              Vector2D const &position) {

@@ -19,6 +19,8 @@ class SimulationAnimator:
 
         self._body_markers = dict()
 
+        # Dict("Body Name": Dict(Time: Mass))
+        self._mass_data = dict()
         # Dict("Body Name": Dict(Time: Position))
         self._position_data = dict()
         # Dict("Body Name": Dict(Time: Velocity))
@@ -56,8 +58,9 @@ class SimulationAnimator:
 
     def set_simulation_data(self, simulation_data: tuple) -> None:
         """Sets the simulated position and velocity data to be animated."""
-        self._position_data = simulation_data[0]
-        self._velocity_data = simulation_data[1]
+        self._mass_data = simulation_data[0]
+        self._position_data = simulation_data[1]
+        self._velocity_data = simulation_data[2]
         self._update_time_step()
         self._update_duration()
 
@@ -89,31 +92,36 @@ class SimulationAnimator:
         self._time_step = round(abs(times[-1] / (len(times) - 1)), self.time_dp)
 
     def _update_duration(self) -> float:
-        """Returns the duration of the simulation."""
-        self._duration = round(list(list(self._position_data.values())[0].keys())[-1], self.time_dp)
+        """Updates the duration of the simulation."""
+        max_time = 0
+        for time_dict in self._position_data.values():
+            last_time = list(time_dict.keys())[-1]
+            if last_time > max_time:
+                max_time = last_time
+        self._duration = round(max_time, self.time_dp)
 
     def _update_bodies(self, time: float) -> dict:
         """Updates the positions and velocities of the bodies in the animation."""
-        patches = self._update_body_velocities(time)
-        patches.extend(self._update_body_positions(time))
-        return patches
-
-    def _update_body_positions(self, time: float) -> list:
-        """Updates the positions of the bodies in the animation."""
         patches = []
-        for body_name, positions in self._position_data.items():
-            self._body_markers[body_name].set_position(positions[time].x, positions[time].y, emit_signal=False)
-            patches.append(self._body_markers[body_name].get_body_patch())
-        return patches
+        for body_name in self._position_data.keys():
+            masses = self._mass_data[body_name]
+            positions = self._position_data[body_name]
+            velocities = self._velocity_data[body_name]
 
-    def _update_body_velocities(self, time: float) -> list:
-        """Updates the velocities of the bodies in the animation."""
-        patches = []
-        for body_name, velocities in self._velocity_data.items():
-            self._body_markers[body_name].set_velocity(velocities[time].x, velocities[time].y, emit_signal=False)
-            velocity_patch = self._body_markers[body_name].get_velocity_patch()
-            if velocity_patch is not None:
-                patches.append(velocity_patch)
+            if time in masses and time in positions and time in velocities:
+                self._body_markers[body_name].set_mass(masses[time], recreate_body=False)
+                self._body_markers[body_name].set_position(positions[time].x, positions[time].y,
+                                                           emit_signal=False, recreate_body=False)
+                self._body_markers[body_name].set_velocity(velocities[time].x, velocities[time].y,
+                                                           emit_signal=False, recreate_body=False)
+                self._body_markers[body_name].refresh()
+
+                patches.append(self._body_markers[body_name].get_body_patch())
+                velocity_patch = self._body_markers[body_name].get_velocity_patch()
+                if velocity_patch is not None:
+                    patches.append(velocity_patch)
+            else:
+                self._body_markers[body_name].show_body(False)
         return patches
 
     def _time(self) -> float:

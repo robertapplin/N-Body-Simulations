@@ -111,6 +111,12 @@ class BodyMarker(QObject):
         self._create_velocity_arrow()
         self._create_position_circle()
 
+    def show_body(self, show_body: bool) -> None:
+        """Show or hide the body on the interactive plot. It is hidden if it merges with another body."""
+        self._body_patch.set_visible(show_body)
+        self._position_label.set_visible(show_body)
+        self._velocity_patch.set_visible(show_body)
+
     def show_position_label(self, show_label: bool) -> None:
         """Show or hide the position label on the interactive plot."""
         self._show_position_label = show_label
@@ -138,26 +144,32 @@ class BodyMarker(QObject):
         """Returns the colour used for this body marker."""
         return self._colour
 
-    def set_mass(self, mass: float) -> None:
+    def set_mass(self, mass: float, recreate_body: bool = True) -> None:
         """Sets the mass of a body marker."""
-        self.remove_body()
         self._mass = mass
-        self.create_body()
 
-    def set_position(self, x: float, y: float, emit_signal: bool = True) -> None:
+        if recreate_body:
+            self.remove_body()
+            self.create_body()
+
+    def set_position(self, x: float, y: float, emit_signal: bool = True, recreate_body: bool = True) -> None:
         """Sets a new position for this body marker, and emits a signal."""
-        self.remove_body()
         self._position = Vector2D(x, y)
-        self.create_body()
+
+        if recreate_body:
+            self.remove_body()
+            self.create_body()
 
         if emit_signal:
             self.bodyMovedSignal.emit(self._name, x, y)
 
-    def set_velocity(self, vx: float, vy: float, emit_signal: bool = True) -> None:
+    def set_velocity(self, vx: float, vy: float, emit_signal: bool = True, recreate_body: bool = True) -> None:
         """Sets a new velocity for this body marker, and emits a signal."""
-        self.remove_body()
         self._velocity = Vector2D(vx, vy)
-        self.create_body()
+
+        if recreate_body:
+            self.remove_body()
+            self.create_body()
 
         if emit_signal:
             self.bodyVelocityChangedSignal.emit(self._name, vx, vy)

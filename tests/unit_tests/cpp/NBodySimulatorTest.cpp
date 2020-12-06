@@ -97,7 +97,7 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(NBodySimulatorTest, test_that_setMass_will_set_the_mass_of_a_body) {
   m_simulator->setMass("Sun", 2.0);
-  ASSERT_EQ(2.0, m_simulator->mass("Sun"));
+  ASSERT_EQ(2.0, m_simulator->initialMass("Sun"));
   ASSERT_TRUE(m_simulator->hasDataChanged());
 }
 
@@ -108,7 +108,7 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(NBodySimulatorTest,
        test_that_mass_will_throw_if_the_body_name_does_not_exist) {
-  ASSERT_THROW(m_simulator->mass("Neptune"), std::invalid_argument);
+  ASSERT_THROW(m_simulator->initialMass("Neptune"), std::invalid_argument);
 }
 
 TEST_F(NBodySimulatorTest,
@@ -183,11 +183,11 @@ TEST_F(NBodySimulatorTest,
 
 TEST_F(
     NBodySimulatorTest,
-    test_that_runSimulation_will_throw_if_two_bodies_have_the_same_position) {
+    test_that_runSimulation_will_not_throw_if_two_bodies_have_the_same_position) {
   m_simulator->setTimeStep(1.0);
   m_simulator->setDuration(500.0);
   m_simulator->addBody("Earth", 0.000003, {0.0, 0.0}, {0.0, 0.015});
-  ASSERT_THROW(m_simulator->runSimulation(), std::runtime_error);
+  ASSERT_NO_THROW(m_simulator->runSimulation());
 }
 
 TEST_F(NBodySimulatorTest,
@@ -222,6 +222,42 @@ TEST_F(
   m_simulator->setTimeStep(1.3);
   m_simulator->setDuration(20.0);
   ASSERT_THROW(m_simulator->runSimulation(), std::invalid_argument);
+}
+
+TEST_F(
+    NBodySimulatorTest,
+    test_that_simulatedMasses_will_return_a_map_of_masses_with_the_correct_size) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
+  m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
+
+  m_simulator->runSimulation();
+
+  auto sunMasses = m_simulator->simulatedMasses("Sun");
+  auto earthMasses = m_simulator->simulatedMasses("Earth");
+
+  ASSERT_EQ(501, sunMasses.size());
+  ASSERT_EQ(501, earthMasses.size());
+}
+
+TEST_F(NBodySimulatorTest,
+       test_that_simulatedMasses_will_return_the_initial_mass_in_a_map) {
+  m_simulator->setTimeStep(1.0);
+  m_simulator->setDuration(500.0);
+  m_simulator->addBody("Earth", 0.000003, {1.0, 0.0}, {0.0, 0.015});
+
+  m_simulator->runSimulation();
+
+  auto const sunMasses = m_simulator->simulatedMasses("Sun");
+  auto const earthMasses = m_simulator->simulatedMasses("Earth");
+
+  ASSERT_EQ(1.0, sunMasses.at(0.0));
+  ASSERT_EQ(0.000003, earthMasses.at(0.0));
+}
+
+TEST_F(NBodySimulatorTest,
+       test_that_simulatedMasses_will_throw_if_the_body_name_does_not_exist) {
+  ASSERT_THROW(m_simulator->simulatedMasses("Earth"), std::invalid_argument);
 }
 
 TEST_F(
