@@ -101,6 +101,9 @@ private:
   void calculateAcceleration(Vector2D &acceleration, Body &targetBody,
                              Body &otherBody);
 
+  // Handles the merging of two bodies and applies the momentum transfer.
+  void mergeBodies(Body &largerBody, Body &smallerBody);
+
   // Returns a reference to the body at a given index.
   Body &body(std::size_t const &bodyIndex);
 

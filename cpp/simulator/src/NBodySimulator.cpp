@@ -192,19 +192,18 @@ void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
   auto &position = targetBody.position();
   position += velocity * m_timeStep;
 
-  m_bodyData[targetBodyIndex]->addMass(stepNumber * m_timeStep,
-                                       targetBody.mass());
-  m_bodyData[targetBodyIndex]->addPosition(stepNumber * m_timeStep, position);
-  m_bodyData[targetBodyIndex]->addVelocity(stepNumber * m_timeStep, velocity);
+  auto const time = stepNumber * m_timeStep;
+  m_bodyData[targetBodyIndex]->addMass(time, targetBody.mass());
+  m_bodyData[targetBodyIndex]->addPosition(time, position);
+  m_bodyData[targetBodyIndex]->addVelocity(time, velocity);
 }
 
 Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) {
   Vector2D acceleration = {0.0, 0.0};
 
-  for (auto const &data : m_bodyData) {
+  for (auto const &data : m_bodyData)
     if (!data->body().isMerged())
       calculateAcceleration(acceleration, targetBody, data->body());
-  }
   return acceleration;
 }
 
@@ -213,17 +212,22 @@ void NBodySimulator::calculateAcceleration(Vector2D &acceleration,
   if (targetBody != otherBody) {
     auto relativePosition = otherBody.position() - targetBody.position();
     auto const r = relativePosition.magnitude();
-    if (r < 0.1) {
-      targetBody.setMass(targetBody.mass() + otherBody.mass());
-      otherBody.setAsMerged(true);
-
-      auto &velocity = targetBody.velocity();
-      velocity += otherBody.velocity() * (otherBody.mass() / targetBody.mass());
+    auto const collision = r <= targetBody.radius() + otherBody.radius();
+    if (collision && targetBody.mass() >= otherBody.mass()) {
+      mergeBodies(targetBody, otherBody);
     } else {
       acceleration += relativePosition *
                       (m_gravitationalConstant * otherBody.mass() / pow(r, 3));
     }
   }
+}
+
+void NBodySimulator::mergeBodies(Body &largerBody, Body &smallerBody) {
+  largerBody.setMass(largerBody.mass() + smallerBody.mass());
+  smallerBody.setAsMerged(true);
+
+  auto &velocity = largerBody.velocity();
+  velocity += smallerBody.velocity() * (smallerBody.mass() / largerBody.mass());
 }
 
 Body &NBodySimulator::body(std::size_t const &bodyIndex) {

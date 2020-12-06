@@ -48,6 +48,9 @@ public:
   // Returns the current velocity of the body.
   [[nodiscard]] inline Vector2D &velocity() noexcept { return m_velocity; }
 
+  // Returns an estimated radius for the body.
+  [[nodiscard]] double radius() const;
+
   // Reset the position and velocity of the body to the initial values.
   void resetBody();
 
