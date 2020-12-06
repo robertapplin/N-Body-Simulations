@@ -19,7 +19,10 @@ Body::Body(std::string const &name, double initialMass,
 
 void Body::setName(std::string const &name) { m_name = name; }
 
-void Body::setInitialMass(double mass) { m_initialMass = mass; }
+void Body::setInitialMass(double mass) {
+  m_initialMass = mass;
+  m_mass = mass;
+}
 
 void Body::setMass(double mass) { m_mass = mass; }
 

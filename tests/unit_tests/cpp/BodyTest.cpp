@@ -30,11 +30,13 @@ TEST_F(BodyTest, test_that_setName_will_set_the_name_of_the_body) {
 
 TEST_F(BodyTest, test_that_mass_returns_the_mass_of_the_body) {
   ASSERT_EQ(0.01, m_body->initialMass());
+  ASSERT_EQ(0.01, m_body->mass());
 }
 
 TEST_F(BodyTest, test_that_setMass_will_set_the_mass_of_the_body) {
   m_body->setInitialMass(5.0);
   ASSERT_EQ(5.0, m_body->initialMass());
+  ASSERT_EQ(5.0, m_body->mass());
 }
 
 TEST_F(BodyTest,
@@ -69,16 +71,27 @@ TEST_F(BodyTest, test_that_the_current_velocity_of_the_body_can_be_set) {
   ASSERT_TRUE(Vector2D({5.0, 6.0}) == m_body->velocity());
 }
 
+TEST_F(BodyTest, test_that_the_body_is_not_merged_by_default) {
+  ASSERT_TRUE(!m_body->isMerged());
+}
+
+TEST_F(BodyTest, test_that_setAsMerged_will_set_the_body_as_being_merged) {
+  m_body->setAsMerged(true);
+  ASSERT_TRUE(m_body->isMerged());
+}
+
 TEST_F(
     BodyTest,
     test_that_resetBody_will_reset_the_current_position_and_velocity_of_the_body) {
   m_body->position() += {2.0, 2.0};
   m_body->velocity() += {2.0, 2.0};
+  m_body->setAsMerged(true);
 
   m_body->resetBody();
 
   ASSERT_TRUE(Vector2D({1.0, 2.0}) == m_body->position());
   ASSERT_TRUE(Vector2D({3.0, 4.0}) == m_body->velocity());
+  ASSERT_TRUE(!m_body->isMerged());
 }
 
 TEST_F(BodyTest,

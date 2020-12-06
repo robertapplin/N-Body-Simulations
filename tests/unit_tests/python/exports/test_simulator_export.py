@@ -68,7 +68,7 @@ def test_that_setName_is_exposed_to_python(simulator):
     assert simulator.bodyNames() == ["Earth"]
 
 
-def test_that_mass_is_exposed_to_python(simulator):
+def test_that_initialMass_is_exposed_to_python(simulator):
     assert simulator.initialMass("Sun") == 1.0
 
 
@@ -129,6 +129,18 @@ def test_that_runSimulation_is_exposed_to_python(simulator):
     simulator.runSimulation()
 
     assert not simulator.hasDataChanged()
+
+
+def test_that_simulatedMasses_is_exposed_to_python(simulator):
+    simulator.setTimeStep(1.0)
+    simulator.setDuration(500.0)
+    simulator.runSimulation()
+
+    results = simulator.simulatedMasses("Sun")
+
+    assert results[0.0] == 1.0
+    assert results[1.0] == 1.0
+    assert results[2.0] == 1.0
 
 
 def test_that_simulatedPositions_is_exposed_to_python(simulator):

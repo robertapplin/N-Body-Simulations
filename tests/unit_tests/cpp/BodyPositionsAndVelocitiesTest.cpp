@@ -30,13 +30,30 @@ TEST_F(BodyPositionsTest,
 TEST_F(
     BodyPositionsTest,
     test_that_BodyPositions_has_been_instantiated_with_a_single_position_and_velocity_at_time_zero) {
+  auto const masses = m_bodyPositions->masses();
   auto const positions = m_bodyPositions->positions();
   auto const velocities = m_bodyPositions->velocities();
 
+  ASSERT_EQ(1, masses.size());
   ASSERT_EQ(1, positions.size());
   ASSERT_EQ(1, velocities.size());
+  ASSERT_EQ(0.01, masses.at(0.0));
   ASSERT_TRUE(Vector2D({1.0, 2.0}) == positions.at(0.0));
   ASSERT_TRUE(Vector2D({3.0, 4.0}) == velocities.at(0.0));
+}
+
+TEST_F(BodyPositionsTest, test_that_addMass_will_add_a_mass) {
+  m_bodyPositions->addMass(1.0, 2.0);
+
+  auto const masses = m_bodyPositions->masses();
+
+  ASSERT_EQ(2, masses.size());
+  ASSERT_EQ(2.0, masses.at(1.0));
+}
+
+TEST_F(BodyPositionsTest,
+       test_that_addMass_will_throw_when_a_time_already_exists) {
+  ASSERT_THROW(m_bodyPositions->addMass(0.0, 2.0), std::runtime_error);
 }
 
 TEST_F(BodyPositionsTest, test_that_addPosition_will_add_a_position) {
@@ -72,15 +89,19 @@ TEST_F(BodyPositionsTest,
 TEST_F(
     BodyPositionsTest,
     test_that_resetParameters_will_clear_all_positions_and_velocities_but_the_first) {
+  m_bodyPositions->addMass(1.0, 2.0);
   m_bodyPositions->addPosition(1.0, {3.0, 3.0});
   m_bodyPositions->addVelocity(1.0, {4.0, 4.0});
 
   m_bodyPositions->resetParameters();
 
+  auto const masses = m_bodyPositions->masses();
   auto const positions = m_bodyPositions->positions();
   auto const velocities = m_bodyPositions->velocities();
+  ASSERT_EQ(1, masses.size());
   ASSERT_EQ(1, positions.size());
   ASSERT_EQ(1, velocities.size());
+  ASSERT_EQ(0.01, masses.at(0.0));
   ASSERT_TRUE(Vector2D({1.0, 2.0}) == positions.at(0.0));
   ASSERT_TRUE(Vector2D({3.0, 4.0}) == velocities.at(0.0));
 }
