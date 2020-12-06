@@ -69,12 +69,12 @@ def test_that_setName_is_exposed_to_python(simulator):
 
 
 def test_that_mass_is_exposed_to_python(simulator):
-    assert simulator.mass("Sun") == 1.0
+    assert simulator.initialMass("Sun") == 1.0
 
 
 def test_that_setMass_is_exposed_to_python(simulator):
     simulator.setMass("Sun", 5.0)
-    assert simulator.mass("Sun") == 5.0
+    assert simulator.initialMass("Sun") == 5.0
 
 
 def test_that_initialPosition_is_exposed_to_python(simulator):
