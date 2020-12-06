@@ -204,6 +204,7 @@ class NBodySimulationsPresenter:
         """Loads body data into the view and model."""
         self._set_time_step(time_step)
         self._set_duration(duration)
+        self.view.reset_plot_options()
 
         for line in initial_data:
             line_split = line.split(" ")
