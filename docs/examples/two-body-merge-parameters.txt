@@ -1,0 +1,4 @@
+I declare that the data in this *.txt file is correctly formatted for the N-Body Simulator.
+1.0 150.0
+orange Sun 2e-06 -0.23943482688391043 0.45820264765784113 0.01 0.0
+blue Earth 1.0 0.0 -0.5 0.01 0.0
