@@ -19,8 +19,34 @@ If two bodies get close enough to each other, they will merge into one body.
 
 ## Building On Windows
 
+The easiest way to build this project is to download and install Miniconda. The dependences for this project can then be installed:
+
 ```sh
-cmake .. -DPYTHON_LIBRARY_DIR="C:/Users/rober/miniconda3/Lib/site-packages" -DPYTHON_EXECUTABLE="C:/Users/rober/miniconda3/python.exe" -G "Visual Studio 15 2017 Win64"
+conda install -c anaconda pytest-mock pyqt qtawesome
+conda install -c conda-forge matplotlib pybind11 pyside2 pytest
 ```
+
+The code for this project should then be cloned:
+
+```sh
+git clone git@github.com:robertapplin/N-Body-Simulations.git
+```
+
+CMake was used to structure this project. Using the command prompt you should create a build folder, and then cmake the project:
+
+```sh
+mkdir build
+cd build
+cmake .. -DPYTHON_LIBRARY_DIR=<path_to>/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=<path_to>/Miniconda/python.exe
+cmake --build . --config Release
+```
+
+Note that it might be necessary to specify a compile when running `cmake`:
+
+```sh
+cmake .. -DPYTHON_LIBRARY_DIR=<path_to>/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=<path_to>/Miniconda/python.exe -G "Visual Studio 15 2017 Win64"
+```
+
+Run the `startup.py` script from your chosen python environment to open this QWidget.
 
 ## Building On Linux
