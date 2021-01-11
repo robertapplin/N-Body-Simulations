@@ -1,0 +1,4 @@
+I declare that the data in this *.txt file is correctly formatted for the N-Body Simulator.
+1.0 1000.0
+#ff0000 Star1 1.0 -1.0 0.0 0.0 -0.006
+#ffaa00 Star2 1.0 1.0 0.0 0.0 0.006
