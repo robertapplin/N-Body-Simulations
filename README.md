@@ -1,6 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/robertapplin/N-Body-Simulations/badge.svg?branch=master)](https://coveralls.io/r/robertapplin/N-Body-Simulations?branch=master)
-
-## About The Project
+## About
 
 This project creates a QWidget used for simulating and animating a system of N bodies. A detailed explanation for how to use this widget can be found in the `docs` folder. The widget can:
 
@@ -48,5 +46,3 @@ cmake .. -DPYTHON_LIBRARY_DIR=<path_to>/Miniconda/lib/site-packages/ -DPYTHON_EX
 ```
 
 Run the `startup.py` script from your chosen python environment to open this QWidget.
-
-## Building On Linux
