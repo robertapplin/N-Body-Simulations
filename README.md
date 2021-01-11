@@ -8,8 +8,7 @@ This project creates a QWidget used for simulating a gravitational system of N b
 * Change the time step and duration of the simulation.
 * Change the colour and name used to represent a body.
 * Save and load the initial parameters for an N-body simulation.
-
-If two bodies get close enough to each other, they will merge into one body.
+* Bodies will merge together if they get close enough to each other.
 
 <p align="center">
   <img src="docs/three-body-simulation.gif" alt="animated">
