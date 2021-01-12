@@ -1,6 +1,6 @@
 ## About
 
-This project creates a QWidget used for simulating a gravitational system of N bodies. A detailed explanation for how to use this widget can be found in the `docs` folder. The widget can:
+This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions. A detailed explanation for how to use this widget can be found in the `docs` folder. The widget can:
 
 * Add and remove bodies from the simulation.
 * Adjust the position of a body by dragging the body on the interactive plot.
