@@ -1,19 +1,22 @@
 ## About
 
-This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions. The widget has options to:
+This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions. These bodies will merge together if they get close enough to each other. The widget has options to:
 
-* Save and load the initial parameters for an N-body simulation.
-* Add and remove bodies from the simulation.
-* Adjust the time step and duration of the simulation.
-* Show or hide position labels and velocity arrows.
-* Play, Pause or Stop the simulation at will.
+* Load a \**.txt* file containing initial parameters for an N-Body-Simulation. <img align="left" width="25" height="25" src="docs/load_button.PNG">
+* Save the initial parameters of an N-Body-Simulation to a \**.txt* file. <img align="left" width="25" height="25" src="docs/save_button.PNG">
+* Remove the selected bodies from the simulation. <img align="left" width="25" height="25" src="docs/remove_button.PNG">
+* Add bodies to the simulation. <img align="left" width="25" height="25" src="docs/add_button.PNG">
+* Adjust the time step and duration of the simulation. <img align="left" width="25" height="25" src="docs/time_options_button.PNG">
+* Show or hide position labels and velocity arrows on the plot. <img align="left" width="25" height="25" src="docs/plotting_options_button.PNG">
+* Turn on interactive mode, allowing you to interact with the bodies on the plot. <img align="left" width="25" height="25" src="docs/interactive_mode_button.PNG">
+* Stop the simulation. <img align="left" width="25" height="25" src="docs/stop_button.PNG">
+* Play or Pause the simulation. <img align="left" width="25" height="25" src="docs/play_pause_button.PNG">
 
 The widget also includes an interactive plot where you can:
 
-* Adjust the colour and name used to represent a body.
-* Adjust the position of a body by dragging the body on the interactive plot.
-* Adjust the velocity of a body by dragging the velocity arrow on the interactive plot.
-* Bodies will merge together if they get close enough to each other.
+* Adjust the colour and name used to represent a body. <img align="left" width="83" height="25" src="docs/body.PNG">
+* Adjust the position of a body by dragging the body on the interactive plot. <img align="left" width="83" height="25" src="docs/body_position.PNG">
+* Adjust the velocity of a body by dragging the velocity arrow on the interactive plot. <img align="left" width="83" height="25" src="docs/body_velocity.PNG">
 
 <p align="center">
   <img src="docs/three-body-simulation.gif" alt="animated">
@@ -23,10 +26,13 @@ The **docs** folder has example \**.txt* files which can be loaded into the widg
 
 ## Units
 
-Mass - Solar masses (M*)
-Position - Astronomical units (au)
-Time - Days (d)
-Velocity - (au/d)
+**Mass** - Solar masses (M*)
+
+**Position** - Astronomical units (au)
+
+**Time** - Days (d)
+
+**Velocity** - Astronomical units per day (au/d)
 
 ## Building On Windows
 
