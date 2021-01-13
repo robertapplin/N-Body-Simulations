@@ -1,4 +1,7 @@
-## About
+## N-Body Simulator
+![windows workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Windows?label=Windows%20latest)
+![ubuntu workflow](https://img.shields.io/badge/Ubuntu%20latest-In%20development-lightgrey)
+![test coverage](https://img.shields.io/badge/Test%20Coverage-High-brightgreen)
 
 This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions. These bodies will merge together if they get close enough to each other. The widget has options to:
 
@@ -26,13 +29,12 @@ The **docs** folder has example \**.txt* files which can be loaded into the widg
 
 ## Units
 
-**Mass** - Solar masses (M*)
-
-**Position** - Astronomical units (au)
-
-**Time** - Days (d)
-
-**Velocity** - Astronomical units per day (au/d)
+  |Quantity  |Measured in               |Unit|
+  |----------|--------------------------|----|
+  |Mass      |Solar masses              |M*  |
+  |Position  |Astronomical units        |au  |
+  |Time      |Days                      |d   |
+  |Velocity  |Astronomical units per day|au/d|
 
 ## Building On Windows
 
@@ -61,7 +63,7 @@ cmake --build . --config Release
 It might be necessary to specify a compiler when running **cmake**:
 
 ```sh
-cmake .. -DPYTHON_LIBRARY_DIR=<path>/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=<path>/Miniconda/python.exe -G "Visual Studio 15 2017 Win64"
+cmake .. -DPYTHON_LIBRARY_DIR=... -DPYTHON_EXECUTABLE=... -G "Visual Studio 15 2017 Win64"
 ```
 
 Run the **startup.py** script from your chosen python environment to open this QWidget.
