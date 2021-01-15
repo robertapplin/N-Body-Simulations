@@ -1,0 +1,44 @@
+name: Ubuntu
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Miniconda
+      uses: s-weigand/setup-conda@v1
+    - name: Install Dependencies
+      run: |
+        conda install -c anaconda pytest-mock pyqt qtawesome
+        conda install -c conda-forge matplotlib pybind11 pyside2 pytest
+    - name: Build Project
+      run: |
+        ls
+        mkdir build
+        cd build
+        cmake .. -DPYTHON_LIBRARY_DIR=/home/ra00578/Miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/home/ra00578//Miniconda/bin/python
+        cmake --build . --config Release
+    - name: Install into Python Site-Packages
+      run: |
+        cd build
+        cmake --install .
+    - name: Cpp Unit Tests
+      run: |
+        cd build/tests/unit_tests/cpp/Release
+        ./NBodySimulationsUnitTests.exe
+    - name: Cpp System Tests
+      run: |
+        cd build/tests/system_tests/cpp/Release
+        ./NBodySimulationsSystemTests.exe
+    - name: Python Unit Tests
+      run: |
+        pytest tests/unit_tests/python/
+    - name: Python System Tests
+      run: |
+        pytest tests/system_tests/python/
