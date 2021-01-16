@@ -2,8 +2,6 @@
 # Authored by Robert Applin, 2020
 from NBodySimulations import Vector2D
 
-import matplotlib as mpl
-mpl.use('agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Circle, FancyArrow, Patch
 

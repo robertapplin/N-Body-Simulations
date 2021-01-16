@@ -2,8 +2,6 @@
 # Authored by Robert Applin, 2020
 from n_body_simulations.xml_reader import get_user_interface_property
 
-import matplotlib as mpl
-mpl.use('agg')
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
