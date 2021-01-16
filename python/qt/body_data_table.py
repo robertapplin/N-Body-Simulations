@@ -36,10 +36,7 @@ class BodyDataTableWidget(QTableWidget):
 
     def __init__(self, parent=None):
         """Initialize the table widget for storing body data."""
-        try:
-            super(BodyDataTableWidget, self).__init__(parent)
-        except Exception as ex:
-            print(ex)
+        super(BodyDataTableWidget, self).__init__(parent)
 
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)

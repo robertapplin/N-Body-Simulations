@@ -37,7 +37,8 @@ jobs:
         ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
-        pytest tests/unit_tests/python/
+        pytest tests/unit_tests/python/exports/
+        pytest tests/unit_tests/python/plotting/
     - name: Python System Tests
       run: |
         pytest tests/system_tests/python/
