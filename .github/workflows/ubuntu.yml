@@ -43,4 +43,4 @@ jobs:
         # Doing matplotlib.use('agg') only works for pylab, not when using FigureCanvas.
     - name: Python System Tests
       run: |
-        pytest-qt tests/system_tests/python/
+        pytest tests/system_tests/python/

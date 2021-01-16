@@ -18,7 +18,7 @@ def dummy_plot():
     return plot
 
 
-def test_that_the_animator_will_start_pause_play_and_stop_without_error(dummy_plot):
+def test_that_the_animator_will_start_pause_play_and_stop_without_error(qtbot, dummy_plot):
     dummy_plot.animator.start(dummy_plot.lines)
     dummy_plot.animator.pause()
     dummy_plot.animator.play()
