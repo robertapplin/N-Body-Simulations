@@ -19,10 +19,14 @@ def q_app():
 
 
 @pytest.fixture
+def app():
+    return q_app()
+
+
+@pytest.fixture
 def dummy_plot():
-    app = q_app()
     plot = DummyInteractivePlot()
-    return app, plot
+    return plot
 
 
 def test_that_get_colour_will_get_the_colour_of_the_body_marker(app, dummy_plot):
