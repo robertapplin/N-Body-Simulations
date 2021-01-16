@@ -11,16 +11,12 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 
-def q_app():
+@pytest.fixture
+def app():
     """Create or get a QApplication instance."""
     if QApplication.instance():
         return QApplication.instance()
     return QApplication(sys.argv)
-
-
-@pytest.fixture
-def app():
-    return q_app()
 
 
 @pytest.fixture
