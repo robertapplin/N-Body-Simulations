@@ -4,6 +4,8 @@ from n_body_simulations.xml_reader import get_user_interface_property
 
 import matplotlib as mpl
 mpl.use('agg')
+from matplotlib.animation import FuncAnimation
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 class SimulationAnimator:
@@ -11,7 +13,7 @@ class SimulationAnimator:
 
     time_dp = int(get_user_interface_property("time-dp"))
 
-    def __init__(self, figure):
+    def __init__(self, figure: FigureCanvas):
         """Initialize the animator using the InteractivePlot figure."""
         self._figure = figure
         self._animation = None
@@ -45,8 +47,8 @@ class SimulationAnimator:
 
         self._active = True
         self._body_markers = body_markers
-        self._animation = mpl.animation.FuncAnimation(self._figure, self._update_bodies, self._time,
-                                                      interval=self._animation_interval)
+        self._animation = FuncAnimation(self._figure, self._update_bodies, self._time,
+                                        interval=self._animation_interval)
 
     def is_enabled(self) -> bool:
         """Returns whether the animator is active or not."""

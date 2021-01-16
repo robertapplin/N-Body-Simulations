@@ -7,8 +7,8 @@ from NBodySimulations import Vector2D
 
 import matplotlib as mpl
 mpl.use('agg')
-#from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-#from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
@@ -57,8 +57,8 @@ class DummyInteractivePlot:
     """A class used as a dummy interactive plot for the purposes of testing the animator."""
 
     def __init__(self):
-        self._figure = mpl.figure.Figure()
-        self._canvas = mpl.backends.backend_qt5agg.FigureCanvasQTAgg(self._figure)
+        self._figure = Figure()
+        self._canvas = FigureCanvas(self._figure)
 
         self._ax = self._figure.add_subplot(111)
         self.animator = SimulationAnimator(self._figure)

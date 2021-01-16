@@ -4,6 +4,7 @@ from NBodySimulations import Vector2D
 
 import matplotlib as mpl
 mpl.use('agg')
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Circle, FancyArrow, Patch
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
@@ -21,7 +22,7 @@ class BodyMarker(QObject):
     bodyMovedSignal = pyqtSignal(str, float, float)
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
-    def __init__(self, canvas, colour: str, name: str, mass: float, position: Vector2D,
+    def __init__(self, canvas: FigureCanvas, colour: str, name: str, mass: float, position: Vector2D,
                  velocity: Vector2D):
         """Initializes the body marker with a patch and a coordinate label."""
         super(BodyMarker, self).__init__()
@@ -191,8 +192,8 @@ class BodyMarker(QObject):
         """Creates the velocity arrow if necessary."""
         self._velocity_patch = FancyArrow(self._position.x, self._position.y,
                                           self._velocity.x * self._velocity_magnification,
-                                          self._velocity.y * self._velocity_magnification,
-                                          length_includes_head=True, facecolor=self._colour, edgecolor="black",
+                                          self._velocity.y * self._velocity_magnification, length_includes_head=True,
+                                          facecolor=self._colour, edgecolor="black",
                                           head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
         self._axis.add_patch(self._velocity_patch)
 
@@ -200,8 +201,8 @@ class BodyMarker(QObject):
 
     def _create_position_circle(self) -> None:
         """Creates a circle used to mark the position of a body."""
-        self._body_patch = Circle((self._position.x, self._position.y),
-                                  self._pixels_to_distance(self._body_radius()), facecolor=self._colour)
+        self._body_patch = Circle((self._position.x, self._position.y), self._pixels_to_distance(self._body_radius()),
+                                  facecolor=self._colour)
         self._axis.add_patch(self._body_patch)
 
     def _create_position_label(self) -> None:
