@@ -5,6 +5,8 @@ from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.simulation_animator import SimulationAnimator
 from NBodySimulations import Vector2D
 
+import matplotlib
+matplotlib.use('agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
