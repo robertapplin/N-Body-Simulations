@@ -1,5 +1,8 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+import matplotlib as mpl
+mpl.use('agg') # noqa
+
 import pytest
 
 from n_body_simulations.test_helpers.dummy_class_helper import DummyInteractivePlot

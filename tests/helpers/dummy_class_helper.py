@@ -1,8 +1,5 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-import matplotlib as mpl
-mpl.use('agg') # noqa
-
 from n_body_simulations.body_marker import BodyMarker
 from n_body_simulations.error_catcher import catch_errors
 from n_body_simulations.simulation_animator import SimulationAnimator
