@@ -2,8 +2,8 @@
 # Authored by Robert Applin, 2020
 from NBodySimulations import Vector2D
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.patches import Circle, FancyArrow, Patch
+import matplotlib as mpl
+mpl.use('agg')
 
 from PyQt5.QtCore import pyqtSignal, QObject, Qt
 from PyQt5.QtGui import QCursor
@@ -20,7 +20,7 @@ class BodyMarker(QObject):
     bodyMovedSignal = pyqtSignal(str, float, float)
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
-    def __init__(self, canvas: FigureCanvas, colour: str, name: str, mass: float, position: Vector2D,
+    def __init__(self, canvas, colour: str, name: str, mass: float, position: Vector2D,
                  velocity: Vector2D):
         """Initializes the body marker with a patch and a coordinate label."""
         super(BodyMarker, self).__init__()
@@ -174,11 +174,11 @@ class BodyMarker(QObject):
         if emit_signal:
             self.bodyVelocityChangedSignal.emit(self._name, vx, vy)
 
-    def get_body_patch(self) -> Patch:
+    def get_body_patch(self) -> mpl.patches.Patch:
         """Returns the patch which represents the body marker."""
         return self._body_patch
 
-    def get_velocity_patch(self) -> Patch:
+    def get_velocity_patch(self) -> mpl.patches.Patch:
         """Returns the patch which represents the velocity of the body."""
         return self._velocity_patch
 
@@ -188,19 +188,20 @@ class BodyMarker(QObject):
 
     def _create_velocity_arrow(self) -> None:
         """Creates the velocity arrow if necessary."""
-        self._velocity_patch = FancyArrow(self._position.x, self._position.y,
-                                          self._velocity.x * self._velocity_magnification,
-                                          self._velocity.y * self._velocity_magnification, length_includes_head=True,
-                                          facecolor=self._colour, edgecolor="black",
-                                          head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
+        self._velocity_patch = mpl.patches.FancyArrow(self._position.x, self._position.y,
+                                                      self._velocity.x * self._velocity_magnification,
+                                                      self._velocity.y * self._velocity_magnification,
+                                                      length_includes_head=True, facecolor=self._colour,
+                                                      edgecolor="black",
+                                                      head_width=self._pixels_to_distance(ARROW_HEAD_WIDTH_PIXELS))
         self._axis.add_patch(self._velocity_patch)
 
         self._velocity_patch.set_visible(self._is_velocity_arrow_above_minimum() and self._show_velocity_arrow)
 
     def _create_position_circle(self) -> None:
         """Creates a circle used to mark the position of a body."""
-        self._body_patch = Circle((self._position.x, self._position.y), self._pixels_to_distance(self._body_radius()),
-                                  facecolor=self._colour)
+        self._body_patch = mpl.patches.Circle((self._position.x, self._position.y),
+                                              self._pixels_to_distance(self._body_radius()), facecolor=self._colour)
         self._axis.add_patch(self._body_patch)
 
     def _create_position_label(self) -> None:
