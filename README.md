@@ -8,7 +8,7 @@ This project creates a QWidget used for simulating a gravitational system of N b
 ## Table of contents
 * [About](#about)
 * [Features](#features)
-* [Screenshots](#screenshots)
+* [Screengrab](#Screengrab)
 * [Setup](#setup)
 
 ## About
@@ -42,11 +42,12 @@ The widget has several options which are found above the data table:
 
 The widget also includes an interactive plot where you can:
 
-* Adjust the colour and name used to represent a body. <img align="left" width="83" height="25" src="docs/body.PNG">
-* Adjust the position of a body by dragging the body on the interactive plot. <img align="left" width="83" height="25" src="docs/body_position.PNG">
-* Adjust the velocity of a body by dragging the velocity arrow on the interactive plot. <img align="left" width="83" height="25" src="docs/body_velocity.PNG">
+  |Image                                                                 |Description                                                                          |
+  |<img align="left" width="83" height="25" src="docs/body.PNG">         |Adjust the colour and name used to represent a body.                                 |
+  |<img align="left" width="83" height="25" src="docs/body_position.PNG">|Adjust the position of a body by dragging the body on the interactive plot.          |
+  |<img align="left" width="83" height="25" src="docs/body_velocity.PNG">|Adjust the velocity of a body by dragging the velocity arrow on the interactive plot.|
 
-## Screenshots
+## Screengrab
 
 <p align="center">
   <img src="docs/three-body-simulation.gif" alt="animated">
@@ -54,7 +55,18 @@ The widget also includes an interactive plot where you can:
 
 ## Setup
 
-This widget was created using Python v3.8, and using CMake v3.12. These versions are a minimum requirement.
+This widget was created using Python v3.8, and using CMake v3.12. These versions are a minimum requirement. Follow the instructions for the appropriate operating system:
+
+```diff
+* Windows
+! Ubuntu
+```
+
+The first step is to clone the code in this repository using **git**.
+
+```sh
+git clone git@github.com:robertapplin/N-Body-Simulations.git
+```
 
 The easiest way to build this project is to download and install Miniconda3. The dependencies for this project can be installed from the **command line** or **terminal**:
 
@@ -63,11 +75,33 @@ conda install -c anaconda pytest-mock pyqt qtawesome
 conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt
 ```
 
-Clone the code in this repository using **git**:
+Create a build folder from the project root directory and enter this folder.
 
 ```sh
-git clone git@github.com:robertapplin/N-Body-Simulations.git
+mkdir build
+cd build
 ```
+
+Generate the build files. Follow the colour corresponding to your operating system:
+
+```diff
++ cmake .. -DPYTHON_LIBRARY_DIR=<path>/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=<path>/Miniconda/python.exe
+! cmake .. -DPYTHON_LIBRARY_DIR=<path>/miniconda3/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=<path>/miniconda3/bin/python
+```
+
+Then build the project in Release mode:
+
+```sh
+cmake --build . --config Release
+```
+
+Finally you can install the project into the Miniconda site-packages folder:
+
+```
+cmake --install .
+```
+
+Run the **startup.py** script from your chosen python environment to open this QWidget.
 
 ### Windows
 
