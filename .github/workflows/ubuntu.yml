@@ -21,7 +21,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/bin/python -DQT_DEBUG_PLUGINS=1
+        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/bin/python
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
@@ -37,12 +37,13 @@ jobs:
         ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
+        export QT_QPA_PLATFORM=offscreen
         pytest tests/unit_tests/python/exports/
+        pytest tests/unit_tests/python/plotting/
         # The 'pytest tests/unit_tests/python/plotting/' tests won't run because of this problem:
         # https://stackoverflow.com/questions/21321292/using-matplotlib-when-display-is-undefined
         # Doing matplotlib.use('agg') only works for pylab, not when using FigureCanvas.
     - name: Python System Tests
       run: |
-        export QT_DEBUG_PLUGINS=1
         export QT_QPA_PLATFORM=offscreen
         pytest -s --no-qt-log tests/system_tests/python/
