@@ -37,7 +37,7 @@ jobs:
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
-        PYTEST_QT_API=pyqt5 pytest tests/unit_tests/python/
+        pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
-        PYTEST_QT_API=pyqt5 pytest tests/system_tests/python/
+        pytest tests/system_tests/python/
