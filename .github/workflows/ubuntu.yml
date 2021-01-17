@@ -44,4 +44,5 @@ jobs:
     - name: Python System Tests
       run: |
         export QT_DEBUG_PLUGINS=1
+        export QT_QPA_PLATFORM=offscreen
         pytest -s --no-qt-log tests/system_tests/python/
