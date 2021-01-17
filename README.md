@@ -43,6 +43,7 @@ The widget has several options which are found above the data table:
 The widget also includes an interactive plot where you can:
 
   |Image                                                                 |Description                                                                          |
+  |----------------------------------------------------------------------|-------------------------------------------------------------------------------------|
   |<img align="left" width="83" height="25" src="docs/body.PNG">         |Adjust the colour and name used to represent a body.                                 |
   |<img align="left" width="83" height="25" src="docs/body_position.PNG">|Adjust the position of a body by dragging the body on the interactive plot.          |
   |<img align="left" width="83" height="25" src="docs/body_velocity.PNG">|Adjust the velocity of a body by dragging the velocity arrow on the interactive plot.|
@@ -55,20 +56,22 @@ The widget also includes an interactive plot where you can:
 
 ## Setup
 
-This widget was created using Python v3.8, and using CMake v3.12. These versions are a minimum requirement. Follow the instructions for the appropriate operating system:
+Follow the instructions for the appropriate operating system:
 
 ```diff
-* Windows
++ Windows
 ! Ubuntu
 ```
 
-The first step is to clone the code in this repository using **git**.
+This widget was created using **Python v3.8**, and using **CMake v3.12**. These versions are a minimum requirement. It is also recommended that you download and install the python package manager [Miniconda3](https://docs.conda.io/en/latest/miniconda.html).
+
+The first step is to clone the code in this repository using [git](https://git-scm.com/downloads).
 
 ```sh
 git clone git@github.com:robertapplin/N-Body-Simulations.git
 ```
 
-The easiest way to build this project is to download and install Miniconda3. The dependencies for this project can be installed from the **command line** or **terminal**:
+The dependencies for this project can be installed using Miniconda:
 
 ```sh
 conda install -c anaconda pytest-mock pyqt qtawesome
@@ -96,63 +99,6 @@ cmake --build . --config Release
 ```
 
 Finally you can install the project into the Miniconda site-packages folder:
-
-```
-cmake --install .
-```
-
-Run the **startup.py** script from your chosen python environment to open this QWidget.
-
-### Windows
-
-Using the **command line** create a build folder from the project root directory, and then cmake the project:
-
-```sh
-mkdir build
-cd build
-cmake .. -DPYTHON_LIBRARY_DIR=<path>/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=<path>/Miniconda/python.exe
-cmake --build . --config Release
-```
-
-It might be necessary to specify a compiler when running **cmake** using the **-G** flag:
-
-```sh
-cmake .. -DPYTHON_LIBRARY_DIR=... -DPYTHON_EXECUTABLE=... -G "Visual Studio 15 2017 Win64"
-```
-
-Next, make sure to install the project into the Miniconda site-packages folder:
-
-```
-cmake --install .
-```
-
-Run the **startup.py** script from your chosen python environment to open this QWidget.
-
-### Ubuntu
-
-Using the **terminal** create a build folder from the project root directory, and then cmake the project:
-
-```sh
-mkdir build
-cd build
-cmake .. -DPYTHON_LIBRARY_DIR=<path>/miniconda3/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=<path>/miniconda3/bin/python
-cmake --build . --config Release
-```
-
-The g++ compiler was used when running **cmake**. It can be installed from the **terminal**:
-
-```sh
-sudo apt-get install g++
-```
-
-If you are using an earlier version of CMake than v3.12, an up-to-date version can be installed from the **terminal**:
-
-```sh
-sudo apt remove --purge cmake
-sudo snap install cmake --classic
-```
-
-Next, make sure to install the project into the Miniconda site-packages folder:
 
 ```
 cmake --install .
