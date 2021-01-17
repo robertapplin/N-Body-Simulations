@@ -8,7 +8,7 @@ This project creates a QWidget used for simulating a gravitational system of N b
 ## Table of contents
 * [About](#about)
 * [Features](#features)
-* [Setup](#setup)
+* [Installation](#installation)
 
 ## About
 
@@ -51,7 +51,7 @@ The widget also includes an interactive plot where you can:
   <img src="docs/three-body-simulation.gif" alt="animated">
 </p>
 
-## Setup
+## Installation
 
 Follow the instructions for the appropriate operating system:
 
