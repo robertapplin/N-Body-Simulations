@@ -3,12 +3,11 @@
 ![ubuntu workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Ubuntu?label=Ubuntu%20latest)
 ![test coverage](https://img.shields.io/badge/Test%20Coverage-High-brightgreen)
 
-This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions. These bodies will merge together if they get close enough to each other. 
+This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions.
 
 ## Table of contents
 * [About](#about)
 * [Features](#features)
-* [Screengrab](#Screengrab)
 * [Setup](#setup)
 
 ## About
@@ -47,8 +46,6 @@ The widget also includes an interactive plot where you can:
   |<img align="left" width="83" height="25" src="docs/body.PNG">         |Adjust the colour and name used to represent a body.                                 |
   |<img align="left" width="83" height="25" src="docs/body_position.PNG">|Adjust the position of a body by dragging the body on the interactive plot.          |
   |<img align="left" width="83" height="25" src="docs/body_velocity.PNG">|Adjust the velocity of a body by dragging the velocity arrow on the interactive plot.|
-
-## Screengrab
 
 <p align="center">
   <img src="docs/three-body-simulation.gif" alt="animated">
