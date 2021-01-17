@@ -1,6 +1,6 @@
 ## N-Body Simulator
 ![windows workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Windows?label=Windows%20latest)
-![ubuntu workflow](https://img.shields.io/badge/Ubuntu%20latest-In%20development-lightgrey)
+![ubuntu workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Ubuntu?label=Ubuntu%20latest)
 ![test coverage](https://img.shields.io/badge/Test%20Coverage-High-brightgreen)
 
 This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions. These bodies will merge together if they get close enough to each other. The widget has options to:
@@ -36,22 +36,26 @@ The **docs** folder has example \**.txt* files which can be loaded into the widg
   |Time      |Days                      |d   |
   |Velocity  |Astronomical units per day|au/d|
 
-## Building On Windows
+## Building the N-Body Simulator
 
-The easiest way to build this project is to download and install Miniconda. The dependencies for this project can then be installed:
+This widget was created using Python v3.8, and using CMake v3.12. These versions are a minimum requirement.
+
+The easiest way to build this project is to download and install Miniconda3. The dependencies for this project can be installed from the **command line** or **terminal**:
 
 ```sh
 conda install -c anaconda pytest-mock pyqt qtawesome
-conda install -c conda-forge matplotlib pybind11 pyside2 pytest
+conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt
 ```
 
-The code for this project should then be cloned:
+Clone the code in this repository using **git**:
 
 ```sh
 git clone git@github.com:robertapplin/N-Body-Simulations.git
 ```
 
-CMake was used to create this widget. Using the command prompt you should create a build folder, and then cmake the project:
+### Windows
+
+Using the **command line** create a build folder from the project root directory, and then cmake the project:
 
 ```sh
 mkdir build
@@ -60,10 +64,48 @@ cmake .. -DPYTHON_LIBRARY_DIR=<path>/Miniconda/lib/site-packages/ -DPYTHON_EXECU
 cmake --build . --config Release
 ```
 
-It might be necessary to specify a compiler when running **cmake**:
+It might be necessary to specify a compiler when running **cmake** using the **-G** flag:
 
 ```sh
 cmake .. -DPYTHON_LIBRARY_DIR=... -DPYTHON_EXECUTABLE=... -G "Visual Studio 15 2017 Win64"
+```
+
+Next, make sure to install the project into the Miniconda site-packages folder:
+
+```
+cmake --install .
+```
+
+Run the **startup.py** script from your chosen python environment to open this QWidget.
+
+### Ubuntu
+
+Using the **terminal** create a build folder from the project root directory, and then cmake the project:
+
+```sh
+mkdir build
+cd build
+cmake .. -DPYTHON_LIBRARY_DIR=<path>/miniconda3/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=<path>/miniconda3/bin/python
+cmake --build . --config Release
+```
+
+The g++ compiler was used when running **cmake**. It can be installed from the **terminal**:
+
+```sh
+sudo apt-get install g++
+```
+
+If you are using an earlier version of CMake than v3.12, an up-to-date version can be installed from the **terminal**:
+
+```sh
+sudo apt remove --purge cmake
+sudo snap install cmake --classic
+```
+
+Next, make sure to install the project into the Miniconda site-packages folder:
+
+```
+cmake --install .
 ```
 
 Run the **startup.py** script from your chosen python environment to open this QWidget.

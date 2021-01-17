@@ -17,7 +17,7 @@ set(HEADER_FILES
 )
 
 set(EXPORT_FILES
-    NBodySimulations.cpp
+    nbodysimulations.cpp
     NBodySimulator.cpp
     Vector2D.cpp
 )

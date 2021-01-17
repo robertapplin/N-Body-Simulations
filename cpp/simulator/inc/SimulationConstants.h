@@ -6,7 +6,7 @@
 namespace Simulator {
 namespace Constants {
 
-enum TimeUnit { Days } const;
+enum TimeUnit { Days };
 
 static double G(6.67408e-11);       // Gravitational constant (m3 kg-1 s-2)
 static double M_SOLAR(1.98847e+30); // Solar mass (kg)

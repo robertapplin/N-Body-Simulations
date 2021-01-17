@@ -1,4 +1,4 @@
-name: Windows
+name: Ubuntu
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
@@ -21,7 +21,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
+        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/bin/python
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
@@ -29,15 +29,19 @@ jobs:
         cmake --install .
     - name: Cpp Unit Tests
       run: |
-        cd build/tests/unit_tests/cpp/Release
-        ./NBodySimulationsUnitTests.exe
+        cd build/tests/unit_tests/cpp
+        ./NBodySimulationsUnitTests
     - name: Cpp System Tests
       run: |
-        cd build/tests/system_tests/cpp/Release
-        ./NBodySimulationsSystemTests.exe
+        cd build/tests/system_tests/cpp
+        ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
+        # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
+        export QT_QPA_PLATFORM=offscreen
         pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
+        # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
+        export QT_QPA_PLATFORM=offscreen
         pytest tests/system_tests/python/
