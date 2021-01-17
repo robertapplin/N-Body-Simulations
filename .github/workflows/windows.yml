@@ -35,6 +35,10 @@ jobs:
       run: |
         cd build/tests/system_tests/cpp/Release
         ./NBodySimulationsSystemTests.exe
+    - name: Set Environment variables
+      run: |
+        # Prevent error with addWidget(FigureCanvas) if qtbot uses pyside instead of pyqt5.
+        setx PYTEST_QT_API pyqt5
     - name: Python Unit Tests
       run: |
         pytest tests/unit_tests/python/
