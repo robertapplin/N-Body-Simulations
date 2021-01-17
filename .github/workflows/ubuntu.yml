@@ -37,8 +37,6 @@ jobs:
         ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
-        # Prevent error with addWidget(FigureCanvas) if qtbot uses pyside instead of pyqt5.
-        export PYTEST_QT_API=pyqt5
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
         export QT_QPA_PLATFORM=offscreen
         pytest tests/unit_tests/python/
