@@ -14,7 +14,7 @@ def setup_presenter():
     return view, model, presenter
 
 
-def test_that_handle_remove_body_clicked_calls_the_expected_methods(mocker):
+def test_that_handle_remove_body_clicked_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     view_selected_body = mocker.spy(view, 'selected_bodies')
@@ -28,7 +28,7 @@ def test_that_handle_remove_body_clicked_calls_the_expected_methods(mocker):
     view_remove_body.assert_called_once_with("Earth")
 
 
-def test_that_handle_add_body_clicked_calls_the_expected_methods(mocker):
+def test_that_handle_add_body_clicked_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_number_of_bodies = mocker.spy(model, 'number_of_bodies')
@@ -46,7 +46,7 @@ def test_that_handle_add_body_clicked_calls_the_expected_methods(mocker):
     view_add_body.assert_called_once()
 
 
-def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_body_name_does_not_exist(mocker):
+def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_body_name_does_not_exist(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_body_names = mocker.spy(model, 'body_names')
@@ -60,7 +60,7 @@ def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_b
     view_update_body_name.assert_called_once_with("Earth", "Sun")
 
 
-def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_body_name_already_exists(mocker):
+def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_body_name_already_exists(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_body_names = mocker.spy(model, 'body_names')
@@ -75,7 +75,7 @@ def test_that_handle_body_name_changed_calls_the_expected_methods_when_the_new_b
     view_set_name.assert_called_once_with("Earth")
 
 
-def test_that_handle_mass_changed_calls_the_expected_methods(mocker):
+def test_that_handle_mass_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_mass = mocker.spy(model, 'set_mass')
@@ -87,7 +87,7 @@ def test_that_handle_mass_changed_calls_the_expected_methods(mocker):
     view_update_body_mass.assert_called_once_with("Earth", 1.0)
 
 
-def test_that_handle_x_position_changed_calls_the_expected_methods(mocker):
+def test_that_handle_x_position_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_x_position = mocker.spy(model, 'set_x_position')
@@ -99,7 +99,7 @@ def test_that_handle_x_position_changed_calls_the_expected_methods(mocker):
     view_update_body_position.assert_called_once()
 
 
-def test_that_handle_y_position_changed_calls_the_expected_methods(mocker):
+def test_that_handle_y_position_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_y_position = mocker.spy(model, 'set_y_position')
@@ -111,7 +111,7 @@ def test_that_handle_y_position_changed_calls_the_expected_methods(mocker):
     view_update_body_position.assert_called_once()
 
 
-def test_that_handle_x_velocity_changed_calls_the_expected_methods(mocker):
+def test_that_handle_x_velocity_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_x_velocity = mocker.spy(model, 'set_x_velocity')
@@ -123,7 +123,7 @@ def test_that_handle_x_velocity_changed_calls_the_expected_methods(mocker):
     view_update_body_velocity.assert_called_once()
 
 
-def test_that_handle_y_velocity_changed_calls_the_expected_methods(mocker):
+def test_that_handle_y_velocity_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_y_velocity = mocker.spy(model, 'set_y_velocity')
@@ -135,7 +135,7 @@ def test_that_handle_y_velocity_changed_calls_the_expected_methods(mocker):
     view_update_body_velocity.assert_called_once()
 
 
-def test_that_handle_time_step_changed_calls_the_expected_methods(mocker):
+def test_that_handle_time_step_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_time_step = mocker.spy(model, 'set_time_step')
@@ -145,7 +145,7 @@ def test_that_handle_time_step_changed_calls_the_expected_methods(mocker):
     model_set_time_step.assert_called_once_with(1.0)
 
 
-def test_that_handle_duration_changed_calls_the_expected_methods(mocker):
+def test_that_handle_duration_changed_calls_the_expected_methods(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_duration = mocker.spy(model, 'set_duration')
@@ -155,7 +155,7 @@ def test_that_handle_duration_changed_calls_the_expected_methods(mocker):
     model_set_duration.assert_called_once_with(500.0)
 
 
-def test_that_handle_play_pause_clicked_will_set_as_playing(mocker):
+def test_that_handle_play_pause_clicked_will_set_as_playing(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     view_is_simulating = mocker.spy(view, 'is_simulating')
@@ -167,7 +167,7 @@ def test_that_handle_play_pause_clicked_will_set_as_playing(mocker):
     view_set_as_playing.assert_called_once_with(True)
 
 
-def test_that_handle_body_moved_will_set_the_position_in_the_model(mocker):
+def test_that_handle_body_moved_will_set_the_position_in_the_model(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_x_position = mocker.spy(model, 'set_x_position')
@@ -179,7 +179,7 @@ def test_that_handle_body_moved_will_set_the_position_in_the_model(mocker):
     model_set_y_position.assert_called_once_with("Earth", 0.0)
 
 
-def test_that_handle_body_velocity_changed_will_set_the_velocity_in_the_model(mocker):
+def test_that_handle_body_velocity_changed_will_set_the_velocity_in_the_model(qtbot, mocker):
     view, model, presenter = setup_presenter()
 
     model_set_x_velocity = mocker.spy(model, 'set_x_velocity')

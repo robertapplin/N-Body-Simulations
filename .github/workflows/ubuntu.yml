@@ -38,13 +38,8 @@ jobs:
     - name: Python Unit Tests
       run: |
         export QT_QPA_PLATFORM=offscreen
-        pytest tests/unit_tests/python/exports/
-        pytest tests/unit_tests/python/plotting/
-        #pytest tests/unit_tests/python/qt/
-        # The 'pytest tests/unit_tests/python/plotting/' tests won't run because of this problem:
-        # https://stackoverflow.com/questions/21321292/using-matplotlib-when-display-is-undefined
-        # Doing matplotlib.use('agg') only works for pylab, not when using FigureCanvas.
+        pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
         export QT_QPA_PLATFORM=offscreen
-        pytest -s --no-qt-log tests/system_tests/python/
+        pytest tests/system_tests/python/

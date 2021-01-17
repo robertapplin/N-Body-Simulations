@@ -9,16 +9,16 @@ from PyQt5.QtWidgets import QTableWidget
 enable_test_mode()
 
 
-def test_that_creating_a_ColourItemDelegate_does_not_raise_an_exception():
+def test_that_creating_a_ColourItemDelegate_does_not_raise_an_exception(qtbot):
     table = QTableWidget()
     _ = ColourItemDelegate(table)
 
 
-def test_that_creating_a_DoubleItemDelegate_does_not_raise_an_exception():
+def test_that_creating_a_DoubleItemDelegate_does_not_raise_an_exception(qtbot):
     table = DummyBodyTable()
     _ = DoubleItemDelegate(table, DoubleItemDelegate.Mass)
 
 
-def test_that_creating_a_StringItemDelegate_does_not_raise_an_exception():
+def test_that_creating_a_StringItemDelegate_does_not_raise_an_exception(qtbot):
     table = DummyBodyTable()
     _ = StringItemDelegate(table)
