@@ -16,7 +16,7 @@ class NBodySimulationsModel(QThread):
 
     def __init__(self):
         """Initialize the model with an empty NBodySimulator."""
-        super(NBodySimulationsModel, self).__init__(None)
+        super(NBodySimulationsModel, self).__init__(self)
         self._simulator = NBodySimulator()
 
     def clear(self) -> None:
