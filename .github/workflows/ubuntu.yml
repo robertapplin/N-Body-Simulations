@@ -21,7 +21,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/bin/python
+        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/bin/python -DQT_DEBUG_PLUGINS=1
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
