@@ -376,7 +376,10 @@ class NBodySimulationsView(Ui_NBodySimulator, QWidget):
 
         self.add_body_to_table(body_name, initial_data, colour)
 
-        self.interactive_plot.add_body(colour, body_name, initial_data[0], initial_data[1], initial_data[2])
+        self.interactive_plot.add_body(colour, body_name, initial_data[0], initial_data[1], initial_data[2],
+                                       not self.position_plot_options_action.showing_position_labels(),
+                                       not self.velocity_plot_options_action.showing_velocity_arrows(),
+                                       int(self.velocity_plot_options_action.arrow_magnification.currentText()[1:]))
         self.interactive_plot.update_axes_limits(initial_data=True)
         self.interactive_plot.draw()
 

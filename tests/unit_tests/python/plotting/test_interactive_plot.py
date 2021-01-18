@@ -15,15 +15,23 @@ def interactive_plot():
 
 
 def test_that_add_body_will_add_a_body_to_the_plot(qtbot, interactive_plot):
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
 
     assert list(interactive_plot._initial_data.keys()) == ["Earth"]
     assert list(interactive_plot._body_markers.keys()) == ["Earth"]
 
 
+def test_that_add_body_will_set_the_label_and_velocity_arrow_settings_as_expected(qtbot, interactive_plot):
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), False, False, 2)
+
+    assert not interactive_plot._body_markers["Earth"]._show_position_label
+    assert not interactive_plot._body_markers["Earth"]._show_velocity_arrow
+    assert interactive_plot._body_markers["Earth"]._velocity_magnification == 2
+
+
 def test_that_remove_body_will_remove_a_body_from_the_plot(qtbot, interactive_plot):
-    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
 
     assert list(interactive_plot._initial_data.keys()) == ["Sun", "Earth"]
     assert list(interactive_plot._body_markers.keys()) == ["Sun", "Earth"]
@@ -35,19 +43,19 @@ def test_that_remove_body_will_remove_a_body_from_the_plot(qtbot, interactive_pl
 
 
 def test_that_get_body_colour_returns_the_expected_colour_for_a_body(qtbot, interactive_plot):
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
     assert interactive_plot.get_body_colour("Earth") == "green"
 
 
 def test_that_update_body_colour_will_update_the_colour_of_a_body(qtbot, interactive_plot):
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
     interactive_plot.update_body_colour("Earth", "red")
 
     assert interactive_plot.get_body_colour("Earth") == "red"
 
 
 def test_that_update_body_name_will_update_the_name_of_a_body(qtbot, interactive_plot):
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
     interactive_plot.update_body_name("Earth", "Sun")
 
     assert list(interactive_plot._initial_data.keys()) == ["Sun"]
@@ -55,21 +63,21 @@ def test_that_update_body_name_will_update_the_name_of_a_body(qtbot, interactive
 
 
 def test_that_update_body_position_will_update_the_position_of_a_body(qtbot, interactive_plot):
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
     interactive_plot.update_body_position("Earth", Vector2D(1.0, 1.0))
 
     assert interactive_plot._body_markers["Earth"]._position == Vector2D(1.0, 1.0)
 
 
 def test_that_update_body_velocity_will_update_the_velocity_of_a_body(qtbot, interactive_plot):
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
     interactive_plot.update_body_velocity("Earth", Vector2D(1.0, 1.0))
 
     assert interactive_plot._body_markers["Earth"]._velocity == Vector2D(1.0, 1.0)
 
 
 def test_that_update_axes_limits_will_update_the_axes_limits_for_a_single_body(qtbot, interactive_plot):
-    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
 
     interactive_plot.update_axes_limits()
 
@@ -77,8 +85,8 @@ def test_that_update_axes_limits_will_update_the_axes_limits_for_a_single_body(q
 
 
 def test_that_update_axes_limits_will_update_the_axes_limits_to_the_expected_values(qtbot, interactive_plot):
-    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(1.0, 1.0), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(1.0, 1.0), Vector2D(0.0, 0.0), True, True, 1)
 
     interactive_plot.update_axes_limits()
 
@@ -90,8 +98,8 @@ def test_that_update_axes_limits_will_update_the_axes_limits_to_the_expected_val
 
 
 def test_that_update_axes_limits_will_update_the_axes_limits_for_a_non_square_layout(qtbot, interactive_plot):
-    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0))
-    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.1, 0.5), Vector2D(0.0, 0.0))
+    interactive_plot.add_body("red", "Sun", 1.0, Vector2D(0.0, 0.0), Vector2D(0.0, 0.0), True, True, 1)
+    interactive_plot.add_body("green", "Earth", 0.000003, Vector2D(0.1, 0.5), Vector2D(0.0, 0.0), True, True, 1)
 
     interactive_plot.update_axes_limits()
 
