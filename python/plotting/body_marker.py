@@ -21,7 +21,7 @@ class BodyMarker(QObject):
     bodyVelocityChangedSignal = pyqtSignal(str, float, float)
 
     def __init__(self, canvas: FigureCanvas, colour: str, name: str, mass: float, position: Vector2D,
-                 velocity: Vector2D):
+                 velocity: Vector2D, show_position_label: bool, show_velocity_arrow: bool, velocity_magnifier: int):
         """Initializes the body marker with a patch and a coordinate label."""
         super(BodyMarker, self).__init__()
 
@@ -39,9 +39,9 @@ class BodyMarker(QObject):
         self._position_label = None
         self._override_cursor = None
 
-        self._velocity_magnification = 1
-        self._show_position_label = True
-        self._show_velocity_arrow = True
+        self._show_position_label = show_position_label
+        self._show_velocity_arrow = show_velocity_arrow
+        self._velocity_magnification = velocity_magnifier
 
         self._is_dragging_body = False
         self._is_dragging_velocity = False
