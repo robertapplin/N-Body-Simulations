@@ -1,7 +1,7 @@
 # N-Body Simulator
 ![windows workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Windows?label=Windows%20latest)
 ![ubuntu workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Ubuntu?label=Ubuntu%20latest)
-![test coverage](https://img.shields.io/badge/Test%20Coverage-High-brightgreen)
+[![Coverage Status](https://coveralls.io/repos/github/robertapplin/N-Body-Simulations/badge.svg)](https://coveralls.io/github/robertapplin/N-Body-Simulations)
 
 This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions.
 
@@ -72,7 +72,7 @@ The dependencies for this project can be installed using Miniconda:
 
 ```sh
 conda install -c anaconda pytest-mock pyqt qtawesome
-conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt
+conda install -c conda-forge coveralls matplotlib pybind11 pyside2 pytest pytest-cov pytest-qt=3.3.0
 ```
 
 Create a build folder from the project root directory and enter this folder.
