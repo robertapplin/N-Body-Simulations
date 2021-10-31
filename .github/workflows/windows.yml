@@ -41,7 +41,7 @@ jobs:
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
-        pytest tests/unit_tests/python/ --cov=tests/unit_tests/python/ --cov-report term-missing
+        pytest tests/unit_tests/python/ --cov=python/ --cov-report term-missing
     - name: Submit Coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

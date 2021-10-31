@@ -20,7 +20,7 @@ jobs:
     - name: Install Dependencies
       run: |
         conda install -c anaconda pytest-mock pyqt qtawesome
-        conda install -c conda-forge coveralls matplotlib pybind11 pyside2 pytest pytest-cov pytest-qt=3.3.0
+        conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt=3.3.0
     - name: Build Project
       run: |
         mkdir build
@@ -43,12 +43,7 @@ jobs:
       run: |
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
         export QT_QPA_PLATFORM=offscreen
-        pytest tests/unit_tests/python/ --cov=tests/unit_tests/python/ --cov-report term-missing
-    - name: Submit Coverage
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        coveralls --service=github
+        pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
