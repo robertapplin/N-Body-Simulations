@@ -20,7 +20,7 @@ jobs:
     - name: Install Dependencies
       run: |
         conda install -c anaconda pytest-mock pyqt qtawesome
-        conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-cov pytest-qt=3.3.0
+        conda install -c conda-forge coveralls matplotlib pybind11 pyside2 pytest pytest-cov pytest-qt=3.3.0
     - name: Build Project
       run: |
         mkdir build
