@@ -1,0 +1,7 @@
+I declare that the data in this *.txt file is correctly formatted for the N-Body Simulator.
+1.0 5000.0
+orange Sun 1.0 0.0 0.0 -0.005 0.0025
+blue Earth 3e-06 1.0 0.0 -0.005 0.0175
+#ff0000 Mars 3e-06 2.0 0.0 -0.005 0.014
+#f934ff Venus 1e-06 5.0 0.0 -0.005 0.0105
+#00aa00 Jupiter 0.0001 3.733310703779135 0.0 -0.005 0.0125
