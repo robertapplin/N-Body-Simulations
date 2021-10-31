@@ -41,7 +41,7 @@ jobs:
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
-        pytest tests/unit_tests/python/
+        pytest -s --no-qt-log tests/unit_tests/python/
     - name: Python System Tests
       run: |
-        pytest tests/system_tests/python/
+        pytest -s --no-qt-log tests/system_tests/python/
