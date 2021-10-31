@@ -44,6 +44,11 @@ jobs:
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
         export QT_QPA_PLATFORM=offscreen
         pytest tests/unit_tests/python/ --cov=tests/unit_tests/python/ --cov-report term-missing
+    - name: Submit Coverage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        coveralls --service=github
     - name: Python System Tests
       run: |
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.

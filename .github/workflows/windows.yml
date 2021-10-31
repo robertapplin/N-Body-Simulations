@@ -42,6 +42,11 @@ jobs:
     - name: Python Unit Tests
       run: |
         pytest tests/unit_tests/python/ --cov=tests/unit_tests/python/ --cov-report term-missing
+    - name: Submit Coverage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        coveralls --service=github
     - name: Python System Tests
       run: |
         pytest tests/system_tests/python/
