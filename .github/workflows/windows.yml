@@ -20,7 +20,7 @@ jobs:
     - name: Install Dependencies
       run: |
         conda install -c anaconda pytest-mock pyqt qtawesome
-        conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt
+        conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt=3.3.0
     - name: Build Project
       run: |
         mkdir build
@@ -41,7 +41,7 @@ jobs:
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
-        pytest -s --no-qt-log tests/unit_tests/python/
+        pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
-        pytest -s --no-qt-log tests/system_tests/python/
+        pytest tests/system_tests/python/
