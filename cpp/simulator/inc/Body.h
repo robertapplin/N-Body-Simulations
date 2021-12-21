@@ -13,8 +13,8 @@ namespace Simulator {
 class Body {
 
 public:
-  Body(std::string const &name, double initialMass,
-       Vector2D const &initialPosition, Vector2D const &initialVelocity);
+  Body(std::string name, const double initialMass, Vector2D initialPosition,
+       Vector2D initialVelocity);
   ~Body() = default;
 
   // Sets the name of the body.

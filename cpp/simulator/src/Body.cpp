@@ -10,12 +10,13 @@
 
 namespace Simulator {
 
-Body::Body(std::string const &name, double initialMass,
-           Vector2D const &initialPosition, Vector2D const &initialVelocity)
-    : m_name(name), m_initialMass(initialMass),
-      m_initialPosition(initialPosition), m_initialVelocity(initialVelocity),
-      m_mass(initialMass), m_position(initialPosition),
-      m_velocity(initialVelocity), m_isMerged(false) {}
+Body::Body(std::string name, double const initialMass, Vector2D initialPosition,
+           Vector2D initialVelocity)
+    : m_name(std::move(name)), m_initialMass(initialMass),
+      m_initialPosition(std::move(initialPosition)),
+      m_initialVelocity(std::move(initialVelocity)), m_mass(initialMass),
+      m_position(initialPosition), m_velocity(initialVelocity),
+      m_isMerged(false) {}
 
 void Body::setName(std::string const &name) { m_name = name; }
 
