@@ -8,7 +8,7 @@
 namespace Simulator {
 namespace Constants {
 
-double gravitationalConstant(TimeUnit const &timeUnit) {
+double const gravitationalConstant(TimeUnit const &timeUnit) {
   switch (timeUnit) {
   case TimeUnit::Days:
     return G * M_SOLAR * pow(DAY, 2) * (1.0 / pow(AU, 3));
@@ -17,7 +17,7 @@ double gravitationalConstant(TimeUnit const &timeUnit) {
   throw std::invalid_argument("An invalid time unit has been provided.");
 }
 
-double density(double const mass) {
+double const density(double const mass) {
   double densityKgPerMetreCubed;
   if (mass <= 0.0001)
     densityKgPerMetreCubed = 0.1;

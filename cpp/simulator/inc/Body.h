@@ -20,19 +20,21 @@ public:
   // Sets the name of the body.
   void setName(std::string const &name);
   // Returns the name of the body.
-  [[nodiscard]] inline std::string name() const noexcept { return m_name; }
+  [[nodiscard]] inline std::string const &name() const noexcept {
+    return m_name;
+  }
 
   // Sets the initial mass of the body.
   void setInitialMass(double const mass);
   // Returns the mass of the body.
-  [[nodiscard]] inline double initialMass() const noexcept {
+  [[nodiscard]] inline double const initialMass() const noexcept {
     return m_initialMass;
   }
 
   // Sets the current mass of the body.
   void setMass(double const mass);
   // Returns the current mass of the body.
-  [[nodiscard]] inline double mass() const noexcept { return m_mass; }
+  [[nodiscard]] inline double const mass() const noexcept { return m_mass; }
 
   // Returns the initial position of the body.
   [[nodiscard]] inline Vector2D &initialPosition() noexcept {
@@ -49,7 +51,7 @@ public:
   [[nodiscard]] inline Vector2D &velocity() noexcept { return m_velocity; }
 
   // Returns an estimated radius for the body.
-  [[nodiscard]] double radius() const;
+  [[nodiscard]] double const radius() const;
 
   // Reset the position and velocity of the body to the initial values.
   void resetBody();
@@ -57,9 +59,11 @@ public:
   // Sets the body as having been engulfed by a larger body.
   void setAsMerged(bool const merged);
   // Returns true if this body has merged into a larger body.
-  [[nodiscard]] inline bool isMerged() const noexcept { return m_isMerged; }
+  [[nodiscard]] inline bool const isMerged() const noexcept {
+    return m_isMerged;
+  }
 
-  bool operator!=(Body const &otherBody);
+  bool const operator!=(Body const &otherBody);
 
 private:
   std::string m_name;

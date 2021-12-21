@@ -27,7 +27,7 @@ void Body::setInitialMass(double const mass) {
 
 void Body::setMass(double const mass) { m_mass = mass; }
 
-double Body::radius() const {
+double const Body::radius() const {
   return pow((3.0 * m_mass) / (4.0 * M_PI * Constants::density(m_mass)),
              (1.0 / 3.0));
 }
@@ -41,7 +41,7 @@ void Body::resetBody() {
 
 void Body::setAsMerged(bool const merged) { m_isMerged = merged; }
 
-bool Body::operator!=(Body const &otherBody) {
+bool const Body::operator!=(Body const &otherBody) {
   return m_name != otherBody.name();
 }
 

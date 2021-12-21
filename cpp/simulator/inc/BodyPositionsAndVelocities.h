@@ -33,17 +33,19 @@ public:
   void addVelocity(double const time, Vector2D const &velocity);
 
   // Returns the bodies mass at the different times during the a simulation.
-  [[nodiscard]] inline std::map<double, double> masses() const noexcept {
+  [[nodiscard]] inline std::map<double, double> const &masses() const noexcept {
     return m_masses;
   }
 
   // Returns the body locations calculated during a simulation.
-  [[nodiscard]] inline std::map<double, Vector2D> positions() const noexcept {
+  [[nodiscard]] inline std::map<double, Vector2D> const &
+  positions() const noexcept {
     return m_positions;
   }
 
   // Returns the body velocities calculated during a simulation.
-  [[nodiscard]] inline std::map<double, Vector2D> velocities() const noexcept {
+  [[nodiscard]] inline std::map<double, Vector2D> const &
+  velocities() const noexcept {
     return m_velocities;
   }
 
