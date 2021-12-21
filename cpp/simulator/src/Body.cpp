@@ -20,12 +20,12 @@ Body::Body(std::string name, double const initialMass, Vector2D initialPosition,
 
 void Body::setName(std::string const &name) { m_name = name; }
 
-void Body::setInitialMass(double mass) {
+void Body::setInitialMass(double const mass) {
   m_initialMass = mass;
   m_mass = mass;
 }
 
-void Body::setMass(double mass) { m_mass = mass; }
+void Body::setMass(double const mass) { m_mass = mass; }
 
 double Body::radius() const {
   return pow((3.0 * m_mass) / (4.0 * M_PI * Constants::density(m_mass)),
@@ -39,7 +39,7 @@ void Body::resetBody() {
   m_isMerged = false;
 }
 
-void Body::setAsMerged(bool merged) { m_isMerged = merged; }
+void Body::setAsMerged(bool const merged) { m_isMerged = merged; }
 
 bool Body::operator!=(Body const &otherBody) {
   return m_name != otherBody.name();

@@ -28,16 +28,16 @@ public:
   // Removes the body with the specified name from the simulator.
   void removeBody(std::string const &name);
   // Adds a body to the simulator.
-  void addBody(std::string const &name, double mass, Vector2D const &position,
-               Vector2D const &velocity);
+  void addBody(std::string const &name, double const mass,
+               Vector2D const &position, Vector2D const &velocity);
 
   // Set the time step used by the simulator.
-  void setTimeStep(double timeStep);
+  void setTimeStep(double const timeStep);
   // Return the time step stored by the simulator.
   [[nodiscard]] double timeStep() const;
 
   // Set the simulation duration used by the simulator.
-  void setDuration(double duration);
+  void setDuration(double const duration);
   // Return the simulation duration stored by the simulator.
   [[nodiscard]] double duration() const;
 
@@ -51,19 +51,19 @@ public:
   void setName(std::string const &oldName, std::string const &newName);
 
   // Set the mass of the specified body in the simulator.
-  void setMass(std::string const &bodyName, double mass);
+  void setMass(std::string const &bodyName, double const mass);
   // Return the mass of the specified body stored by the simulator.
   double initialMass(std::string const &bodyName) const;
 
   // Set the x position of the specified body in the simulator.
-  void setXPosition(std::string const &bodyName, double x);
+  void setXPosition(std::string const &bodyName, double const x);
   // Set the y position of the specified body in the simulator.
-  void setYPosition(std::string const &bodyName, double y);
+  void setYPosition(std::string const &bodyName, double const y);
 
   // Set the x velocity of the specified body in the simulator.
-  void setXVelocity(std::string const &bodyName, double vx);
+  void setXVelocity(std::string const &bodyName, double const vx);
   // Set the y velocity of the specified body in the simulator.
-  void setYVelocity(std::string const &bodyName, double vy);
+  void setYVelocity(std::string const &bodyName, double const vy);
 
   // Return the initial position of the specified body stored by the simulator.
   Vector2D initialPosition(std::string const &bodyName) const;

@@ -19,7 +19,7 @@ static double DAY(60.0 * 60.0 * 24.0); // Day (s)
 
 // Returns a pseudo value to use for the density of a body. These densities are
 // not based in reality.
-[[nodiscard]] double density(double mass);
+[[nodiscard]] double density(double const mass);
 
 } // namespace Constants
 } // namespace Simulator

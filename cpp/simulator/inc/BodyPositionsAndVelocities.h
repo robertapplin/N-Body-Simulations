@@ -26,11 +26,11 @@ public:
   [[nodiscard]] Body &body() const;
 
   // Add a mass for a specific time.
-  void addMass(double time, double mass);
+  void addMass(double const time, double const mass);
   // Add a position coordinate for a specific time.
-  void addPosition(double time, Vector2D const &position);
+  void addPosition(double const time, Vector2D const &position);
   // Add a velocity for a specific time.
-  void addVelocity(double time, Vector2D const &velocity);
+  void addVelocity(double const time, Vector2D const &velocity);
 
   // Returns the bodies mass at the different times during the a simulation.
   [[nodiscard]] inline std::map<double, double> masses() const noexcept {

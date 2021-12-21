@@ -14,7 +14,7 @@ Vector2D Vector2D::operator-(Vector2D const &otherVector) {
   return {m_x - otherVector.m_x, m_y - otherVector.m_y};
 }
 
-Vector2D Vector2D::operator*(double value) {
+Vector2D Vector2D::operator*(double const value) {
   return {m_x * value, m_y * value};
 }
 

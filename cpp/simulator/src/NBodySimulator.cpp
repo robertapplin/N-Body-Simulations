@@ -33,7 +33,7 @@ void NBodySimulator::removeBody(std::string const &name) {
   m_dataChanged = true;
 }
 
-void NBodySimulator::addBody(std::string const &name, double mass,
+void NBodySimulator::addBody(std::string const &name, double const mass,
                              Vector2D const &position,
                              Vector2D const &velocity) {
   if (hasBody(name))
@@ -44,14 +44,14 @@ void NBodySimulator::addBody(std::string const &name, double mass,
   m_dataChanged = true;
 }
 
-void NBodySimulator::setTimeStep(double timeStep) {
+void NBodySimulator::setTimeStep(double const timeStep) {
   m_timeStep = timeStep;
   m_dataChanged = true;
 }
 
 double NBodySimulator::timeStep() const { return m_timeStep; }
 
-void NBodySimulator::setDuration(double duration) {
+void NBodySimulator::setDuration(double const duration) {
   m_duration = duration;
   m_dataChanged = true;
 }
@@ -82,7 +82,7 @@ void NBodySimulator::setName(std::string const &oldName,
   m_dataChanged = true;
 }
 
-void NBodySimulator::setMass(std::string const &bodyName, double mass) {
+void NBodySimulator::setMass(std::string const &bodyName, double const mass) {
   auto &body = findBody(bodyName);
   body.setInitialMass(mass);
   body.setMass(mass);
@@ -93,22 +93,24 @@ double NBodySimulator::initialMass(std::string const &bodyName) const {
   return findBody(bodyName).initialMass();
 }
 
-void NBodySimulator::setXPosition(std::string const &bodyName, double x) {
+void NBodySimulator::setXPosition(std::string const &bodyName, double const x) {
   findBody(bodyName).initialPosition().m_x = x;
   m_dataChanged = true;
 }
 
-void NBodySimulator::setYPosition(std::string const &bodyName, double y) {
+void NBodySimulator::setYPosition(std::string const &bodyName, double const y) {
   findBody(bodyName).initialPosition().m_y = y;
   m_dataChanged = true;
 }
 
-void NBodySimulator::setXVelocity(std::string const &bodyName, double vx) {
+void NBodySimulator::setXVelocity(std::string const &bodyName,
+                                  double const vx) {
   findBody(bodyName).initialVelocity().m_x = vx;
   m_dataChanged = true;
 }
 
-void NBodySimulator::setYVelocity(std::string const &bodyName, double vy) {
+void NBodySimulator::setYVelocity(std::string const &bodyName,
+                                  double const vy) {
   findBody(bodyName).initialVelocity().m_y = vy;
   m_dataChanged = true;
 }

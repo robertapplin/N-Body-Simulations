@@ -12,7 +12,7 @@ struct Vector2D {
 
   // Used to simplify vector operations.
   Vector2D operator-(Vector2D const &otherVector);
-  Vector2D operator*(double value);
+  Vector2D operator*(double const value);
   void operator+=(Vector2D const &otherVector);
   bool operator==(Vector2D const &otherVector);
 

@@ -23,14 +23,14 @@ public:
   [[nodiscard]] inline std::string name() const noexcept { return m_name; }
 
   // Sets the initial mass of the body.
-  void setInitialMass(double mass);
+  void setInitialMass(double const mass);
   // Returns the mass of the body.
   [[nodiscard]] inline double initialMass() const noexcept {
     return m_initialMass;
   }
 
   // Sets the current mass of the body.
-  void setMass(double mass);
+  void setMass(double const mass);
   // Returns the current mass of the body.
   [[nodiscard]] inline double mass() const noexcept { return m_mass; }
 
@@ -55,7 +55,7 @@ public:
   void resetBody();
 
   // Sets the body as having been engulfed by a larger body.
-  void setAsMerged(bool merged);
+  void setAsMerged(bool const merged);
   // Returns true if this body has merged into a larger body.
   [[nodiscard]] inline bool isMerged() const noexcept { return m_isMerged; }
 

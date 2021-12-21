@@ -17,7 +17,7 @@ double gravitationalConstant(TimeUnit const &timeUnit) {
   throw std::invalid_argument("An invalid time unit has been provided.");
 }
 
-double density(double mass) {
+double density(double const mass) {
   double densityKgPerMetreCubed;
   if (mass <= 0.0001)
     densityKgPerMetreCubed = 0.1;
