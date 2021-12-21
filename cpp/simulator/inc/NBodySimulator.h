@@ -20,6 +20,8 @@ class NBodySimulator {
 
 public:
   NBodySimulator();
+  NBodySimulator(NBodySimulator const &simulator) = delete;
+  NBodySimulator &operator=(NBodySimulator const &simulator) = delete;
   ~NBodySimulator();
 
   // Clear all the data from the simulator
