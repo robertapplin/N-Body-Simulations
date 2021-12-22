@@ -9,26 +9,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      ACTIVATE_EXE: /usr/share/miniconda/bin/activate
+      PYBIND_DIR: /usr/share/miniconda/share/cmake/pybind11
+      PYTHON_EXE: /usr/share/miniconda/envs/test/bin/python
+      SITE_PACKAGE_DIR: /usr/share/miniconda/envs/test/lib/python3.8/site-packages/
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Setup Miniconda
-      uses: s-weigand/setup-conda@v1
+      uses: conda-incubator/setup-miniconda@v2
       with:
          python-version: 3.8
     - name: Install Dependencies
       run: |
+        source $ACTIVATE_EXE test
         conda install -c anaconda pytest-mock pyqt qtawesome
         conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt=3.3.0
     - name: Build Project
       run: |
+        source $ACTIVATE_EXE test
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/bin/python
+        cmake .. -DPYTHON_LIBRARY_DIR=$SITE_PACKAGE_DIR -DPYTHON_EXECUTABLE=$PYTHON_EXE -Dpybind11_DIR=$PYBIND_DIR
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
+        source $ACTIVATE_EXE test
         cd build
         cmake --install .
     - name: Cpp Unit Tests
@@ -41,11 +48,13 @@ jobs:
         ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
+        source $ACTIVATE_EXE test
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
         export QT_QPA_PLATFORM=offscreen
-        pytest tests/unit_tests/python/
+        $PYTHON_EXE -m pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
+        source $ACTIVATE_EXE test
         # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
         export QT_QPA_PLATFORM=offscreen
-        pytest tests/system_tests/python/
+        $PYTHON_EXE -m pytest tests/system_tests/python/
