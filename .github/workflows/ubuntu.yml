@@ -31,6 +31,8 @@ jobs:
       run: |
         cd build
         cmake --install .
+        cd C:/Miniconda/lib/site-packages/
+        ls
     - name: Cpp Unit Tests
       run: |
         cd build/tests/unit_tests/cpp
