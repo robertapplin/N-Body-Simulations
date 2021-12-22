@@ -31,8 +31,9 @@ jobs:
       run: |
         cd build
         cmake --install .
-        cd C:/Miniconda/lib/site-packages/
+        cd /usr/share/miniconda/lib/python3.8/site-packages/
         ls
+        conda env list
     - name: Cpp Unit Tests
       run: |
         cd build/tests/unit_tests/cpp

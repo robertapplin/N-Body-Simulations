@@ -33,6 +33,7 @@ jobs:
         cmake --install .
         cd C:/Miniconda/lib/site-packages/
         dir
+        conda env list
     - name: Cpp Unit Tests
       run: |
         cd build/tests/unit_tests/cpp/Release
