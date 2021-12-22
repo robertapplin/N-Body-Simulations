@@ -20,6 +20,8 @@ class NBodySimulator {
 
 public:
   NBodySimulator();
+  NBodySimulator(NBodySimulator const &simulator) = delete;
+  NBodySimulator &operator=(NBodySimulator const &simulator) = delete;
   ~NBodySimulator();
 
   // Clear all the data from the simulator
@@ -28,61 +30,62 @@ public:
   // Removes the body with the specified name from the simulator.
   void removeBody(std::string const &name);
   // Adds a body to the simulator.
-  void addBody(std::string const &name, double mass, Vector2D const &position,
-               Vector2D const &velocity);
+  void addBody(std::string const &name, double const mass,
+               Vector2D const &position, Vector2D const &velocity);
 
   // Set the time step used by the simulator.
-  void setTimeStep(double timeStep);
+  void setTimeStep(double const timeStep);
   // Return the time step stored by the simulator.
-  [[nodiscard]] double timeStep() const;
+  [[nodiscard]] double const timeStep() const;
 
   // Set the simulation duration used by the simulator.
-  void setDuration(double duration);
+  void setDuration(double const duration);
   // Return the simulation duration stored by the simulator.
-  [[nodiscard]] double duration() const;
+  [[nodiscard]] double const duration() const;
 
   // Return the number of bodies in the simulation setup.
-  [[nodiscard]] std::size_t numberOfBodies() const;
+  [[nodiscard]] std::size_t const numberOfBodies() const;
 
   // Returns the names of the bodies in the simulator.
-  [[nodiscard]] std::vector<std::string> bodyNames() const;
+  [[nodiscard]] std::vector<std::string> const bodyNames() const;
 
   // Set a new name for the specified body in the simulator.
   void setName(std::string const &oldName, std::string const &newName);
 
   // Set the mass of the specified body in the simulator.
-  void setMass(std::string const &bodyName, double mass);
+  void setMass(std::string const &bodyName, double const mass);
   // Return the mass of the specified body stored by the simulator.
-  double initialMass(std::string const &bodyName) const;
+  double const initialMass(std::string const &bodyName) const;
 
   // Set the x position of the specified body in the simulator.
-  void setXPosition(std::string const &bodyName, double x);
+  void setXPosition(std::string const &bodyName, double const x);
   // Set the y position of the specified body in the simulator.
-  void setYPosition(std::string const &bodyName, double y);
+  void setYPosition(std::string const &bodyName, double const y);
 
   // Set the x velocity of the specified body in the simulator.
-  void setXVelocity(std::string const &bodyName, double vx);
+  void setXVelocity(std::string const &bodyName, double const vx);
   // Set the y velocity of the specified body in the simulator.
-  void setYVelocity(std::string const &bodyName, double vy);
+  void setYVelocity(std::string const &bodyName, double const vy);
 
   // Return the initial position of the specified body stored by the simulator.
-  Vector2D initialPosition(std::string const &bodyName) const;
+  Vector2D const initialPosition(std::string const &bodyName) const;
   // Return the initial velocity of the specified body stored by the simulator.
-  Vector2D initialVelocity(std::string const &bodyName) const;
+  Vector2D const initialVelocity(std::string const &bodyName) const;
 
   // Returns true if the initial parameters changed since the last simulation.
-  [[nodiscard]] bool hasDataChanged() const;
+  [[nodiscard]] bool const hasDataChanged() const;
 
   // Run the simulation using the currently stored initial parameters.
   void runSimulation();
 
   // Return the simulated masses of the specified body.
-  std::map<double, double> simulatedMasses(std::string const &bodyName) const;
+  std::map<double, double> const
+  simulatedMasses(std::string const &bodyName) const;
   // Return the simulated locations of the specified body.
-  std::map<double, Vector2D>
+  std::map<double, Vector2D> const
   simulatedPositions(std::string const &bodyName) const;
   // Return the simulated velocities of the specified body.
-  std::map<double, Vector2D>
+  std::map<double, Vector2D> const
   simulatedVelocities(std::string const &bodyName) const;
 
 private:
@@ -119,7 +122,7 @@ private:
   // Finds the Body data object given a bodies name.
   Body &findBody(std::string const &name) const;
   // Finds the index of the specified body in m_bodyData.
-  std::size_t findBodyIndex(std::string const &name) const;
+  std::size_t const findBodyIndex(std::string const &name) const;
 
   double m_timeStep;
   double m_duration;

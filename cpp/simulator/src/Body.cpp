@@ -10,23 +10,24 @@
 
 namespace Simulator {
 
-Body::Body(std::string const &name, double initialMass,
-           Vector2D const &initialPosition, Vector2D const &initialVelocity)
-    : m_name(name), m_initialMass(initialMass),
-      m_initialPosition(initialPosition), m_initialVelocity(initialVelocity),
-      m_mass(initialMass), m_position(initialPosition),
-      m_velocity(initialVelocity), m_isMerged(false) {}
+Body::Body(std::string name, double const initialMass, Vector2D initialPosition,
+           Vector2D initialVelocity)
+    : m_name(std::move(name)), m_initialMass(initialMass),
+      m_initialPosition(std::move(initialPosition)),
+      m_initialVelocity(std::move(initialVelocity)), m_mass(initialMass),
+      m_position(m_initialPosition), m_velocity(m_initialVelocity),
+      m_isMerged(false) {}
 
 void Body::setName(std::string const &name) { m_name = name; }
 
-void Body::setInitialMass(double mass) {
+void Body::setInitialMass(double const mass) {
   m_initialMass = mass;
   m_mass = mass;
 }
 
-void Body::setMass(double mass) { m_mass = mass; }
+void Body::setMass(double const mass) { m_mass = mass; }
 
-double Body::radius() const {
+double const Body::radius() const {
   return pow((3.0 * m_mass) / (4.0 * M_PI * Constants::density(m_mass)),
              (1.0 / 3.0));
 }
@@ -38,9 +39,9 @@ void Body::resetBody() {
   m_isMerged = false;
 }
 
-void Body::setAsMerged(bool merged) { m_isMerged = merged; }
+void Body::setAsMerged(bool const merged) { m_isMerged = merged; }
 
-bool Body::operator!=(Body const &otherBody) {
+bool const Body::operator!=(Body const &otherBody) {
   return m_name != otherBody.name();
 }
 

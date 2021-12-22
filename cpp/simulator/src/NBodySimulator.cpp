@@ -33,7 +33,7 @@ void NBodySimulator::removeBody(std::string const &name) {
   m_dataChanged = true;
 }
 
-void NBodySimulator::addBody(std::string const &name, double mass,
+void NBodySimulator::addBody(std::string const &name, double const mass,
                              Vector2D const &position,
                              Vector2D const &velocity) {
   if (hasBody(name))
@@ -44,23 +44,25 @@ void NBodySimulator::addBody(std::string const &name, double mass,
   m_dataChanged = true;
 }
 
-void NBodySimulator::setTimeStep(double timeStep) {
+void NBodySimulator::setTimeStep(double const timeStep) {
   m_timeStep = timeStep;
   m_dataChanged = true;
 }
 
-double NBodySimulator::timeStep() const { return m_timeStep; }
+double const NBodySimulator::timeStep() const { return m_timeStep; }
 
-void NBodySimulator::setDuration(double duration) {
+void NBodySimulator::setDuration(double const duration) {
   m_duration = duration;
   m_dataChanged = true;
 }
 
-double NBodySimulator::duration() const { return m_duration; }
+double const NBodySimulator::duration() const { return m_duration; }
 
-std::size_t NBodySimulator::numberOfBodies() const { return m_bodyData.size(); }
+std::size_t const NBodySimulator::numberOfBodies() const {
+  return m_bodyData.size();
+}
 
-std::vector<std::string> NBodySimulator::bodyNames() const {
+std::vector<std::string> const NBodySimulator::bodyNames() const {
   auto const getName =
       [](std::unique_ptr<BodyPositionsAndVelocities> const &data) {
         return data->body().name();
@@ -82,46 +84,50 @@ void NBodySimulator::setName(std::string const &oldName,
   m_dataChanged = true;
 }
 
-void NBodySimulator::setMass(std::string const &bodyName, double mass) {
+void NBodySimulator::setMass(std::string const &bodyName, double const mass) {
   auto &body = findBody(bodyName);
   body.setInitialMass(mass);
   body.setMass(mass);
   m_dataChanged = true;
 }
 
-double NBodySimulator::initialMass(std::string const &bodyName) const {
+double const NBodySimulator::initialMass(std::string const &bodyName) const {
   return findBody(bodyName).initialMass();
 }
 
-void NBodySimulator::setXPosition(std::string const &bodyName, double x) {
+void NBodySimulator::setXPosition(std::string const &bodyName, double const x) {
   findBody(bodyName).initialPosition().m_x = x;
   m_dataChanged = true;
 }
 
-void NBodySimulator::setYPosition(std::string const &bodyName, double y) {
+void NBodySimulator::setYPosition(std::string const &bodyName, double const y) {
   findBody(bodyName).initialPosition().m_y = y;
   m_dataChanged = true;
 }
 
-void NBodySimulator::setXVelocity(std::string const &bodyName, double vx) {
+void NBodySimulator::setXVelocity(std::string const &bodyName,
+                                  double const vx) {
   findBody(bodyName).initialVelocity().m_x = vx;
   m_dataChanged = true;
 }
 
-void NBodySimulator::setYVelocity(std::string const &bodyName, double vy) {
+void NBodySimulator::setYVelocity(std::string const &bodyName,
+                                  double const vy) {
   findBody(bodyName).initialVelocity().m_y = vy;
   m_dataChanged = true;
 }
 
-Vector2D NBodySimulator::initialPosition(std::string const &bodyName) const {
+Vector2D const
+NBodySimulator::initialPosition(std::string const &bodyName) const {
   return findBody(bodyName).initialPosition();
 }
 
-Vector2D NBodySimulator::initialVelocity(std::string const &bodyName) const {
+Vector2D const
+NBodySimulator::initialVelocity(std::string const &bodyName) const {
   return findBody(bodyName).initialVelocity();
 }
 
-bool NBodySimulator::hasDataChanged() const { return m_dataChanged; }
+bool const NBodySimulator::hasDataChanged() const { return m_dataChanged; }
 
 void NBodySimulator::runSimulation() {
   validateSimulationParameters();
@@ -139,19 +145,19 @@ void NBodySimulator::runSimulation() {
   m_dataChanged = false;
 }
 
-std::map<double, double>
+std::map<double, double> const
 NBodySimulator::simulatedMasses(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
   return m_bodyData[bodyIndex]->masses();
 }
 
-std::map<double, Vector2D>
+std::map<double, Vector2D> const
 NBodySimulator::simulatedPositions(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
   return m_bodyData[bodyIndex]->positions();
 }
 
-std::map<double, Vector2D>
+std::map<double, Vector2D> const
 NBodySimulator::simulatedVelocities(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
   return m_bodyData[bodyIndex]->velocities();
@@ -253,7 +259,7 @@ Body &NBodySimulator::findBody(std::string const &name) const {
   return m_bodyData[findBodyIndex(name)]->body();
 }
 
-std::size_t NBodySimulator::findBodyIndex(std::string const &name) const {
+std::size_t const NBodySimulator::findBodyIndex(std::string const &name) const {
   auto const hasName =
       [&](std::unique_ptr<BodyPositionsAndVelocities> const &data) {
         return data->body().name() == name;

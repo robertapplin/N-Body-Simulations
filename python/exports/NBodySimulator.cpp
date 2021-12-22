@@ -19,7 +19,7 @@ void export_NBodySimulator(py::module &m) {
                &Simulator::NBodySimulator::removeBody),
            py::arg("name"))
       .def("addBody",
-           py::overload_cast<std::string const &, double,
+           py::overload_cast<std::string const &, double const,
                              Simulator::Vector2D const &,
                              Simulator::Vector2D const &>(
                &Simulator::NBodySimulator::addBody),
@@ -45,7 +45,7 @@ void export_NBodySimulator(py::module &m) {
                &Simulator::NBodySimulator::setName),
            py::arg("oldName"), py::arg("newName"))
       .def("setMass",
-           py::overload_cast<std::string const &, double>(
+           py::overload_cast<std::string const &, double const>(
                &Simulator::NBodySimulator::setMass),
            py::arg("bodyName"), py::arg("mass"))
       .def("initialMass",
@@ -53,19 +53,19 @@ void export_NBodySimulator(py::module &m) {
                &Simulator::NBodySimulator::initialMass, py::const_),
            py::arg("bodyName"))
       .def("setXPosition",
-           py::overload_cast<std::string const &, double>(
+           py::overload_cast<std::string const &, double const>(
                &Simulator::NBodySimulator::setXPosition),
            py::arg("bodyName"), py::arg("x"))
       .def("setYPosition",
-           py::overload_cast<std::string const &, double>(
+           py::overload_cast<std::string const &, double const>(
                &Simulator::NBodySimulator::setYPosition),
            py::arg("bodyName"), py::arg("y"))
       .def("setXVelocity",
-           py::overload_cast<std::string const &, double>(
+           py::overload_cast<std::string const &, double const>(
                &Simulator::NBodySimulator::setXVelocity),
            py::arg("bodyName"), py::arg("vx"))
       .def("setYVelocity",
-           py::overload_cast<std::string const &, double>(
+           py::overload_cast<std::string const &, double const>(
                &Simulator::NBodySimulator::setYVelocity),
            py::arg("bodyName"), py::arg("vy"))
       .def("initialPosition",

@@ -32,7 +32,7 @@ void BodyPositionsAndVelocities::resetParameters() {
 
 Body &BodyPositionsAndVelocities::body() const { return *m_body.get(); }
 
-void BodyPositionsAndVelocities::addMass(double time, double mass) {
+void BodyPositionsAndVelocities::addMass(double const time, double const mass) {
   if (m_masses.find(time) != m_masses.cend())
     throw std::runtime_error("A mass for " + m_body->name() + " at time " +
                              std::to_string(time) + " already exists.");
@@ -40,7 +40,7 @@ void BodyPositionsAndVelocities::addMass(double time, double mass) {
   m_masses[time] = mass;
 }
 
-void BodyPositionsAndVelocities::addPosition(double time,
+void BodyPositionsAndVelocities::addPosition(double const time,
                                              Vector2D const &position) {
   if (m_positions.find(time) != m_positions.cend())
     throw std::runtime_error("A position for " + m_body->name() + " at time " +
@@ -49,7 +49,7 @@ void BodyPositionsAndVelocities::addPosition(double time,
   m_positions[time] = position;
 }
 
-void BodyPositionsAndVelocities::addVelocity(double time,
+void BodyPositionsAndVelocities::addVelocity(double const time,
                                              Vector2D const &velocity) {
   if (m_velocities.find(time) != m_velocities.cend())
     throw std::runtime_error("A velocity for " + m_body->name() + " at time " +
