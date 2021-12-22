@@ -14,8 +14,9 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Setup Miniconda
-      uses: s-weigand/setup-conda@v1
+      uses: conda-incubator/setup-miniconda@v2
       with:
+         auto-update-conda: true
          python-version: 3.8
     - name: Install Dependencies
       run: |
@@ -34,6 +35,7 @@ jobs:
         cd C:/Miniconda/lib/site-packages/
         dir
         conda env list
+        conda list
     - name: Cpp Unit Tests
       run: |
         cd build/tests/unit_tests/cpp/Release
