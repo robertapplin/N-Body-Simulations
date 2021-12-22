@@ -14,7 +14,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Setup Miniconda
-      uses: s-weigand/setup-conda@v1
+      uses: conda-incubator/setup-miniconda@v2
       with:
          python-version: 3.8
     - name: Install Dependencies
@@ -25,13 +25,12 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/envs/__setup_conda/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/envs/__setup_conda/bin/python
+        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/envs/test/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/envs/test/bin/python
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
         cd build
         cmake --install .
-        conda env list
     - name: Cpp Unit Tests
       run: |
         cd build/tests/unit_tests/cpp
