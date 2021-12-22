@@ -21,11 +21,13 @@ jobs:
       run: |
         conda install -c anaconda pytest-mock pyqt qtawesome
         conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt=3.3.0
+        cd /usr/share/miniconda/share/cmake/pybind11
+        ls
     - name: Build Project
       run: |
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/envs/test/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/envs/test/bin/python
+        cmake .. -DPYTHON_LIBRARY_DIR=/usr/share/miniconda/envs/test/lib/python3.8/site-packages/ -DPYTHON_EXECUTABLE=/usr/share/miniconda/envs/test/bin/python -Dpybind11_DIR=/usr/share/miniconda/share/cmake/pybind11
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
