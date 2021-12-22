@@ -15,7 +15,7 @@ Body::Body(std::string name, double const initialMass, Vector2D initialPosition,
     : m_name(std::move(name)), m_initialMass(initialMass),
       m_initialPosition(std::move(initialPosition)),
       m_initialVelocity(std::move(initialVelocity)), m_mass(initialMass),
-      m_position(initialPosition), m_velocity(initialVelocity),
+      m_position(m_initialPosition), m_velocity(m_initialVelocity),
       m_isMerged(false) {}
 
 void Body::setName(std::string const &name) { m_name = name; }
