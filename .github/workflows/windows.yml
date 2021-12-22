@@ -26,16 +26,12 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/python.exe
+        cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/envs/test/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/envs/test/python.exe
         cmake --build . --config Release
     - name: Install into Python Site-Packages
       run: |
         cd build
         cmake --install .
-        cd C:/Miniconda/lib/site-packages/
-        dir
-        conda env list
-        conda list
     - name: Cpp Unit Tests
       run: |
         cd build/tests/unit_tests/cpp/Release
