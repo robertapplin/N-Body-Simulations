@@ -3,8 +3,8 @@
 import random
 import string
 
-from n_body_simulations.error_catcher import catch_errors
-from n_body_simulations.xml_reader import get_simulation_setting, get_user_interface_property
+from n_body_simulations.qt.error_catcher import catch_errors
+from n_body_simulations.xml.xml_reader import get_simulation_setting, get_user_interface_property
 
 
 class NBodySimulationsPresenter:

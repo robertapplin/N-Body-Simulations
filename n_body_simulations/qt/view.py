@@ -4,13 +4,13 @@ import qtawesome as qta
 
 from enum import Enum
 
-from n_body_simulations.body_data_table import BodyDataTableWidget, ColourTableWidget
-from n_body_simulations.custom_actions import (AnimationFrameDelayAction, DoubleSpinBoxAction, LineEditButtonAction,
-                                               PositionPlotOptionsAction, SpinBoxButtonAction,
-                                               VelocityPlotOptionsAction)
-from n_body_simulations.interactive_plot import InteractivePlot
-from n_body_simulations.main_window_ui import Ui_NBodySimulator
-from n_body_simulations.splitter_widgets import Splitter
+from n_body_simulations.plotting.interactive_plot import InteractivePlot
+from n_body_simulations.qt.body_data_table import BodyDataTableWidget, ColourTableWidget
+from n_body_simulations.qt.custom_actions import (AnimationFrameDelayAction, DoubleSpinBoxAction, LineEditButtonAction,
+                                                  PositionPlotOptionsAction, SpinBoxButtonAction,
+                                                  VelocityPlotOptionsAction)
+from n_body_simulations.qt.splitter_widgets import Splitter
+from n_body_simulations.qt.ui.main_window_ui import Ui_NBodySimulator
 from NBodySimulations import Vector2D
 
 from PyQt5.QtCore import Qt

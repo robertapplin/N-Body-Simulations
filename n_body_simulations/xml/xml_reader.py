@@ -2,7 +2,7 @@
 # Authored by Robert Applin, 2020
 from xml.dom import minidom
 
-from n_body_simulations.interface_resources_rc import qInitResources
+from n_body_simulations.xml.interface_resources_rc import qInitResources
 
 from PyQt5.QtCore import QCoreApplication, QFile, QTextStream
 
