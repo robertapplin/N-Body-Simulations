@@ -2,7 +2,7 @@
 # Authored by Robert Applin, 2020
 import pytest
 
-from n_body_simulations.interactive_plot import InteractivePlot
+from n_body_simulations.plotting.interactive_plot import InteractivePlot
 from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 from NBodySimulations import Vector2D
 

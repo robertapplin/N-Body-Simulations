@@ -57,5 +57,5 @@ setup(
               "n_body_simulations.xml_r"],
     install_requires=["matplotlib", "pybind11", "pyside2", "pyqt5", "qtawesome"],
     extras_require={"test": ["pytest", "pytest-mock", "pytest-qt==3.3.0"]},
-    python_requires=">=3.8",
+    python_requires=">=3.8"
 )
