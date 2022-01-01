@@ -1,8 +1,8 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.qt.body_marker import BodyMarker
-from n_body_simulations.plotting.error_catcher import catch_errors
+from n_body_simulations.plotting.body_marker import BodyMarker
 from n_body_simulations.plotting.simulation_animator import SimulationAnimator
+from n_body_simulations.qt.error_catcher import catch_errors
 from NBodySimulations import Vector2D
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
