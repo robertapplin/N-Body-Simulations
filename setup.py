@@ -19,14 +19,15 @@ class CMakeExtension(Extension):
 class CMakeBuild(build_ext):
     """A class used to build the project using CMake."""
 
-    def build_extension(self, extension: CMakeExtension):
+    def build_extension(self, extension: CMakeExtension) -> None:
         """Generates and builds the project using CMake."""
         extension_directory = self._get_extension_directory(extension)
+        pybind11_directory = os.path.join(pybind11.__path__[0], "share", "cmake", "pybind11")
 
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extension_directory}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
-            f"-DCMAKE_PREFIX_PATH={pybind11.__path__}"
+            f"-Dpybind11_DIR={pybind11_directory}"
         ]
 
         if not os.path.exists(self.build_temp):
