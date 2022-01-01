@@ -1,7 +1,7 @@
-import pybind11
 import os
 import subprocess
 import sys
+import sysconfig
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
@@ -22,11 +22,13 @@ class CMakeBuild(build_ext):
     def build_extension(self, extension: CMakeExtension) -> None:
         """Generates and builds the project using CMake."""
         extension_directory = self._get_extension_directory(extension)
-        pybind11_directory = os.path.join(pybind11.__path__[0], "share", "cmake", "pybind11")
+        site_package_directory = sysconfig.get_paths()["purelib"]
+        pybind11_directory = os.path.join(site_package_directory, "pybind11", "share", "cmake", "pybind11")
 
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extension_directory}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DPYTHON_LIBRARY_DIR={site_package_directory}",
             f"-Dpybind11_DIR={pybind11_directory}"
         ]
 

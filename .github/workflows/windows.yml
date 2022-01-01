@@ -23,6 +23,16 @@ jobs:
     - name: Build and Install Project
       run: |
         python -m build --wheel
+        cd build/lib.win-amd64-3.8
+        dir
+        cd Release
+        dir
+    - name: Install into site-packages
+      run: |
+        dir
+        cd build
+        dir
+        cmake --install .
         pip install dist/n_body_simulations-1.0.1-cp38-cp38-win_amd64.whl
         pip install n-body-simulations[test]
     - name: Cpp Unit Tests
@@ -35,6 +45,8 @@ jobs:
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
+        cd c:\\hostedtoolcache\\windows\\python\\3.8.10\\x64\\lib\\site-packages
+        dir
         pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
