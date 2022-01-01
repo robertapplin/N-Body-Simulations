@@ -44,8 +44,3 @@ add_library(NBodySimulationsTestable
 
 target_link_libraries(NBodySimulations PUBLIC)
 target_link_libraries(NBodySimulationsTestable PUBLIC)
-
-#install(TARGETS NBodySimulations
-#        COMPONENT python
-#        LIBRARY DESTINATION "${PYTHON_LIBRARY_DIR}"
-#)
