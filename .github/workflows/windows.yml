@@ -13,14 +13,17 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Setup Miniconda
-      uses: conda-incubator/setup-miniconda@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
       with:
-         python-version: 3.8
+        python-version: '3.8'
     - name: Install Dependencies
       run: |
-        conda install -c anaconda pytest-mock pyqt qtawesome
-        conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt=3.3.0
+        pip install build
+    - name: Build and Install Project
+      run: |
+        python -m build --wheel
+        pip install dist/n_body_simulations-1.0.1-cp39-cp39-win_amd64.whl
     - name: Build Project
       run: |
         mkdir build
