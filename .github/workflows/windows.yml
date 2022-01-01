@@ -24,23 +24,13 @@ jobs:
       run: |
         python -m build --wheel
         pip install dist/n_body_simulations-1.0.1-cp38-cp38-win_amd64.whl
-    - name: Build Project
-      run: |
-        mkdir build
-        cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/envs/test/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/envs/test/python.exe
-        cmake --build . --config Release
-    - name: Install into Python Site-Packages
-      run: |
-        cd build
-        cmake --install .
     - name: Cpp Unit Tests
       run: |
-        cd build/tests/unit_tests/cpp/Release
+        cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
         ./NBodySimulationsUnitTests.exe
     - name: Cpp System Tests
       run: |
-        cd build/tests/system_tests/cpp/Release
+        cd build/temp.win-amd64-3.8/Release/tests/system_tests/cpp/Release
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
