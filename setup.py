@@ -22,20 +22,17 @@ class CMakeBuild(build_ext):
         """Generates and builds the project using CMake."""
         extension_directory = self._get_extension_directory(extension)
 
-        debug = int(os.environ.get("DEBUG", 0)) if self.debug is None else self.debug
-        config = "Debug" if debug else "Release"
-
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extension_directory}",
-            f"-DPYTHON_EXECUTABLE={sys.executable}",
-            f"-DCMAKE_BUILD_TYPE={config}"
+            f"-DPYTHON_EXECUTABLE={sys.executable}"
         ]
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 
         subprocess.check_call(["cmake", extension.source_directory] + cmake_args, cwd=self.build_temp)
-        subprocess.check_call(["cmake", "--build", "."], cwd=self.build_temp)
+        subprocess.check_call(["cmake", "--build", ".", "--config", "Release"], cwd=self.build_temp)
+        subprocess.check_call(["cmake", "--install", "."], cwd=self.build_temp)
 
     def _get_extension_directory(self, extension: CMakeExtension) -> str:
         """Generates and builds the project using CMake."""
