@@ -24,6 +24,7 @@ jobs:
       run: |
         python -m build --wheel
         pip install dist/n_body_simulations-1.0.1-cp38-cp38-win_amd64.whl
+        pip install n-body-simulations[test]
     - name: Cpp Unit Tests
       run: |
         cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
