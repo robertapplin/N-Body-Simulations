@@ -3,7 +3,7 @@ import subprocess
 import sys
 import sysconfig
 
-from setuptools import Extension, setup
+from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
 
@@ -26,7 +26,7 @@ class CMakeBuild(build_ext):
         pybind11_directory = os.path.join(site_package_directory, "pybind11", "share", "cmake", "pybind11")
 
         cmake_args = [
-            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extension_directory}",
+            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE={extension_directory}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DPYTHON_LIBRARY_DIR={site_package_directory}",
             f"-Dpybind11_DIR={pybind11_directory}"
@@ -52,14 +52,10 @@ setup(
     author="Robert Applin",
     author_email="robertgjapplin@gmail.com",
     description="A QWidget used for simulating a gravitational system of N bodies in two dimensions.",
-    ext_modules=[CMakeExtension("n_body_simulations", os.path.dirname(os.path.realpath(__file__)))],
+    ext_modules=[CMakeExtension("NBodySimulations", os.path.dirname(os.path.realpath(__file__)))],
     cmdclass={"build_ext": CMakeBuild},
-    packages=["n_body_simulations",
-              "n_body_simulations.plotting",
-              "n_body_simulations.qt",
-              "n_body_simulations.qt.ui",
-              "n_body_simulations.test_helpers",
-              "n_body_simulations.xml_r"],
+    packages=find_packages(),
+    zip_safe=False,
     install_requires=["matplotlib", "pybind11", "pyside2", "pyqt5", "qtawesome"],
     extras_require={"test": ["pytest", "pytest-mock", "pytest-qt==3.3.0"]},
     python_requires=">=3.8"
