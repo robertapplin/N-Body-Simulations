@@ -17,15 +17,9 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.8'
-    - name: Install Dependencies
+    - name: Build & Install Project
       run: |
-        pip install build
-    - name: Build Project
-      run: |
-        python -m build --wheel
-    - name: Install Project
-      run: |
-        pip install dist/n_body_simulations-1.0.1-cp38-cp38-win_amd64.whl
+        python setup.py install
         pip install n-body-simulations[test]
     - name: Cpp Unit Tests
       run: |
