@@ -20,7 +20,7 @@ jobs:
     - name: Build & Install Project
       run: |
         python setup.py install
-        pip install n-body-simulations[test]
+        pip install n_body_simulations[test]
     - name: Cpp Unit Tests
       run: |
         cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
