@@ -17,9 +17,14 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.8'
+    - name: Install Python Environment Requirements
+      run: |
+        pip install -r requirements.txt
     - name: Build & Install Project
       run: |
         python setup.py install
+    - name: Install Dependencies for Testing
+      run: |
         pip install n_body_simulations[test]
     - name: Cpp Unit Tests
       run: |

@@ -56,7 +56,7 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     packages=find_packages(),
     zip_safe=False,
-    install_requires=["matplotlib", "pybind11", "pyside2", "pyqt5", "qtawesome"],
+    install_requires=["matplotlib", "pyside2", "pyqt5", "qtawesome"],
     extras_require={"test": ["pytest", "pytest-mock", "pytest-qt==3.3.0"]},
     python_requires=">=3.8"
 )
