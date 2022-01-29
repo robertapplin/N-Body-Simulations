@@ -26,7 +26,6 @@ class CMakeBuild(build_ext):
         pybind11_directory = os.path.join(site_package_directory, "pybind11", "share", "cmake", "pybind11")
 
         cmake_args = [
-            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE={extension_directory}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DPYTHON_LIBRARY_DIR={site_package_directory}",
             f"-Dpybind11_DIR={pybind11_directory}"
@@ -36,7 +35,9 @@ class CMakeBuild(build_ext):
             os.makedirs(self.build_temp)
 
         if "win" in self.plat_name:
-            cmake_args += ["-A", "x64"]
+            cmake_args += [f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE={extension_directory}", "-A", "x64"]
+        else:
+            cmake_args += [f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extension_directory}"]
 
         subprocess.check_call(["cmake", extension.source_directory] + cmake_args, cwd=self.build_temp)
         subprocess.check_call(["cmake", "--build", ".", "--config", "Release"], cwd=self.build_temp)
