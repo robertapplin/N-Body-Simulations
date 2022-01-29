@@ -28,12 +28,12 @@ jobs:
         pip install n_body_simulations[test]
     - name: Cpp Unit Tests
       run: |
-        cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
-        ./NBodySimulationsUnitTests.exe
+        cd build/temp.linux-x86_64-3.8/tests/unit_tests/cpp
+        ./NBodySimulationsUnitTests
     - name: Cpp System Tests
       run: |
-        cd build/temp.win-amd64-3.8/Release/tests/system_tests/cpp/Release
-        ./NBodySimulationsSystemTests.exe
+        cd build/temp.linux-x86_64-3.8/tests/system_tests/cpp
+        ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
         pytest tests/unit_tests/python/

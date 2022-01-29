@@ -35,7 +35,10 @@ class CMakeBuild(build_ext):
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 
-        subprocess.check_call(["cmake", extension.source_directory, "-A", "x64"] + cmake_args, cwd=self.build_temp)
+        if "win" in self.plat_name:
+            cmake_args += ["-A", "x64"]
+
+        subprocess.check_call(["cmake", extension.source_directory] + cmake_args, cwd=self.build_temp)
         subprocess.check_call(["cmake", "--build", ".", "--config", "Release"], cwd=self.build_temp)
 
     def _get_extension_directory(self, extension: CMakeExtension) -> str:
