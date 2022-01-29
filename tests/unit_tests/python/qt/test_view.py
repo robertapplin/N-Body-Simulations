@@ -1,7 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
+from n_body_simulations.qt.view import NBodySimulationsView
 from n_body_simulations.test_helpers.mock_class_helper import MockNBodySimulationsModel, MockNBodySimulationsPresenter
-from n_body_simulations.view import NBodySimulationsView
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest

@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.xml_reader import get_user_interface_property
+from n_body_simulations.xml_r.xml_reader import get_user_interface_property
 
 from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
 from PyQt5.QtGui import QPainter

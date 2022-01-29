@@ -1,7 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.body_marker import BodyMarker
-from n_body_simulations.simulation_animator import SimulationAnimator
+from n_body_simulations.plotting.body_marker import BodyMarker
+from n_body_simulations.plotting.simulation_animator import SimulationAnimator
 from NBodySimulations import Vector2D
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas

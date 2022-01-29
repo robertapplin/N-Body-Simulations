@@ -2,7 +2,7 @@
 # Authored by Robert Applin, 2020
 import qtawesome as qta
 
-from n_body_simulations.splitter_widgets import Splitter
+from n_body_simulations.qt.splitter_widgets import Splitter
 from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 
 enable_test_mode()

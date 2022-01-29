@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.presenter import NBodySimulationsPresenter
+from n_body_simulations.qt.presenter import NBodySimulationsPresenter
 from n_body_simulations.test_helpers.mock_class_helper import MockNBodySimulationsModel, MockNBodySimulationsView
 from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 

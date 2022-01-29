@@ -1,7 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.error_catcher import catch_errors
-from n_body_simulations.xml_reader import get_user_interface_property
+from n_body_simulations.qt.error_catcher import catch_errors
+from n_body_simulations.xml_r.xml_reader import get_user_interface_property
 from NBodySimulations import NBodySimulator, Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QThread

@@ -10,8 +10,7 @@ project(NBodySimulations)
 
 set(SOURCE_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/src/)
 set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc/)
-set(PYTHON_DIRECTORY ${CMAKE_SOURCE_DIR}/python/)
-set(EXPORT_DIRECTORY ${CMAKE_SOURCE_DIR}/python/exports/)
+set(EXPORT_DIRECTORY ${CMAKE_SOURCE_DIR}/n_body_simulations/exports/)
 set(TEST_HELPER_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/helpers/)
 
 include_directories(${HEADER_DIRECTORY})
@@ -19,5 +18,4 @@ include_directories(${HEADER_DIRECTORY})
 add_subdirectory(external)
 
 add_subdirectory(cpp)
-add_subdirectory(python)
 add_subdirectory(tests)

@@ -2,10 +2,10 @@
 # Authored by Robert Applin, 2020
 import sys
 
-from n_body_simulations.interface_resources_rc import qInitResources, qCleanupResources
-from n_body_simulations.model import NBodySimulationsModel
-from n_body_simulations.presenter import NBodySimulationsPresenter
-from n_body_simulations.view import NBodySimulationsView
+from n_body_simulations.qt.model import NBodySimulationsModel
+from n_body_simulations.qt.presenter import NBodySimulationsPresenter
+from n_body_simulations.qt.view import NBodySimulationsView
+from n_body_simulations.xml_r.interface_resources_rc import qInitResources, qCleanupResources
 
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QApplication

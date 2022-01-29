@@ -1,6 +1,6 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
-from n_body_simulations.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
+from n_body_simulations.qt.custom_actions import DoubleSpinBoxAction, LineEditButtonAction, SpinBoxButtonAction
 from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 
 from PyQt5.QtWidgets import QToolButton

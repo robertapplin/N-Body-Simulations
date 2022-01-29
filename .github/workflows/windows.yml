@@ -13,31 +13,26 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Setup Miniconda
-      uses: conda-incubator/setup-miniconda@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
       with:
-         python-version: 3.8
-    - name: Install Dependencies
+        python-version: '3.8'
+    - name: Install Requirements
       run: |
-        conda install -c anaconda pytest-mock pyqt qtawesome
-        conda install -c conda-forge matplotlib pybind11 pyside2 pytest pytest-qt=3.3.0
-    - name: Build Project
+        pip install -r requirements.txt
+    - name: Build & Install Project
       run: |
-        mkdir build
-        cd build
-        cmake .. -DPYTHON_LIBRARY_DIR=C:/Miniconda/envs/test/lib/site-packages/ -DPYTHON_EXECUTABLE=C:/Miniconda/envs/test/python.exe
-        cmake --build . --config Release
-    - name: Install into Python Site-Packages
+        python setup.py install
+    - name: Install Dependencies for Testing
       run: |
-        cd build
-        cmake --install .
+        pip install n_body_simulations[test]
     - name: Cpp Unit Tests
       run: |
-        cd build/tests/unit_tests/cpp/Release
+        cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
         ./NBodySimulationsUnitTests.exe
     - name: Cpp System Tests
       run: |
-        cd build/tests/system_tests/cpp/Release
+        cd build/temp.win-amd64-3.8/Release/tests/system_tests/cpp/Release
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |

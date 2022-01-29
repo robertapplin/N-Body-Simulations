@@ -2,7 +2,7 @@
 # Authored by Robert Applin, 2020
 import pytest
 
-from n_body_simulations.xml_reader import get_user_interface_property
+from n_body_simulations.xml_r.xml_reader import get_user_interface_property
 from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 
 enable_test_mode()
