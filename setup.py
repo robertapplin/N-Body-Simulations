@@ -50,7 +50,7 @@ setup(
     name="n_body_simulations",
     version="1.0.1",
     author="Robert Applin",
-    author_email="robertgjapplin@gmail.com",
+    author_email="robertapplin.developer@gmail.com",
     description="A QWidget used for simulating a gravitational system of N bodies in two dimensions.",
     ext_modules=[CMakeExtension("NBodySimulations", os.path.dirname(os.path.realpath(__file__)))],
     cmdclass={"build_ext": CMakeBuild},
