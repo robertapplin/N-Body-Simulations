@@ -36,7 +36,11 @@ jobs:
         ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
+        # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
+        export QT_QPA_PLATFORM=offscreen
         pytest tests/unit_tests/python/
     - name: Python System Tests
       run: |
+        # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
+        export QT_QPA_PLATFORM=offscreen
         pytest tests/system_tests/python/
