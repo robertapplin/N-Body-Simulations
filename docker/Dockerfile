@@ -48,4 +48,4 @@ RUN . /opt/env/bin/activate && \
 
 CMD service dbus start; service lightdm start
 
-CMD [".", "/opt/env/bin/activate", "&&", "python3", "./usr/start.py"]
+CMD . /opt/env/bin/activate && python3 /usr/start.py
