@@ -14,6 +14,9 @@ ARG GIT_REPOSITORY=https://github.com/robertapplin/N-Body-Simulations
 # Set the DISPLAY variable to be available at runtime
 ENV DISPLAY=host.docker.internal:0.0
 
+# Set the XDG_RUNTIME_DIR variable to its default to avoid a warning
+ENV XDG_RUNTIME_DIR=/tmp/runtime-root
+
 # Install packages required in the container environment
 RUN apt-get update && \
     apt-get install -y cmake git libxcb-xinerama0 lightdm python3.8 python3-pip python3-venv
