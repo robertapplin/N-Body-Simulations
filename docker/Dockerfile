@@ -11,15 +11,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Create git repository variable
 ARG GIT_REPOSITORY=https://github.com/robertapplin/N-Body-Simulations
 
-# Set the DISPLAY variable to be available at runtime
-ENV DISPLAY=host.docker.internal:0.0
-
-# Set the XDG_RUNTIME_DIR variable to its default to avoid a warning
-ENV XDG_RUNTIME_DIR=/tmp/runtime-root
-
 # Install packages required in the container environment
 RUN apt-get update && \
-    apt-get install -y cmake git libxcb-xinerama0 lightdm python3.8 python3-pip python3-venv
+    apt-get install -y cmake git libgl1-mesa-glx libxcb-xinerama0 lightdm mesa-utils python3.8 python3-pip python3-venv
 
 # Install the virtualenv python package
 RUN python3 -m pip install --user virtualenv
@@ -37,7 +31,3 @@ RUN . /opt/env/bin/activate && \
     cd /usr/N-Body-Simulations && \
 	pip install -r requirements.txt && \
 	python3 setup.py install
-
-# Activate python environment, and startup the widget
-CMD . /opt/env/bin/activate && \
-    python3 /usr/N-Body-Simulations/n_body_simulations/startup.py
