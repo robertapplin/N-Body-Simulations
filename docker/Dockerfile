@@ -11,9 +11,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Create git repository variable
 ARG GIT_REPOSITORY=https://github.com/robertapplin/N-Body-Simulations
 
-# Install packages required in the container environment
+# Install packages required in the container environment. Then clean up the apt cache
 RUN apt-get update && \
-    apt-get install -y cmake git libgl1-mesa-glx libxcb-xinerama0 lightdm mesa-utils python3.8 python3-pip python3-venv
+    apt-get install -y cmake git libgl1-mesa-glx libxcb-xinerama0 lightdm mesa-utils python3.8 python3-pip python3-venv && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install the virtualenv python package
 RUN python3 -m pip install --user virtualenv
