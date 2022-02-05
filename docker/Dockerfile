@@ -30,5 +30,5 @@ RUN cd /usr && \
 # Activate python environment, and install the N-Body-Simulations package
 RUN . /opt/env/bin/activate && \
     cd /usr/N-Body-Simulations && \
-	pip install -r requirements.txt && \
-	python3 setup.py install
+    pip install -r requirements.txt && \
+    python3 setup.py install
