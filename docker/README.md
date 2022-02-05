@@ -45,3 +45,17 @@ docker-compose run --rm n-body-simulations
 ```
 
 The N-Body Simulations widget should open within a containerized Ubuntu environment.
+
+### Pulling from Dockerhub
+
+There is also the option to pull the image from [Dockerhub](https://hub.docker.com/r/robertapplin/n-body-simulations).
+
+```sh
+docker pull robertapplin/n-body-simulations
+```
+
+You would then need to change the tag on the image so that it can be picked up by the ``docker-compose.yml`` file.
+
+```sh
+docker tag robertapplin/n-body-simulations n-body-simulations
+```
