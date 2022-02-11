@@ -21,10 +21,7 @@ docker build --no-cache -t n-body-simulations .
 Then run the image and mount the config files into the container:
 
 ```sh
-winpty docker run -u=root -it -e DISPLAY=host.docker.internal:0.0 -e LIBGL_ALWAYS_INDIRECT=1 -e XDG_RUNTIME_DIR=/tmp/runtime-root \
---mount "type=bind,source=$PWD/config/lightdm.conf,target=/etc/lightdm/lightdm.conf.d/lightdm.conf" \
---mount "type=bind,source=$PWD/config/default-display-manager,target=/etc/X11/default-display-manager" \
-n-body-simulations:latest \
+winpty docker run --rm -u=root -it n-body-simulations:latest \
 bash -c ". /opt/env/bin/activate && python3 /usr/N-Body-Simulations/n_body_simulations/startup.py"
 ```
 

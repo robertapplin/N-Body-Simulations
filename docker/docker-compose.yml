@@ -7,16 +7,5 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        environment:
-            - DISPLAY=host.docker.internal:0.0
-            - LIBGL_ALWAYS_INDIRECT=1
-            - XDG_RUNTIME_DIR=/tmp/runtime-root
-        volumes:
-            - type: bind
-              source: ./config/lightdm.conf
-              target: /etc/lightdm/lightdm.conf.d/lightdm.conf
-            - type: bind
-              source: ./config/default-display-manager
-              target: /etc/X11/default-display-manager
         command:
             bash -c ". /opt/env/bin/activate && python3 /usr/N-Body-Simulations/n_body_simulations/startup.py"
