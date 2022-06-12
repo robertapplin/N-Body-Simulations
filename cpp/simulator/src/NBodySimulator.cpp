@@ -33,7 +33,9 @@ void NBodySimulator::removeBody(std::string const &name) {
     return data->body().name() == name;
   };
 
-  std::erase_if(m_bodyData, hasName);
+  if (std::erase_if(m_bodyData, hasName) == 0u) {
+    throw std::invalid_argument("The body '" + name + "' could not be found.");
+  }
   m_dataChanged = true;
 }
 
