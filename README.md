@@ -31,13 +31,24 @@ Then install the python environment requirements and Qt dependencies using pip:
 pip install -r requirements.txt
 ```
 
-Next, from within the project source directory, build and install the project:
+Next, from within the project source directory, build and install the project. If this command fails, try running it as admin.
 
 ```sh
 python setup.py install
 ```
 
 The n-body-simulations package can now be found in the site-packages of your virtual environment.
+
+## Building Locally
+
+You can also build the code locally from git bash, from your source directory and with your virtual environment activated:
+
+```sh
+cmake --preset=win .
+cmake --build ../build
+```
+
+Remember to update the `VIRTUAL_ENV_PATH` found in the `CMakePresets.json` file before doing this.
 
 ## Usage
 
