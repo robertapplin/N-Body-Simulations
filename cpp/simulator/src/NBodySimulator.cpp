@@ -29,7 +29,11 @@ void NBodySimulator::clear() {
 }
 
 void NBodySimulator::removeBody(std::string const &name) {
-  m_bodyData.erase(m_bodyData.cbegin() + findBodyIndex(name));
+  auto const hasName = [&name](auto const &data) {
+    return data->body().name() == name;
+  };
+
+  std::erase_if(m_bodyData, hasName);
   m_dataChanged = true;
 }
 
@@ -63,10 +67,7 @@ std::size_t const NBodySimulator::numberOfBodies() const {
 }
 
 std::vector<std::string> const NBodySimulator::bodyNames() const {
-  auto const getName =
-      [](std::unique_ptr<BodyPositionsAndVelocities> const &data) {
-        return data->body().name();
-      };
+  auto const getName = [](auto const &data) { return data->body().name(); };
 
   std::vector<std::string> names;
   names.reserve(numberOfBodies());
@@ -260,10 +261,9 @@ Body &NBodySimulator::findBody(std::string const &name) const {
 }
 
 std::size_t const NBodySimulator::findBodyIndex(std::string const &name) const {
-  auto const hasName =
-      [&](std::unique_ptr<BodyPositionsAndVelocities> const &data) {
-        return data->body().name() == name;
-      };
+  auto const hasName = [&name](auto const &data) {
+    return data->body().name() == name;
+  };
 
   auto const iter =
       std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasName);
