@@ -103,29 +103,22 @@ private:
                              Body &targetBody);
   // Calculates the accelerations of the bodies at the next time step.
   [[nodiscard]] Vector2D calculateAcceleration(Body &targetBody);
-  // Calculates the acceleration of a target body at the next time step.
-  void calculateAcceleration(Vector2D &acceleration, Body &targetBody,
-                             Body &otherBody);
-
-  // Handles the merging of two bodies and applies the momentum transfer.
-  void mergeBodies(Body &largerBody, Body &smallerBody);
-
-  // Returns a reference to the body at a given index.
-  Body &body(std::size_t const &bodyIndex);
 
   // Removes the data calculated during previous simulations.
   void resetSimulation();
 
   // Returns the number of steps to take in the simulation.
-  [[nodiscard]] std::size_t numberOfSteps() const;
+  [[nodiscard]] std::size_t const numberOfSteps() const;
 
+  // Returns a reference to the body at a given index.
+  Body &getBody(std::size_t const &bodyIndex) const;
   // Finds the Body data object given a bodies name.
-  Body &findBody(std::string const &name) const;
+  Body &getBody(std::string const &name) const;
   // Finds the index of the specified body in m_bodyData.
   [[nodiscard]] std::size_t const findBodyIndex(std::string const &name) const;
 
   // Returns true and an iterator if the simulator contains the given body.
-  [[nodiscard]] std::tuple<bool, BodyData::const_iterator>
+  [[nodiscard]] std::tuple<bool const, BodyData::const_iterator> const
   hasBody(std::string const &name) const;
 
   double m_timeStep;
