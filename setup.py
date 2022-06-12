@@ -52,7 +52,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name="n_body_simulations",
-    version="1.0.1",
+    version="1.1.0",
     author="Robert Applin",
     author_email="robertapplin.developer@gmail.com",
     description="A QWidget used for simulating a gravitational system of N bodies in two dimensions.",

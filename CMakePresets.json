@@ -1,0 +1,43 @@
+{
+    "version": 1,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 12,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "ubuntu",
+            "displayName": "ubuntu",
+            "description": "Default build options for an Ubuntu virtual environment build",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/../build",
+            "environment": {
+                "VIRTUAL_ENV_PATH": ""
+            },
+            "cacheVariables": {
+                "PYTHON_EXECUTABLE": "$env{VIRTUAL_ENV_PATH}/Scripts/python.exe",
+                "PYTHON_LIBRARY_DIR": "$env{VIRTUAL_ENV_PATH}/Lib/site-packages",
+                "pybind11_DIR": "$env{VIRTUAL_ENV_PATH}/Lib/site-packages/pybind11/share/cmake/pybind11",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "win",
+            "displayName": "win",
+            "description": "Default build options for a Windows virtual environment build",
+            "generator": "Visual Studio 16 2019",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/../build",
+            "environment": {
+                "VIRTUAL_ENV_PATH": ""
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "PYTHON_EXECUTABLE": "$env{VIRTUAL_ENV_PATH}/Scripts/python.exe",
+                "PYTHON_LIBRARY_DIR": "$env{VIRTUAL_ENV_PATH}/Lib/site-packages",
+                "pybind11_DIR": "$env{VIRTUAL_ENV_PATH}/Lib/site-packages/pybind11/share/cmake/pybind11"
+            }
+        }
+    ]
+}
