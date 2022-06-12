@@ -11,6 +11,16 @@
 #include <iterator>
 #include <stdexcept>
 
+namespace {
+
+auto const getName = [](auto const &data) { return data->body().name(); };
+
+auto const hasNameLambda(std::string const &name) {
+  return [&name](auto const &data) { return data->body().name() == name; };
+}
+
+} // namespace
+
 namespace Simulator {
 using namespace Constants;
 
@@ -29,14 +39,11 @@ void NBodySimulator::clear() {
 }
 
 void NBodySimulator::removeBody(std::string const &name) {
-  auto const hasName = [&name](auto const &data) {
-    return data->body().name() == name;
-  };
-
-  if (std::erase_if(m_bodyData, hasName) == 0u) {
+  if (std::erase_if(m_bodyData, hasNameLambda(name)) != 0u) {
+    m_dataChanged = true;
+  } else {
     throw std::invalid_argument("The body '" + name + "' could not be found.");
   }
-  m_dataChanged = true;
 }
 
 void NBodySimulator::addBody(std::string const &name, double const mass,
@@ -69,8 +76,6 @@ std::size_t const NBodySimulator::numberOfBodies() const {
 }
 
 std::vector<std::string> const NBodySimulator::bodyNames() const {
-  auto const getName = [](auto const &data) { return data->body().name(); };
-
   std::vector<std::string> names;
   names.reserve(numberOfBodies());
   std::transform(m_bodyData.cbegin(), m_bodyData.cend(),
@@ -264,12 +269,8 @@ Body &NBodySimulator::findBody(std::string const &name) const {
 }
 
 std::size_t const NBodySimulator::findBodyIndex(std::string const &name) const {
-  auto const hasName = [&name](auto const &data) {
-    return data->body().name() == name;
-  };
-
   auto const iter =
-      std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasName);
+      std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasNameLambda(name));
   if (iter != m_bodyData.cend())
     return std::distance(m_bodyData.cbegin(), iter);
 
