@@ -8,12 +8,15 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace Simulator {
 
 class Body;
 struct Vector2D;
+
+using BodyData = std::vector<std::unique_ptr<BodyPositionsAndVelocities>>;
 
 // A class which can be used to simulate an N-Body system.
 class NBodySimulator {
@@ -99,7 +102,7 @@ private:
                              std::size_t const &targetBodyIndex,
                              Body &targetBody);
   // Calculates the accelerations of the bodies at the next time step.
-  Vector2D calculateAcceleration(Body &targetBody);
+  [[nodiscard]] Vector2D calculateAcceleration(Body &targetBody);
   // Calculates the acceleration of a target body at the next time step.
   void calculateAcceleration(Vector2D &acceleration, Body &targetBody,
                              Body &otherBody);
@@ -116,20 +119,21 @@ private:
   // Returns the number of steps to take in the simulation.
   [[nodiscard]] std::size_t numberOfSteps() const;
 
-  // Returns true if the simulator contains a body with the given name.
-  [[nodiscard]] bool hasBody(std::string const &name) const;
-
   // Finds the Body data object given a bodies name.
   Body &findBody(std::string const &name) const;
   // Finds the index of the specified body in m_bodyData.
-  std::size_t const findBodyIndex(std::string const &name) const;
+  [[nodiscard]] std::size_t const findBodyIndex(std::string const &name) const;
+
+  // Returns true and an iterator if the simulator contains the given body.
+  [[nodiscard]] std::tuple<bool, BodyData::const_iterator>
+  hasBody(std::string const &name) const;
 
   double m_timeStep;
   double m_duration;
   double m_gravitationalConstant;
 
   // The vector containing each body and their simulated positions.
-  std::vector<std::unique_ptr<BodyPositionsAndVelocities>> m_bodyData;
+  BodyData m_bodyData;
   // A flag to notify when the data changes in-between simulations.
   bool m_dataChanged;
 };

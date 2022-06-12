@@ -49,7 +49,7 @@ void NBodySimulator::removeBody(std::string const &name) {
 void NBodySimulator::addBody(std::string const &name, double const mass,
                              Vector2D const &position,
                              Vector2D const &velocity) {
-  if (hasBody(name))
+  if (std::get<0>(hasBody(name)))
     throw std::invalid_argument("The body '" + name + "' already exists.");
 
   m_bodyData.emplace_back(std::make_unique<BodyPositionsAndVelocities>(
@@ -85,10 +85,11 @@ std::vector<std::string> const NBodySimulator::bodyNames() const {
 
 void NBodySimulator::setName(std::string const &oldName,
                              std::string const &newName) {
-  if (hasBody(newName))
+  auto const [exists, iter] = hasBody(newName);
+  if (exists)
     throw std::invalid_argument("The body '" + newName + "' already exists.");
 
-  findBody(oldName).setName(newName);
+  (*iter)->body().setName(newName);
   m_dataChanged = true;
 }
 
@@ -258,23 +259,23 @@ std::size_t NBodySimulator::numberOfSteps() const {
   return static_cast<std::size_t>(std::llround(m_duration / m_timeStep));
 }
 
-bool NBodySimulator::hasBody(std::string const &name) const {
-  auto const names = bodyNames();
-  auto const iter = std::find(names.cbegin(), names.cend(), name);
-  return iter != names.cend();
-}
-
 Body &NBodySimulator::findBody(std::string const &name) const {
   return m_bodyData[findBodyIndex(name)]->body();
 }
 
 std::size_t const NBodySimulator::findBodyIndex(std::string const &name) const {
-  auto const iter =
-      std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasNameLambda(name));
-  if (iter != m_bodyData.cend())
+  auto const [exists, iter] = hasBody(name);
+  if (exists)
     return std::distance(m_bodyData.cbegin(), iter);
 
   throw std::invalid_argument("The body '" + name + "' could not be found.");
+}
+
+std::tuple<bool, BodyData::const_iterator>
+NBodySimulator::hasBody(std::string const &name) const {
+  auto const iter =
+      std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasNameLambda(name));
+  return {iter != m_bodyData.cend(), iter};
 }
 
 } // namespace Simulator
