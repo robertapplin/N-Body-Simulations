@@ -24,7 +24,7 @@ NBodySimulator::~NBodySimulator() { m_bodyData.clear(); }
 void NBodySimulator::clear() {
   m_timeStep = 0.0;
   m_duration = 0.0;
-  m_bodyData.erase(m_bodyData.cbegin(), m_bodyData.cend());
+  m_bodyData.clear();
   m_dataChanged = true;
 }
 
