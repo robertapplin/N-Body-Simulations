@@ -183,8 +183,9 @@ void NBodySimulator::validateSimulationParameters() const {
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
   for (auto const &targetBodyName : bodyNames()) {
     auto const targetBodyIndex = findBodyIndex(targetBodyName);
-    if (!body(targetBodyIndex).isMerged())
+    if (!body(targetBodyIndex).isMerged()) {
       calculateNewPositions(stepNumber, targetBodyIndex, body(targetBodyIndex));
+    }
   }
 }
 
