@@ -11,10 +11,10 @@ struct Vector2D {
   [[nodiscard]] double const magnitude() const;
 
   // Used to simplify vector operations.
-  Vector2D const operator-(Vector2D const &otherVector);
-  Vector2D const operator*(double const value);
+  Vector2D const operator-(Vector2D const &otherVector) const;
+  Vector2D const operator*(double const value) const;
   void operator+=(Vector2D const &otherVector);
-  bool const operator==(Vector2D const &otherVector);
+  bool const operator==(Vector2D const &otherVector) const;
 
   double m_x;
   double m_y;

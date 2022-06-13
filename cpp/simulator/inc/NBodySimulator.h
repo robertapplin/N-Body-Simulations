@@ -98,9 +98,9 @@ private:
   // Calculates the new positions of the bodies at the next time step.
   void calculateNewPositions(std::size_t const &stepNumber);
   // Calculates the new positions of a target body at the next time step.
-  void calculateNewPositions(std::size_t const &stepNumber,
-                             std::size_t const &targetBodyIndex,
-                             Body &targetBody);
+  void calculateNewPositionForBody(std::size_t const &stepNumber,
+                                   std::size_t const &targetBodyIndex,
+                                   Body &targetBody);
   // Calculates the accelerations of the bodies at the next time step.
   [[nodiscard]] Vector2D calculateAcceleration(Body &targetBody);
 
@@ -110,10 +110,10 @@ private:
   // Returns the number of steps to take in the simulation.
   [[nodiscard]] std::size_t const numberOfSteps() const;
 
-  // Returns a reference to the body at a given index.
-  Body &getBody(std::size_t const &bodyIndex) const;
   // Finds the Body data object given a bodies name.
   Body &getBody(std::string const &name) const;
+  // Returns a reference to the body at a given index.
+  Body &getBody(std::size_t const &bodyIndex) const;
   // Finds the index of the specified body in m_bodyData.
   [[nodiscard]] std::size_t const findBodyIndex(std::string const &name) const;
 

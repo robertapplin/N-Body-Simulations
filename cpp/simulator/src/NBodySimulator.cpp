@@ -40,7 +40,7 @@ Simulator::Vector2D const
 calculateAccelerationFromOtherBody(Simulator::Body &targetBody,
                                    Simulator::Body &otherBody,
                                    double const gravitationalConstant) {
-  auto relativePosition = otherBody.position() - targetBody.position();
+  auto const relativePosition = otherBody.position() - targetBody.position();
   auto const r = relativePosition.magnitude();
   auto const collision = r <= targetBody.radius() + otherBody.radius();
 
@@ -57,7 +57,7 @@ void accumulateAccelerationFromOtherBody(Simulator::Vector2D &acceleration,
                                          Simulator::Body &targetBody,
                                          Simulator::Body &otherBody,
                                          double const gravitationalConstant) {
-  if (!otherBody.isMerged() || targetBody != otherBody) {
+  if (!otherBody.isMerged() && targetBody != otherBody) {
     acceleration += calculateAccelerationFromOtherBody(targetBody, otherBody,
                                                        gravitationalConstant);
   }
@@ -73,7 +73,7 @@ NBodySimulator::NBodySimulator()
       m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)),
       m_bodyData(), m_dataChanged(true) {}
 
-NBodySimulator::~NBodySimulator() { m_bodyData.clear(); }
+NBodySimulator::~NBodySimulator() { clear(); }
 
 void NBodySimulator::clear() {
   m_timeStep = 0.0;
@@ -83,9 +83,9 @@ void NBodySimulator::clear() {
 }
 
 void NBodySimulator::removeBody(std::string const &name) {
-  if (std::erase_if(m_bodyData, hasNameLambda(name)) != 0u) {
-    m_dataChanged = true;
-  } else {
+  m_dataChanged = std::erase_if(m_bodyData, hasNameLambda(name)) != 0u;
+
+  if (!m_dataChanged) {
     throw std::invalid_argument("The body '" + name + "' could not be found.");
   }
 }
@@ -137,9 +137,7 @@ void NBodySimulator::setName(std::string const &oldName,
 }
 
 void NBodySimulator::setMass(std::string const &bodyName, double const mass) {
-  auto &body = getBody(bodyName);
-  body.setInitialMass(mass);
-  body.setMass(mass);
+  getBody(bodyName).setInitialMass(mass);
   m_dataChanged = true;
 }
 
@@ -216,37 +214,38 @@ NBodySimulator::simulatedVelocities(std::string const &bodyName) const {
 }
 
 void NBodySimulator::validateSimulationParameters() const {
-  if (m_bodyData.empty())
+  if (m_bodyData.empty()) {
     throw std::invalid_argument("There are no bodies in the simulation.");
-  else if (m_timeStep <= 0.0)
+  } else if (m_timeStep <= 0.0) {
     throw std::invalid_argument("The time step must be above zero.");
-  else if (m_duration <= 0.0)
+  } else if (m_duration <= 0.0) {
     throw std::invalid_argument("The duration must be above zero.");
-  else if (m_timeStep > m_duration)
+  } else if (m_timeStep > m_duration) {
     throw std::invalid_argument(
         "The time step cannot be larger than the duration.");
-  else if (std::fmod(static_cast<int>(m_duration * 10.0),
-                     static_cast<int>(m_timeStep * 10.0)) != 0.0)
+  } else if (std::fmod(static_cast<int>(m_duration * 10.0),
+                       static_cast<int>(m_timeStep * 10.0)) != 0.0) {
     throw std::invalid_argument(
         "The duration must be evenly divisible by the time step.");
+  }
 }
 
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
 
-  auto const calNewPositions = [&](auto const &data) {
-    auto const targetBodyIndex = findBodyIndex(data->body().name());
-    auto &targetBody = getBody(targetBodyIndex);
+  auto const calculateNewPosition = [&](auto const &data) -> void {
+    auto &targetBody = data->body();
     if (!targetBody.isMerged()) {
-      calculateNewPositions(stepNumber, targetBodyIndex, targetBody);
+      auto const targetBodyIndex = findBodyIndex(targetBody.name());
+      calculateNewPositionForBody(stepNumber, targetBodyIndex, targetBody);
     }
   };
 
-  std::for_each(m_bodyData.begin(), m_bodyData.end(), calNewPositions);
+  std::for_each(m_bodyData.begin(), m_bodyData.end(), calculateNewPosition);
 }
 
-void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber,
-                                           std::size_t const &targetBodyIndex,
-                                           Body &targetBody) {
+void NBodySimulator::calculateNewPositionForBody(
+    std::size_t const &stepNumber, std::size_t const &targetBodyIndex,
+    Body &targetBody) {
   auto acceleration = calculateAcceleration(targetBody);
 
   auto &velocity = targetBody.velocity();
@@ -279,20 +278,14 @@ void NBodySimulator::resetSimulation() {
 }
 
 std::size_t const NBodySimulator::numberOfSteps() const {
-  return static_cast<std::size_t>(std::llround(m_duration / m_timeStep));
-}
-
-Body &NBodySimulator::getBody(std::size_t const &bodyIndex) const {
-  if (bodyIndex < numberOfBodies()) {
-    return m_bodyData[bodyIndex]->body();
-  }
-
-  throw std::invalid_argument("The body index " + std::to_string(bodyIndex) +
-                              " is too large.");
+  return static_cast<std::size_t const>(std::llround(m_duration / m_timeStep));
 }
 
 Body &NBodySimulator::getBody(std::string const &name) const {
-  auto const bodyIndex = findBodyIndex(name);
+  return getBody(findBodyIndex(name));
+}
+
+Body &NBodySimulator::getBody(std::size_t const &bodyIndex) const {
   if (bodyIndex < numberOfBodies()) {
     return m_bodyData[bodyIndex]->body();
   }
