@@ -234,7 +234,7 @@ void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
 void NBodySimulator::calculateNewPositionForBody(
     std::size_t const &stepNumber, std::size_t const &targetBodyIndex,
     Body &targetBody) {
-  auto acceleration = calculateAcceleration(targetBody);
+  auto const acceleration = calculateAcceleration(targetBody);
 
   auto &velocity = targetBody.velocity();
   velocity += acceleration * m_timeStep;
