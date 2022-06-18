@@ -1,7 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#ifndef Body_H
-#define Body_H
+#pragma once
 
 #include "Vector2D.h"
 
@@ -81,5 +80,3 @@ private:
 };
 
 } // namespace Simulator
-
-#endif // Body_H

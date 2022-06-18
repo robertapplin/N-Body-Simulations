@@ -1,9 +1,8 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#ifndef NBodySimulator_H
-#define NBodySimulator_H
+#pragma once
 
-#include "BodyPositionsAndVelocities.h"
+#include "BodyEvolution.h"
 
 #include <map>
 #include <memory>
@@ -16,7 +15,7 @@ namespace Simulator {
 class Body;
 struct Vector2D;
 
-using BodyData = std::vector<std::unique_ptr<BodyPositionsAndVelocities>>;
+using BodyData = std::vector<std::unique_ptr<BodyEvolution>>;
 
 // A class which can be used to simulate an N-Body system.
 class NBodySimulator {
@@ -81,15 +80,9 @@ public:
   // Run the simulation using the currently stored initial parameters.
   void runSimulation();
 
-  // Return the simulated masses of the specified body.
-  std::map<double, double> const
-  simulatedMasses(std::string const &bodyName) const;
-  // Return the simulated locations of the specified body.
-  std::map<double, Vector2D> const
-  simulatedPositions(std::string const &bodyName) const;
-  // Return the simulated velocities of the specified body.
-  std::map<double, Vector2D> const
-  simulatedVelocities(std::string const &bodyName) const;
+  // Return the simulated masses, positions and velocities of a specified body.
+  std::map<double, BodyState> const
+  simulationResults(std::string const &bodyName) const;
 
 private:
   // Checks that the provided parameters are valid, and throws if they are not.
@@ -132,5 +125,3 @@ private:
 };
 
 } // namespace Simulator
-
-#endif // NBodySimulator_H

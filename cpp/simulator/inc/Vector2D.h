@@ -1,7 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#ifndef Vector2D_H
-#define Vector2D_H
+#pragma once
 
 namespace Simulator {
 
@@ -21,5 +20,3 @@ struct Vector2D {
 };
 
 } // namespace Simulator
-
-#endif // Vector2D_H

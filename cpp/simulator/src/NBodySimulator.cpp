@@ -96,7 +96,7 @@ void NBodySimulator::addBody(std::string const &name, double const mass,
   if (std::get<0>(hasBody(name)))
     throw std::invalid_argument("The body '" + name + "' already exists.");
 
-  m_bodyData.emplace_back(std::make_unique<BodyPositionsAndVelocities>(
+  m_bodyData.emplace_back(std::make_unique<BodyEvolution>(
       std::make_unique<Body>(name, mass, position, velocity)));
   m_dataChanged = true;
 }
@@ -195,22 +195,10 @@ void NBodySimulator::runSimulation() {
   m_dataChanged = false;
 }
 
-std::map<double, double> const
-NBodySimulator::simulatedMasses(std::string const &bodyName) const {
+std::map<double, BodyState> const
+NBodySimulator::simulationResults(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->masses();
-}
-
-std::map<double, Vector2D> const
-NBodySimulator::simulatedPositions(std::string const &bodyName) const {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->positions();
-}
-
-std::map<double, Vector2D> const
-NBodySimulator::simulatedVelocities(std::string const &bodyName) const {
-  auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->velocities();
+  return m_bodyData[bodyIndex]->timeEvolutions();
 }
 
 void NBodySimulator::validateSimulationParameters() const {
@@ -255,9 +243,8 @@ void NBodySimulator::calculateNewPositionForBody(
   position += velocity * m_timeStep;
 
   auto const time = stepNumber * m_timeStep;
-  m_bodyData[targetBodyIndex]->addMass(time, targetBody.mass());
-  m_bodyData[targetBodyIndex]->addPosition(time, position);
-  m_bodyData[targetBodyIndex]->addVelocity(time, velocity);
+  m_bodyData[targetBodyIndex]->addTime(time, targetBody.mass(), position,
+                                       velocity);
 }
 
 Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) {

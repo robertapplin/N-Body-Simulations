@@ -2,7 +2,7 @@
 # Authored by Robert Applin, 2020
 set(SOURCE_FILES
     Body.cpp
-    BodyPositionsAndVelocities.cpp
+    BodyEvolution.cpp
     NBodySimulator.cpp
     SimulationConstants.cpp
     Vector2D.cpp
@@ -10,7 +10,7 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     Body.h
-    BodyPositionsAndVelocities.h
+    BodyEvolution.h
     NBodySimulator.h
     SimulationConstants.h
     Vector2D.h
