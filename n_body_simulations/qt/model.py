@@ -6,6 +6,10 @@ from NBodySimulations import NBodySimulator, Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QThread
 
+MASS_INDEX = 0
+POSITION_INDEX = 1
+VELOCITY_INDEX = 2
+
 
 class NBodySimulationsModel(QThread):
     """A class used as a model for the main GUI (MVP)."""
@@ -149,7 +153,7 @@ class NBodySimulationsModel(QThread):
         mass_data, position_data, velocity_data = {}, {}, {}
         for time, data in simulated_data.items():
             time_rounded = round(time, self.time_dp)
-            mass_data[time_rounded] = data[0]
-            position_data[time_rounded] = data[1]
-            velocity_data[time_rounded] = data[2]
+            mass_data[time_rounded] = data[MASS_INDEX]
+            position_data[time_rounded] = data[POSITION_INDEX]
+            velocity_data[time_rounded] = data[VELOCITY_INDEX]
         return mass_data, position_data, velocity_data

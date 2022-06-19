@@ -19,7 +19,7 @@ BodyEvolution::~BodyEvolution() {
   m_evolutions.clear();
 }
 
-void BodyEvolution::resetParameters() {
+void BodyEvolution::reset() {
   m_evolutions.erase(std::next(m_evolutions.cbegin()), m_evolutions.cend());
   m_body->resetBody();
 }

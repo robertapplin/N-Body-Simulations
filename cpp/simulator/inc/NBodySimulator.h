@@ -102,6 +102,8 @@ private:
 
   // Returns the number of steps to take in the simulation.
   [[nodiscard]] std::size_t const numberOfSteps() const;
+  // Return a vector of time steps to be simulated.
+  [[nodiscard]] std::vector<std::size_t> const timeSteps() const;
 
   // Finds the Body data object given a bodies name.
   Body &getBody(std::string const &name) const;

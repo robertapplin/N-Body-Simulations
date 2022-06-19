@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iterator>
+#include <numeric>
 #include <stdexcept>
 
 namespace {
@@ -24,9 +25,7 @@ auto const hasNameLambda(std::string const &name) {
   return hasName;
 }
 
-auto const resetParameters = [](auto const &data) -> void {
-  data->resetParameters();
-};
+auto const resetParameters = [](auto const &data) -> void { data->reset(); };
 
 void mergeBodies(Simulator::Body &targetBody, Simulator::Body &otherBody) {
   targetBody.setMass(targetBody.mass() + otherBody.mass());
@@ -182,17 +181,13 @@ bool const NBodySimulator::hasDataChanged() const { return m_dataChanged; }
 void NBodySimulator::runSimulation() {
   validateSimulationParameters();
 
-  if (!m_dataChanged)
-    return;
-
-  m_gravitationalConstant = gravitationalConstant(TimeUnit::Days);
-
-  resetSimulation();
-
-  for (auto i = 1u; i <= numberOfSteps(); ++i)
-    calculateNewPositions(i);
-
-  m_dataChanged = false;
+  if (m_dataChanged) {
+    resetSimulation();
+    for (auto const steps = timeSteps(); auto const &i : steps) {
+      calculateNewPositions(i);
+    }
+    m_dataChanged = false;
+  }
 }
 
 std::map<double, BodyState> const
@@ -266,6 +261,13 @@ void NBodySimulator::resetSimulation() {
 
 std::size_t const NBodySimulator::numberOfSteps() const {
   return static_cast<std::size_t const>(std::llround(m_duration / m_timeStep));
+}
+
+std::vector<std::size_t> const NBodySimulator::timeSteps() const {
+  std::vector<std::size_t> timeSteps;
+  timeSteps.reserve(numberOfSteps());
+  std::iota(timeSteps.begin(), timeSteps.end(), 1u);
+  return timeSteps;
 }
 
 Body &NBodySimulator::getBody(std::string const &name) const {

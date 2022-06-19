@@ -15,17 +15,17 @@ struct Vector2D;
 // A mass, position and velocity of a body
 using BodyState = std::tuple<double, Vector2D, Vector2D>;
 
-// A class used to store the positions and velocities of a body over time.
+// A class to store the masses, positions and velocities of a body over time.
 class BodyEvolution {
 
 public:
   BodyEvolution(std::unique_ptr<Body> body);
   ~BodyEvolution();
 
-  // Removes previously calculated positions and velocities.
-  void resetParameters();
+  // Removes previously calculated masses, positions and velocities.
+  void reset();
 
-  // Return the body associated with the position and velocity coordinates.
+  // Return the body associated with the masses, position and velocities.
   [[nodiscard]] Body &body() const;
 
   // Add a mass, position and velocity for a specific time.

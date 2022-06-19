@@ -131,37 +131,19 @@ def test_that_runSimulation_is_exposed_to_python(simulator):
     assert not simulator.hasDataChanged()
 
 
-def test_that_simulatedMasses_is_exposed_to_python(simulator):
+def test_that_simulatedResults_is_exposed_to_python(simulator):
     simulator.setTimeStep(1.0)
     simulator.setDuration(500.0)
     simulator.runSimulation()
 
-    results = simulator.simulatedMasses("Sun")
+    times, data = simulator.simulatedResults("Sun").items()
 
-    assert results[0.0] == 1.0
-    assert results[1.0] == 1.0
-    assert results[2.0] == 1.0
-
-
-def test_that_simulatedPositions_is_exposed_to_python(simulator):
-    simulator.setTimeStep(1.0)
-    simulator.setDuration(500.0)
-    simulator.runSimulation()
-
-    results = simulator.simulatedPositions("Sun")
-
-    assert results[0.0] == Vector2D(0.0, 0.0)
-    assert results[1.0] == Vector2D(0.0, 0.0)
-    assert results[2.0] == Vector2D(0.0, 0.0)
-
-
-def test_that_simulatedVelocities_is_exposed_to_python(simulator):
-    simulator.setTimeStep(1.0)
-    simulator.setDuration(500.0)
-    simulator.runSimulation()
-
-    results = simulator.simulatedVelocities("Sun")
-
-    assert results[0.0] == Vector2D(0.0, 0.0)
-    assert results[1.0] == Vector2D(0.0, 0.0)
-    assert results[2.0] == Vector2D(0.0, 0.0)
+    assert data[0][0.0] == 1.0
+    assert data[0][1.0] == 1.0
+    assert data[0][2.0] == 1.0
+    assert data[1][0.0] == Vector2D(0.0, 0.0)
+    assert data[1][1.0] == Vector2D(0.0, 0.0)
+    assert data[1][2.0] == Vector2D(0.0, 0.0)
+    assert data[2][0.0] == Vector2D(0.0, 0.0)
+    assert data[2][1.0] == Vector2D(0.0, 0.0)
+    assert data[2][2.0] == Vector2D(0.0, 0.0)

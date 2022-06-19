@@ -56,13 +56,12 @@ TEST_F(BodyPositionsTest,
                std::runtime_error);
 }
 
-TEST_F(
-    BodyPositionsTest,
-    test_that_resetParameters_will_clear_all_positions_and_velocities_but_the_first) {
+TEST_F(BodyPositionsTest,
+       test_that_reset_will_clear_all_positions_and_velocities_but_the_first) {
   m_bodyPositions->addTime(1.0, 2.0, Vector2D({3.0, 3.0}),
                            Vector2D({4.0, 4.0}));
 
-  m_bodyPositions->resetParameters();
+  m_bodyPositions->reset();
 
   auto const results = m_bodyPositions->timeEvolutions();
   ASSERT_EQ(1, results.size());
@@ -73,7 +72,7 @@ TEST_F(
 
 TEST_F(
     BodyPositionsTest,
-    test_that_resetParameters_will_reset_the_positions_and_velocities_in_the_body_back_to_the_initial_values) {
+    test_that_reset_will_reset_the_positions_and_velocities_in_the_body_back_to_the_initial_values) {
   auto &position = m_bodyPositions->body().position();
   position += {3.0, 3.0};
   auto &velocity = m_bodyPositions->body().velocity();
@@ -81,7 +80,7 @@ TEST_F(
 
   m_bodyPositions->addTime(1.0, 2.0, position, velocity);
 
-  m_bodyPositions->resetParameters();
+  m_bodyPositions->reset();
 
   auto const results = m_bodyPositions->timeEvolutions();
   ASSERT_EQ(1, results.size());
