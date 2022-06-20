@@ -59,7 +59,10 @@
             "inherits": [
                 "base"
             ],
-            "generator": "Ninja"
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-std=gnu++2a"
+            }
         }
     ]
 }

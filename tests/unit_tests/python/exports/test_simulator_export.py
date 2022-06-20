@@ -131,12 +131,12 @@ def test_that_runSimulation_is_exposed_to_python(simulator):
     assert not simulator.hasDataChanged()
 
 
-def test_that_simulatedResults_is_exposed_to_python(simulator):
+def test_that_simulationResults_is_exposed_to_python(simulator):
     simulator.setTimeStep(1.0)
     simulator.setDuration(500.0)
     simulator.runSimulation()
 
-    times, data = simulator.simulatedResults("Sun").items()
+    times, data = simulator.simulationResults("Sun").items()
 
     assert data[0][0.0] == 1.0
     assert data[0][1.0] == 1.0
