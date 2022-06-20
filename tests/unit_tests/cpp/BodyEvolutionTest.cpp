@@ -13,18 +13,12 @@ using namespace Simulator;
 class BodyPositionsTest : public testing::Test {
 protected:
   void SetUp() override {
-    m_bodyPositions = std::make_unique<BodyEvolution>(std::make_unique<Body>(
-        "Earth", 0.01, Vector2D({1.0, 2.0}), Vector2D({3.0, 4.0})));
+    m_bodyPositions = std::make_unique<BodyEvolution>(
+        0.01, Vector2D({1.0, 2.0}), Vector2D({3.0, 4.0}));
   }
 
   std::unique_ptr<BodyEvolution> m_bodyPositions;
 };
-
-TEST_F(BodyPositionsTest,
-       test_that_BodyPositions_has_been_instantiated_with_the_correct_body) {
-  ASSERT_EQ("Earth", m_bodyPositions->body().name());
-  ASSERT_EQ(0.01, m_bodyPositions->body().initialMass());
-}
 
 TEST_F(
     BodyPositionsTest,
@@ -73,12 +67,7 @@ TEST_F(BodyPositionsTest,
 TEST_F(
     BodyPositionsTest,
     test_that_reset_will_reset_the_positions_and_velocities_in_the_body_back_to_the_initial_values) {
-  auto &position = m_bodyPositions->body().position();
-  position += {3.0, 3.0};
-  auto &velocity = m_bodyPositions->body().velocity();
-  velocity += {3.0, 3.0};
-
-  m_bodyPositions->addTime(1.0, 2.0, position, velocity);
+  m_bodyPositions->addTime(1.0, 2.0, {3.0, 3.0}, {3.0, 3.0});
 
   m_bodyPositions->reset();
 

@@ -2,20 +2,18 @@
 // Authored by Robert Applin, 2020
 #pragma once
 
-#include "BodyEvolution.h"
+#include "SimulatedBody.h"
 
 #include <map>
 #include <memory>
 #include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 namespace Simulator {
 
-class Body;
 struct Vector2D;
-
-using BodyData = std::vector<std::unique_ptr<BodyEvolution>>;
 
 // A class which can be used to simulate an N-Body system.
 class NBodySimulator {
@@ -102,8 +100,6 @@ private:
 
   // Returns the number of steps to take in the simulation.
   [[nodiscard]] std::size_t const numberOfSteps() const;
-  // Return a vector of time steps to be simulated.
-  [[nodiscard]] std::vector<std::size_t> const timeSteps() const;
 
   // Finds the Body data object given a bodies name.
   Body &getBody(std::string const &name) const;
@@ -113,15 +109,17 @@ private:
   [[nodiscard]] std::size_t const findBodyIndex(std::string const &name) const;
 
   // Returns true and an iterator if the simulator contains the given body.
-  [[nodiscard]] std::tuple<bool const, BodyData::const_iterator> const
+  [[nodiscard]] std::tuple<
+      bool const,
+      std::vector<std::unique_ptr<SimulatedBody>>::const_iterator> const
   hasBody(std::string const &name) const;
 
   double m_timeStep;
   double m_duration;
   double m_gravitationalConstant;
 
-  // The vector containing each body and their simulated positions.
-  BodyData m_bodyData;
+  // The vector containing each body and their simulated evolution.
+  std::vector<std::unique_ptr<SimulatedBody>> m_simulatedBodies;
   // A flag to notify when the data changes in-between simulations.
   bool m_dataChanged;
 };

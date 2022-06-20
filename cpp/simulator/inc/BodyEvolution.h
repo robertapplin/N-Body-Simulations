@@ -19,14 +19,11 @@ using BodyState = std::tuple<double, Vector2D, Vector2D>;
 class BodyEvolution {
 
 public:
-  BodyEvolution(std::unique_ptr<Body> body);
+  BodyEvolution(double const mass, Vector2D position, Vector2D velocity);
   ~BodyEvolution();
 
   // Removes previously calculated masses, positions and velocities.
   void reset();
-
-  // Return the body associated with the masses, position and velocities.
-  [[nodiscard]] Body &body() const;
 
   // Add a mass, position and velocity for a specific time.
   void addTime(double const time, double const mass, Vector2D const position,
@@ -39,8 +36,6 @@ public:
   }
 
 private:
-  // The body related to the evolutions.
-  std::unique_ptr<Body> m_body;
   // The evolution of the bodies state over time.
   std::map<double, BodyState> m_evolutions;
 };

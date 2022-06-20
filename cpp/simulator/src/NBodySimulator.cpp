@@ -3,6 +3,7 @@
 #include "NBodySimulator.h"
 
 #include "Body.h"
+#include "BodyEvolution.h"
 #include "SimulationConstants.h"
 #include "Vector2D.h"
 
@@ -14,18 +15,20 @@
 
 namespace {
 
-auto const getName = [](auto const &data) -> std::string {
-  return data->body().name();
+auto const getName = [](auto const &simulatedBody) -> std::string {
+  return simulatedBody->name();
 };
 
 auto const hasNameLambda(std::string const &name) {
-  auto const hasName = [&name](auto const &data) -> bool {
-    return data->body().name() == name;
+  auto const hasName = [&name](auto const &simulatedBody) -> bool {
+    return simulatedBody->name() == name;
   };
   return hasName;
 }
 
-auto const resetParameters = [](auto const &data) -> void { data->reset(); };
+auto const reset = [](auto const &simulatedBody) -> void {
+  simulatedBody->reset();
+};
 
 void mergeBodies(Simulator::Body &targetBody, Simulator::Body &otherBody) {
   targetBody.setMass(targetBody.mass() + otherBody.mass());
@@ -46,7 +49,7 @@ calculateAccelerationFromOtherBody(Simulator::Body &targetBody,
   if (collision && targetBody.mass() >= otherBody.mass()) {
     mergeBodies(targetBody, otherBody);
     return Simulator::Vector2D{0.0, 0.0};
-  } else {
+  } else [[likely]] {
     return relativePosition *
            (gravitationalConstant * otherBody.mass() / pow(r, 3));
   }
@@ -70,19 +73,19 @@ using namespace Constants;
 NBodySimulator::NBodySimulator()
     : m_timeStep(0.0), m_duration(0.0),
       m_gravitationalConstant(gravitationalConstant(TimeUnit::Days)),
-      m_bodyData(), m_dataChanged(true) {}
+      m_simulatedBodies(), m_dataChanged(true) {}
 
 NBodySimulator::~NBodySimulator() { clear(); }
 
 void NBodySimulator::clear() {
   m_timeStep = 0.0;
   m_duration = 0.0;
-  m_bodyData.clear();
+  m_simulatedBodies.clear();
   m_dataChanged = true;
 }
 
 void NBodySimulator::removeBody(std::string const &name) {
-  m_dataChanged = std::erase_if(m_bodyData, hasNameLambda(name)) != 0u;
+  m_dataChanged = std::erase_if(m_simulatedBodies, hasNameLambda(name)) != 0u;
 
   if (!m_dataChanged) {
     throw std::invalid_argument("The body '" + name + "' could not be found.");
@@ -95,8 +98,9 @@ void NBodySimulator::addBody(std::string const &name, double const mass,
   if (std::get<0>(hasBody(name)))
     throw std::invalid_argument("The body '" + name + "' already exists.");
 
-  m_bodyData.emplace_back(std::make_unique<BodyEvolution>(
-      std::make_unique<Body>(name, mass, position, velocity)));
+  m_simulatedBodies.emplace_back(std::make_unique<SimulatedBody>(
+      std::make_unique<Body>(name, mass, position, velocity),
+      std::make_unique<BodyEvolution>(mass, position, velocity)));
   m_dataChanged = true;
 }
 
@@ -115,13 +119,13 @@ void NBodySimulator::setDuration(double const duration) {
 double const NBodySimulator::duration() const { return m_duration; }
 
 std::size_t const NBodySimulator::numberOfBodies() const {
-  return m_bodyData.size();
+  return m_simulatedBodies.size();
 }
 
 std::vector<std::string> const NBodySimulator::bodyNames() const {
   std::vector<std::string> names;
   names.reserve(numberOfBodies());
-  std::transform(m_bodyData.cbegin(), m_bodyData.cend(),
+  std::transform(m_simulatedBodies.cbegin(), m_simulatedBodies.cend(),
                  std::back_inserter(names), getName);
   return names;
 }
@@ -183,7 +187,7 @@ void NBodySimulator::runSimulation() {
 
   if (m_dataChanged) {
     resetSimulation();
-    for (auto const steps = timeSteps(); auto const &i : steps) {
+    for (auto i = 1u; i <= numberOfSteps(); ++i) {
       calculateNewPositions(i);
     }
     m_dataChanged = false;
@@ -193,11 +197,11 @@ void NBodySimulator::runSimulation() {
 std::map<double, BodyState> const
 NBodySimulator::simulationResults(std::string const &bodyName) const {
   auto const bodyIndex = findBodyIndex(bodyName);
-  return m_bodyData[bodyIndex]->timeEvolutions();
+  return m_simulatedBodies[bodyIndex]->bodyEvolution().timeEvolutions();
 }
 
 void NBodySimulator::validateSimulationParameters() const {
-  if (m_bodyData.empty()) {
+  if (m_simulatedBodies.empty()) {
     throw std::invalid_argument("There are no bodies in the simulation.");
   } else if (m_timeStep <= 0.0) {
     throw std::invalid_argument("The time step must be above zero.");
@@ -215,15 +219,16 @@ void NBodySimulator::validateSimulationParameters() const {
 
 void NBodySimulator::calculateNewPositions(std::size_t const &stepNumber) {
 
-  auto const calculateNewPosition = [&](auto const &data) -> void {
-    auto &targetBody = data->body();
+  auto const calculateNewPosition = [&](auto const &simulatedBody) -> void {
+    auto &targetBody = simulatedBody->body();
     if (!targetBody.isMerged()) {
       auto const targetBodyIndex = findBodyIndex(targetBody.name());
       calculateNewPositionForBody(stepNumber, targetBodyIndex, targetBody);
     }
   };
 
-  std::for_each(m_bodyData.begin(), m_bodyData.end(), calculateNewPosition);
+  std::for_each(m_simulatedBodies.begin(), m_simulatedBodies.end(),
+                calculateNewPosition);
 }
 
 void NBodySimulator::calculateNewPositionForBody(
@@ -238,36 +243,30 @@ void NBodySimulator::calculateNewPositionForBody(
   position += velocity * m_timeStep;
 
   auto const time = stepNumber * m_timeStep;
-  m_bodyData[targetBodyIndex]->addTime(time, targetBody.mass(), position,
-                                       velocity);
+  m_simulatedBodies[targetBodyIndex]->addTime(time, targetBody.mass(), position,
+                                              velocity);
 }
 
 Vector2D NBodySimulator::calculateAcceleration(Body &targetBody) {
   Vector2D acceleration = {0.0, 0.0};
 
-  auto const accumulateAcceleration = [&](auto const &data) -> void {
-    auto &otherBody = data->body();
+  auto const accumulateAcceleration = [&](auto &simulatedBody) -> void {
+    auto &otherBody = simulatedBody->body();
     accumulateAccelerationFromOtherBody(acceleration, targetBody, otherBody,
                                         m_gravitationalConstant);
   };
 
-  std::for_each(m_bodyData.begin(), m_bodyData.end(), accumulateAcceleration);
+  std::for_each(m_simulatedBodies.begin(), m_simulatedBodies.end(),
+                accumulateAcceleration);
   return acceleration;
 }
 
 void NBodySimulator::resetSimulation() {
-  std::for_each(m_bodyData.begin(), m_bodyData.end(), resetParameters);
+  std::for_each(m_simulatedBodies.begin(), m_simulatedBodies.end(), reset);
 }
 
 std::size_t const NBodySimulator::numberOfSteps() const {
   return static_cast<std::size_t const>(std::llround(m_duration / m_timeStep));
-}
-
-std::vector<std::size_t> const NBodySimulator::timeSteps() const {
-  std::vector<std::size_t> timeSteps;
-  timeSteps.reserve(numberOfSteps());
-  std::iota(timeSteps.begin(), timeSteps.end(), 1u);
-  return timeSteps;
 }
 
 Body &NBodySimulator::getBody(std::string const &name) const {
@@ -276,7 +275,7 @@ Body &NBodySimulator::getBody(std::string const &name) const {
 
 Body &NBodySimulator::getBody(std::size_t const &bodyIndex) const {
   if (bodyIndex < numberOfBodies()) {
-    return m_bodyData[bodyIndex]->body();
+    return m_simulatedBodies[bodyIndex]->body();
   }
 
   throw std::invalid_argument("The body index " + std::to_string(bodyIndex) +
@@ -286,16 +285,17 @@ Body &NBodySimulator::getBody(std::size_t const &bodyIndex) const {
 std::size_t const NBodySimulator::findBodyIndex(std::string const &name) const {
   auto const [exists, iter] = hasBody(name);
   if (exists)
-    return std::distance(m_bodyData.cbegin(), iter);
+    return std::distance(m_simulatedBodies.cbegin(), iter);
 
   throw std::invalid_argument("The body '" + name + "' could not be found.");
 }
 
-std::tuple<bool const, BodyData::const_iterator> const
+std::tuple<bool const,
+           std::vector<std::unique_ptr<SimulatedBody>>::const_iterator> const
 NBodySimulator::hasBody(std::string const &name) const {
-  auto const iter =
-      std::find_if(m_bodyData.cbegin(), m_bodyData.cend(), hasNameLambda(name));
-  return {iter != m_bodyData.cend(), iter};
+  auto const iter = std::find_if(m_simulatedBodies.cbegin(),
+                                 m_simulatedBodies.cend(), hasNameLambda(name));
+  return {iter != m_simulatedBodies.cend(), iter};
 }
 
 } // namespace Simulator

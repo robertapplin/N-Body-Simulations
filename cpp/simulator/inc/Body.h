@@ -8,7 +8,7 @@
 
 namespace Simulator {
 
-// A class used to store data about a Body in a simulation.
+// A class used to store data about a Body.
 class Body {
 
 public:
@@ -53,7 +53,7 @@ public:
   [[nodiscard]] double const radius() const;
 
   // Reset the position and velocity of the body to the initial values.
-  void resetBody();
+  void reset();
 
   // Sets the body as having been engulfed by a larger body.
   void setAsMerged(bool const merged);

@@ -4,6 +4,7 @@ set(SOURCE_FILES
     Body.cpp
     BodyEvolution.cpp
     NBodySimulator.cpp
+    SimulatedBody.cpp
     SimulationConstants.cpp
     Vector2D.cpp
 )
@@ -12,6 +13,7 @@ set(HEADER_FILES
     Body.h
     BodyEvolution.h
     NBodySimulator.h
+    SimulatedBody.h
     SimulationConstants.h
     Vector2D.h
 )
