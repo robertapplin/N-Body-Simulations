@@ -1,6 +1,6 @@
 # N-Body Simulator
-![windows workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Windows?label=Windows%20latest)
-![ubuntu workflow](https://img.shields.io/github/workflow/status/robertapplin/N-Body-Simulations/Ubuntu?label=Ubuntu%20latest)
+![windows workflow](https://github.com/robertapplin/N-Body-Simulations/actions/workflows/windows.yml/badge.svg)
+![ubuntu workflow](https://github.com/robertapplin/N-Body-Simulations/actions/workflows/ubuntu.yml/badge.svg)
 ![test coverage](https://img.shields.io/badge/Test%20Coverage-High-brightgreen)
 
 This project creates a QWidget used for simulating a gravitational system of N bodies in two dimensions.
