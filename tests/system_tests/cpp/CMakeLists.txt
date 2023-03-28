@@ -6,7 +6,7 @@ set(TEST_FILES
 
 add_executable(NBodySimulationsSystemTests main.cpp ${TEST_FILES})
 
-target_link_libraries(NBodySimulationsSystemTests 
+target_link_libraries(NBodySimulationsSystemTests
                       PRIVATE
                       gtest
                       NBodySimulationsTestable

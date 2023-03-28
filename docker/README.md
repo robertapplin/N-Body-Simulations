@@ -8,7 +8,7 @@ Firstly, make sure you have your command prompt open in the ``docker`` directory
 cd docker/
 ```
 
-Start the Docker Daemon, and start an Xming X Server with the default settings. There is now two avenues for building the image and running a container as explained below. 
+Start the Docker Daemon, and start an Xming X Server with the default settings. There is now two avenues for building the image and running a container as explained below.
 
 ### Using the Dockerfile
 
