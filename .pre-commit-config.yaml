@@ -1,0 +1,24 @@
+default_language_version:
+  python: python3
+
+ci:
+  autofix_prs: true
+
+repos:
+
+  # Run fast code improvement/checks before running PR specific helpers.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        exclude: .patch$
+      - id: check-added-large-files
+        args: ['--maxkb=4096']
+
+  - repo: https://github.com/PyCQA/flake8.git
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        exclude: _rc.py|_ui.py
+        args: ['--max-complexity=14', '--max-line-length=140']

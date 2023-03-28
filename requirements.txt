@@ -7,3 +7,4 @@ pybind11>=2.9.0
 # setup.py. But there is a problem: https://stackoverflow.com/questions/38488063/add-pyqt5-to-install-require
 pyside2>=5.15.2
 PyQt5>=5.15.6
+pre-commit
