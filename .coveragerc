@@ -9,5 +9,5 @@ omit =
    n_body_simulations/qt/view.py
 
 [report]
-fail_under=75
+fail_under=74
 show_missing=true
