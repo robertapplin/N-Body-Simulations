@@ -41,8 +41,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        coverage report
         coveralls --service=github
+        coverage report
     - name: Python System Tests
       run: |
         pytest tests/system_tests/python/
