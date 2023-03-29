@@ -36,7 +36,11 @@ jobs:
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |
-        pytest tests/unit_tests/python/
+        coverage run -m pytest tests/unit_tests/python/
+    - name: Report Unit Test Coverage
+      run: |
+        coverage report
+        coveralls
     - name: Python System Tests
       run: |
         pytest tests/system_tests/python/

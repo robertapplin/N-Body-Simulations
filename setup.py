@@ -61,6 +61,6 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=["matplotlib", "qtawesome"],
-    extras_require={"test": ["py", "pytest", "pytest-mock", "pytest-qt==3.3.0"]},
+    extras_require={"test": ["coverage", "coveralls", "py", "pytest", "pytest-mock", "pytest-qt==3.3.0"]},
     python_requires=">=3.8"
 )

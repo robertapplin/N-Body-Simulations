@@ -1,0 +1,11 @@
+[run]
+include =
+   n_body_simulations/plotting/*
+   n_body_simulations/qt/*
+
+omit =
+   n_body_simulations/qt/ui/*
+
+[report]
+fail_under=75
+show_missing=true
