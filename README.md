@@ -48,7 +48,7 @@ cmake --preset=win .
 cmake --build ../build
 ```
 
-Remember to update the `VIRTUAL_ENV_PATH` found in the `CMakePresets.json` file before doing this.
+Remember to update the `CONDA_ENV_PATH` found in the `CMakePresets.json` file before doing this.
 
 ## Usage
 
