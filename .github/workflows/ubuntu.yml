@@ -19,7 +19,6 @@ jobs:
         python-version: '3.8'
     - name: Install Requirements
       run: |
-        sudo apt-get install xvfb
         pip install -r requirements.txt
     - name: Build & Install Project
       run: |
