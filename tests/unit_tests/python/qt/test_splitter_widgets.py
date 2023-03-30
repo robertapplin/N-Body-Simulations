@@ -8,5 +8,5 @@ from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 enable_test_mode()
 
 
-def test_that_creating_a_Splitter_with_an_icon_does_not_raise_an_exception(qtbot):
+def test_that_creating_a_Splitter_with_an_icon_does_not_raise_an_exception():
     _ = Splitter(qta.icon('mdi.dots-horizontal', scale_factor=1.0))

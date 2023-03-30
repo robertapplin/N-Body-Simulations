@@ -6,9 +6,9 @@ from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 enable_test_mode()
 
 
-def test_that_creating_a_BodyDataTableWidget_does_not_raise_an_exception(qtbot):
+def test_that_creating_a_BodyDataTableWidget_does_not_raise_an_exception():
     _ = BodyDataTableWidget()
 
 
-def test_that_creating_a_ColourTableWidget_does_not_raise_an_exception(qtbot):
+def test_that_creating_a_ColourTableWidget_does_not_raise_an_exception():
     _ = ColourTableWidget()
