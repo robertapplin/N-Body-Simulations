@@ -15,7 +15,7 @@ def setup_view():
     return view, presenter
 
 
-def test_that_remove_clicked_notifies_the_presenter(qtbot, mocker):
+def test_that_remove_clicked_notifies_the_presenter(mocker):
     view, presenter = setup_view()
     presenter_notify_presenter = mocker.spy(presenter, 'notify_presenter')
 
@@ -24,7 +24,7 @@ def test_that_remove_clicked_notifies_the_presenter(qtbot, mocker):
     presenter_notify_presenter.assert_called_once_with(view.ViewEvent.RemoveBodyClicked)
 
 
-def test_that_add_body_clicked_notifies_the_presenter(qtbot, mocker):
+def test_that_add_body_clicked_notifies_the_presenter(mocker):
     view, presenter = setup_view()
     presenter_notify_presenter = mocker.spy(presenter, 'notify_presenter')
 
@@ -35,7 +35,7 @@ def test_that_add_body_clicked_notifies_the_presenter(qtbot, mocker):
     assert view.add_single_body_action.line_edit.text() == ""
 
 
-def test_that_add_bodies_clicked_notifies_the_presenter(qtbot, mocker):
+def test_that_add_bodies_clicked_notifies_the_presenter(mocker):
     view, presenter = setup_view()
     presenter_notify_presenter = mocker.spy(presenter, 'notify_presenter')
 
@@ -46,7 +46,7 @@ def test_that_add_bodies_clicked_notifies_the_presenter(qtbot, mocker):
     assert view.add_multiple_bodies_action.spin_box.value() == 1
 
 
-def test_that_time_step_changed_notifies_the_presenter(qtbot, mocker):
+def test_that_time_step_changed_notifies_the_presenter(mocker):
     view, presenter = setup_view()
     presenter_notify_presenter = mocker.spy(presenter, 'notify_presenter')
 
@@ -55,7 +55,7 @@ def test_that_time_step_changed_notifies_the_presenter(qtbot, mocker):
     presenter_notify_presenter.assert_called_once_with(view.ViewEvent.TimeStepChanged, 5.0)
 
 
-def test_that_duration_changed_notifies_the_presenter(qtbot, mocker):
+def test_that_duration_changed_notifies_the_presenter(mocker):
     view, presenter = setup_view()
     presenter_notify_presenter = mocker.spy(presenter, 'notify_presenter')
 
@@ -64,7 +64,7 @@ def test_that_duration_changed_notifies_the_presenter(qtbot, mocker):
     presenter_notify_presenter.assert_called_once_with(view.ViewEvent.DurationChanged, 600.0)
 
 
-def test_that_play_pause_clicked_notifies_the_presenter(qtbot, mocker):
+def test_that_play_pause_clicked_notifies_the_presenter(mocker):
     view, presenter = setup_view()
     presenter_notify_presenter = mocker.spy(presenter, 'notify_presenter')
 
