@@ -23,3 +23,6 @@ def test_that_the_animator_will_start_pause_play_and_stop_without_error(dummy_pl
     dummy_plot.animator.pause()
     dummy_plot.animator.play()
     dummy_plot.animator.stop()
+
+    # Suppress a warning that an animation wasn't rendered
+    dummy_plot.animator._animation._draw_was_started = True

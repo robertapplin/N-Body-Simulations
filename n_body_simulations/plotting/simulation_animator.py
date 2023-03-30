@@ -46,7 +46,7 @@ class SimulationAnimator:
         self._active = True
         self._body_markers = body_markers
         self._animation = FuncAnimation(self._figure, self._update_bodies, self._time,
-                                        interval=self._animation_interval)
+                                        interval=self._animation_interval, cache_frame_data=False)
 
     def is_enabled(self) -> bool:
         """Returns whether the animator is active or not."""

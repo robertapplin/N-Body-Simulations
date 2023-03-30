@@ -22,12 +22,18 @@ def test_that_enable_will_make_the_animator_active(dummy_plot):
     dummy_plot.animator.enable(dummy_plot.lines)
     assert dummy_plot.animator.is_enabled()
 
+    # Suppress a warning that an animation wasn't rendered
+    dummy_plot.animator._animation._draw_was_started = True
+
 
 def test_that_disable_will_disable_the_animator(dummy_plot):
     dummy_plot.animator.enable(dummy_plot.lines)
     dummy_plot.animator.disable()
 
     assert not dummy_plot.animator.is_enabled()
+
+    # Suppress a warning that an animation wasn't rendered
+    dummy_plot.animator._animation._draw_was_started = True
 
 
 def test_that_set_simulation_data_will_set_the_simulation_data_in_the_animator(dummy_plot):
