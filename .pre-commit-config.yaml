@@ -16,16 +16,15 @@ repos:
       - id: check-added-large-files
         args: ['--maxkb=4096']
 
-  - repo: https://github.com/PyCQA/flake8.git
-    rev: 6.0.0
-    hooks:
-      - id: flake8
-        exclude: _rc.py|_ui.py
-        args: ['--max-complexity=14', '--max-line-length=140']
-
   - repo: local
     hooks:
-      # To get this hook to work, I needed to copy the std.cfg file to be next to the cppcheck executable.
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: system
+        pass_filenames: false
+        args: ['--exclude=build/ *_rc.py *_ui.py', '--max-complexity=14', '--max-line-length=140']
+      # To get the cppcheck hook to work, I needed to copy the std.cfg file to be next to the cppcheck executable.
       # Hopefully a future version of cppcheck will not require this.
       - id: cppcheck
         name: cppcheck

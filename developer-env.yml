@@ -10,6 +10,7 @@ dependencies:
   - coverage<5
   - coveralls
   - cycler
+  - flake8
   - gtest
   - pillow
   - pybind11>=2.9.0
