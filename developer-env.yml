@@ -6,7 +6,8 @@ channels:
 
 dependencies:
   - cmake
-  - coverage
+  - coverage<5
+  - coveralls
   - cycler
   - pillow
   - pybind11>=2.9.0
