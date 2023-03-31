@@ -9,7 +9,7 @@
 
 using namespace Simulator;
 
-class NBodySimulatorTest : public testing::Test {
+class NBodySimulatorSystemTest : public testing::Test {
 protected:
   void SetUp() override { m_simulator = std::make_unique<NBodySimulator>(); }
 
@@ -23,7 +23,7 @@ protected:
 };
 
 TEST_F(
-    NBodySimulatorTest,
+    NBodySimulatorSystemTest,
     test_that_a_one_body_simulation_with_a_stationary_body_returns_the_expected_body_positions) {
   m_simulator->setTimeStep(1.0);
   m_simulator->setDuration(500.0);
@@ -43,7 +43,7 @@ TEST_F(
 }
 
 TEST_F(
-    NBodySimulatorTest,
+    NBodySimulatorSystemTest,
     test_that_a_one_body_simulation_with_a_moving_body_returns_the_expected_body_positions) {
   m_simulator->setTimeStep(1.0);
   m_simulator->setDuration(500.0);
@@ -62,7 +62,7 @@ TEST_F(
   assertEqualVectors({501.0, 502.0}, sunPosition.at(500.0));
 }
 
-TEST_F(NBodySimulatorTest,
+TEST_F(NBodySimulatorSystemTest,
        test_that_a_two_body_simulation_returns_the_expected_body_positions) {
   m_simulator->setTimeStep(1.0);
   m_simulator->setDuration(500.0);
