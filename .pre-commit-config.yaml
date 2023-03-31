@@ -22,3 +22,11 @@ repos:
       - id: flake8
         exclude: _rc.py|_ui.py
         args: ['--max-complexity=14', '--max-line-length=140']
+
+  - repo: local
+    hooks:
+      - id: cppcheck
+        name: cppcheck
+        entry: cppcheck
+        language: system
+        pass_filenames: false
