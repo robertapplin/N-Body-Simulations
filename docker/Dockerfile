@@ -46,6 +46,4 @@ RUN cd /usr/N-Body-Simulations && \
     conda env create -f developer-env.yml
 
 # Activate conda environment, and install the N-Body-Simulations package
-RUN cd /usr/N-Body-Simulations && \
-    conda activate n-body-env && \
-    python setup.py install
+SHELL ["conda", "run", "-n", "n-body-env", "python", "/usr/N-Body-Simulations/setup.py", "install"]
