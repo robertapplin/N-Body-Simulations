@@ -15,7 +15,5 @@ set(TEST_HELPER_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/helpers/)
 
 include_directories(${HEADER_DIRECTORY})
 
-add_subdirectory(external)
-
 add_subdirectory(cpp)
 add_subdirectory(tests)

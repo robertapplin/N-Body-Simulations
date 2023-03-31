@@ -9,32 +9,38 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Setup Python
-      uses: actions/setup-python@v2
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2.2.0
       with:
-        python-version: '3.8'
-    - name: Install Requirements
-      run: |
-        pip install -r requirements.txt
+        miniforge-version: latest
+        miniforge-variant: Mambaforge
+        activate-environment: n-body-env
+        environment-file: developer-env.yml
+        python-version: 3.8
+        auto-activate-base: false
     - name: Build & Install Project
       run: |
         python setup.py install
-    - name: Install Dependencies for Testing
-      run: |
-        pip install n_body_simulations[test]
     - name: Cpp Unit Tests
+      env:
+        TESTPATH: ${{ github.workspace }}/build/temp.win-amd64-cpython-38/Release/tests/unit_tests/cpp/Release
       run: |
-        cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
-        ./NBodySimulationsUnitTests.exe
+        $TESTPATH/NBodySimulationsUnitTests.exe
     - name: Cpp System Tests
+      env:
+        TESTPATH: ${{ github.workspace }}/build/temp.win-amd64-cpython-38/Release/tests/system_tests/cpp/Release
       run: |
-        cd build/temp.win-amd64-3.8/Release/tests/system_tests/cpp/Release
-        ./NBodySimulationsSystemTests.exe
+        $TESTPATH/NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
+      env:
+        PYTHONPATH: ${{ github.workspace }}/build/temp.win-amd64-cpython-38/Release/cpp/simulator/Release/
       run: |
         coverage run -m pytest tests/unit_tests/python/
     - name: Report Unit Test Coverage
@@ -44,5 +50,7 @@ jobs:
         coveralls --service=github
         coverage report
     - name: Python System Tests
+      env:
+        PYTHONPATH: ${{ github.workspace }}/build/temp.win-amd64-cpython-38/Release/cpp/simulator/Release/
       run: |
         pytest tests/system_tests/python/

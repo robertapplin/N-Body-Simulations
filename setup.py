@@ -1,7 +1,7 @@
 import os
+import pybind11
 import subprocess
 import sys
-import sysconfig
 
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
@@ -21,33 +21,19 @@ class CMakeBuild(build_ext):
 
     def build_extension(self, extension: CMakeExtension) -> None:
         """Generates and builds the project using CMake."""
-        extension_directory = self._get_extension_directory(extension)
-        site_package_directory = sysconfig.get_paths()["purelib"]
-        pybind11_directory = os.path.join(site_package_directory, "pybind11", "share", "cmake", "pybind11")
-
         cmake_args = [
             f"-DPYTHON_EXECUTABLE={sys.executable}",
-            f"-DPYTHON_LIBRARY_DIR={site_package_directory}",
-            f"-Dpybind11_DIR={pybind11_directory}"
+            f"-Dpybind11_DIR={pybind11.get_cmake_dir()}"
         ]
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 
         if "win" in self.plat_name:
-            cmake_args += [f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE={extension_directory}", "-A", "x64"]
-        else:
-            cmake_args += [f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extension_directory}"]
+            cmake_args += ["-A", "x64"]
 
         subprocess.check_call(["cmake", extension.source_directory] + cmake_args, cwd=self.build_temp)
         subprocess.check_call(["cmake", "--build", ".", "--config", "Release"], cwd=self.build_temp)
-
-    def _get_extension_directory(self, extension: CMakeExtension) -> str:
-        """Generates and builds the project using CMake."""
-        extension_directory = os.path.abspath(os.path.dirname(self.get_ext_fullpath(extension.name)))
-        if not extension_directory.endswith(os.path.sep):
-            extension_directory += os.path.sep
-        return extension_directory
 
 
 setup(
@@ -61,6 +47,5 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=["matplotlib", "qtawesome"],
-    extras_require={"test": ["coverage", "coveralls", "pytest", "pytest-mock"]},
     python_requires=">=3.8"
 )
