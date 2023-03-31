@@ -30,11 +30,11 @@ jobs:
         python setup.py install
     - name: Cpp Unit Tests
       run: |
-        cd build/temp.win-amd64-3.8/Release/tests/unit_tests/cpp/Release
+        cd build/temp.win-amd64-cpython-38/Release/tests/unit_tests/cpp/Release
         ./NBodySimulationsUnitTests.exe
     - name: Cpp System Tests
       run: |
-        cd build/temp.win-amd64-3.8/Release/tests/system_tests/cpp/Release
+        cd build/temp.win-amd64-cpython-38/Release/tests/system_tests/cpp/Release
         ./NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
       run: |

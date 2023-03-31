@@ -30,11 +30,11 @@ jobs:
         python setup.py install
     - name: Cpp Unit Tests
       run: |
-        cd build/temp.linux-x86_64-3.8/tests/unit_tests/cpp
+        cd build/temp.linux-x86_64-cpython-38/tests/unit_tests/cpp
         ./NBodySimulationsUnitTests
     - name: Cpp System Tests
       run: |
-        cd build/temp.linux-x86_64-3.8/tests/system_tests/cpp
+        cd build/temp.linux-x86_64-cpython-38/tests/system_tests/cpp
         ./NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
