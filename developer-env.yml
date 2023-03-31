@@ -10,6 +10,7 @@ dependencies:
   - coverage<5
   - coveralls
   - cycler
+  - gtest
   - pillow
   - pybind11>=2.9.0
   # pyside2 and PyQt5 are project dependencies and so should ideally be installed using the install_requires keyword in the
