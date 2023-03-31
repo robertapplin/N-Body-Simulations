@@ -20,26 +20,30 @@ ENV XDG_RUNTIME_DIR=/tmp/runtime-root
 
 # Install packages required in the container environment. Then clean up the apt cache
 RUN apt-get update && \
-    apt-get install -y cmake git libgl1-mesa-glx libxcb-xinerama0 lightdm mesa-utils python3.8 python3-pip python3-venv && \
+    apt-get install -y git wget && \
     rm -rf /var/lib/apt/lists/*
 
+# Download and install conda
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh
+
+ARG PATH="/root/miniconda3/bin:${PATH}"
+
 # Copy config files into the container
-COPY config/lightdm.conf /etc/lightdm/lightdm.conf.d/lightdm.conf
-COPY config/default-display-manager /etc/X11/default-display-manager
-
-# Install the virtualenv python package
-RUN python3 -m pip install --user virtualenv
-
-# Create a virtual environment
-RUN cd /opt && \
-    python3 -m venv env
+#COPY config/lightdm.conf /etc/lightdm/lightdm.conf.d/lightdm.conf
+#COPY config/default-display-manager /etc/X11/default-display-manager
 
 # Clone the N-Body-Simulations repository
 RUN cd /usr && \
     git clone $GIT_REPOSITORY
 
-# Activate python environment, and install the N-Body-Simulations package
-RUN . /opt/env/bin/activate && \
-    cd /usr/N-Body-Simulations && \
-    pip install -r requirements.txt && \
-    python3 setup.py install
+# Initialize conda and create an environment
+RUN cd /usr/N-Body-Simulations && \
+    conda init && \
+    conda env create -f developer-env.yml
+
+# Activate conda environment, and install the N-Body-Simulations package
+SHELL ["conda", "run", "-n", "n-body-env", "python", "/usr/N-Body-Simulations/setup.py", "install"]

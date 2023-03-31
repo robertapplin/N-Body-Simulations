@@ -22,7 +22,7 @@ Then run the image and mount the config files into the container:
 
 ```sh
 winpty docker run --rm -u=root -it n-body-simulations:latest \
-bash -c ". /opt/env/bin/activate && python3 /usr/N-Body-Simulations/n_body_simulations/startup.py"
+bash -c "conda activate n-body-env && python /usr/N-Body-Simulations/n_body_simulations/startup.py"
 ```
 
 The N-Body Simulations widget should open within a containerized Ubuntu environment.
