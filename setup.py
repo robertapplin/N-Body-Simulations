@@ -30,7 +30,7 @@ class CMakeBuild(build_ext):
             os.makedirs(self.build_temp)
 
         if "win" in self.plat_name:
-            cmake_args += ["-A", "x64"]
+            cmake_args += ["-G", "Visual Studio 16 2019", "-A", "x64"]
 
         subprocess.check_call(["cmake", extension.source_directory] + cmake_args, cwd=self.build_temp)
         subprocess.check_call(["cmake", "--build", ".", "--config", "Release"], cwd=self.build_temp)
@@ -46,6 +46,5 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     packages=find_packages(),
     zip_safe=False,
-    install_requires=["matplotlib", "qtawesome"],
     python_requires=">=3.8"
 )
