@@ -8,14 +8,14 @@ source:
 requirements:
   build:
     - cmake
-    - gtest
+    - gmock {{ gmock }}
+    - gtest {{ gtest }}
     - ninja
     - pybind11
     - python {{ python }}
     - setuptools
 
   host:
-    - matplotlib
     - pybind11
     - python {{ python }}
     - pyqt
