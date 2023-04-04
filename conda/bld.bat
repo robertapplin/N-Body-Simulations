@@ -5,7 +5,7 @@ cmake ^
     -Dpybind11_DIR=%LIBRARY_PREFIX%/share/cmake/pybind11 ^
     -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX% ^
     -DCMAKE_INSTALL_LIBDIR=%SP_DIR% ^
-    -G "Visual Studio 16 2019" -A x64 ^
+    -G Ninja ^
     ..
 
 if errorlevel 1 exit 1

@@ -9,6 +9,7 @@ requirements:
   build:
     - cmake
     - gtest
+    - ninja
     - pybind11
     - python {{ python }}
     - setuptools

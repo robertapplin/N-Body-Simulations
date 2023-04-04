@@ -31,7 +31,7 @@ jobs:
         cd conda && conda build .
     - name: Install Project
       run: |
-        conda install n-body-simulations
+        conda install --use-local n-body-simulations
     - name: Cpp Unit Tests
       env:
         TESTPATH: ${{ github.workspace }}/build/temp.win-amd64-cpython-38/Release/tests/unit_tests/cpp/Release
