@@ -9,15 +9,14 @@ dependencies:
   - cppcheck
   - coverage<5
   - coveralls
-  - cycler
   - flake8
   - gtest
-  - pillow
-  - pybind11>=2.9.0
+  - pybind11
   # pyside2 and PyQt5 are project dependencies and so should ideally be installed using the install_requires keyword in the
   # setup.py. But there is a problem: https://stackoverflow.com/questions/38488063/add-pyqt5-to-install-require
-  - pyside2>=5.15.2
-  - pyqt>=5.15.6
+  - pyside2
+  - pyqt
   - pytest
   - pytest-mock
   - pre-commit
+  - qt-main=5.15.4  # DLL load error for v5.15.6
