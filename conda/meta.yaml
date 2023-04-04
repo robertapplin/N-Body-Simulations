@@ -19,7 +19,15 @@ requirements:
     - python {{ python }}
     - pyqt
     - pyside2
-    - qt-main=5.15.4
+    - qt-main {{ qt_main }}
+    - qtawesome
+
+  run:
+    - matplotlib
+    - python {{ python }}
+    - pyqt
+    - pyside2
+    - qt-main {{ qt_main }}
     - qtawesome
 
 test:

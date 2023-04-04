@@ -25,9 +25,13 @@ jobs:
         environment-file: conda/developer.yml
         python-version: 3.8
         auto-activate-base: false
-    - name: Build & Install Project
+    - name: Build Project
       run: |
-        python setup.py install
+        conda install conda-build
+        cd conda && conda build .
+    - name: Install Project
+      run: |
+        conda install n-body-simulations
     - name: Cpp Unit Tests
       env:
         TESTPATH: ${{ github.workspace }}/build/temp.linux-x86_64-cpython-38/tests/unit_tests/cpp
