@@ -22,7 +22,6 @@ jobs:
         miniforge-version: latest
         miniforge-variant: Mambaforge
         activate-environment: n-body-env
-        environment-file: conda/developer.yml
         python-version: 3.8
         auto-activate-base: false
     - name: Build Project
