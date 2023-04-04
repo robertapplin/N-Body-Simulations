@@ -1,12 +1,6 @@
 python:
   - 3.8
 
-gmock:
-  - 1.13.*
-
-gtest:
-  - 1.13.*
-
 # DLL load error for v5.15.6
 qt_main:
   - 5.15.4

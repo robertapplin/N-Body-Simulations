@@ -8,8 +8,8 @@ source:
 requirements:
   build:
     - cmake
-    - gmock {{ gmock }}
-    - gtest {{ gtest }}
+    - gmock  # Required due to gtest referring to a gmock library
+    - gtest
     - ninja
     - pybind11
     - python {{ python }}
