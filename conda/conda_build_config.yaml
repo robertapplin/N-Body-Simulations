@@ -1,0 +1,6 @@
+python:
+  - 3.8
+
+# DLL load error for v5.15.6
+qt_main:
+  - 5.15.4

@@ -1,12 +1,11 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include "Body.h"
 #include "SimulationConstants.h"
 
-#include <cmath>
-
-#define _USE_MATH_DEFINES
-#include <math.h>
 
 namespace Simulator {
 

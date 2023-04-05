@@ -1,0 +1,23 @@
+name: test-env
+
+channels:
+  - anaconda
+  - conda-forge
+
+dependencies:
+  - cmake
+  - cppcheck
+  - coverage<5
+  - coveralls
+  - flake8
+  - gtest
+  - matplotlib
+  - ninja
+  - pybind11
+  - pyside2
+  - pyqt
+  - pre-commit
+  - pytest
+  - pytest-mock
+  - qtawesome
+  - qt-main=5.15.4

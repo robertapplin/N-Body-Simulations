@@ -1,0 +1,17 @@
+name: n-body-env
+
+channels:
+  - anaconda
+  - conda-forge
+
+dependencies:
+  - cmake
+  - cppcheck
+  - coverage<5
+  - coveralls
+  - flake8
+  - gtest
+  - ninja
+  - pre-commit
+  - pytest
+  - pytest-mock

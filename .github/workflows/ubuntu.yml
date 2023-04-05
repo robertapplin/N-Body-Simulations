@@ -1,4 +1,4 @@
-name: Ubuntu
+name: Testing - Ubuntu
 
 on:
   pull_request:
@@ -21,32 +21,43 @@ jobs:
       with:
         miniforge-version: latest
         miniforge-variant: Mambaforge
-        activate-environment: n-body-env
-        environment-file: developer-env.yml
+        activate-environment: test-env
+        environment-file: conda/testing.yml
         python-version: 3.8
         auto-activate-base: false
     - name: Build & Install Project
+      env:
+        ENV_DIR: /usr/share/miniconda3/envs/test-env/
+        PYBIND11_DIR: /usr/share/miniconda3/envs/test-env/share/cmake/pybind11
+        PYTHON: /usr/share/miniconda3/envs/test-env/bin/python
+        SITE_PACKAGE_DIR: /usr/share/miniconda3/envs/test-env/lib/python3.8/site-packages
       run: |
-        python setup.py install
+        mkdir build && cd build
+
+        cmake -DPYTHON_EXECUTABLE=$PYTHON -Dpybind11_DIR=$PYBIND11_DIR -DCMAKE_INSTALL_PREFIX=$ENV_DIR -DCMAKE_INSTALL_LIBDIR=$SITE_PACKAGE_DIR -G Ninja ..
+
+        cmake --build . --config Release
+        cmake --build . --config Release --target install
+
+        cd ../
+        $PYTHON -m pip install --ignore-installed .
     - name: Cpp Unit Tests
       env:
-        TESTPATH: ${{ github.workspace }}/build/temp.linux-x86_64-cpython-38/tests/unit_tests/cpp
+        TESTPATH: ${{ github.workspace }}/build/tests/unit_tests/cpp
       run: |
         $TESTPATH/NBodySimulationsUnitTests
     - name: Cpp System Tests
       env:
-        TESTPATH: ${{ github.workspace }}/build/temp.linux-x86_64-cpython-38/tests/system_tests/cpp
+        TESTPATH: ${{ github.workspace }}/build/tests/system_tests/cpp
       run: |
         $TESTPATH/NBodySimulationsSystemTests
     - name: Python Unit Tests
       env:
-        PYTHONPATH: ${{ github.workspace }}/build/temp.linux-x86_64-cpython-38/cpp/simulator/
         QT_QPA_PLATFORM: offscreen  # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
       run: |
         xvfb-run --server-args="-core -noreset -screen 0 640x480x24" --server-num=101 pytest tests/unit_tests/python/
     - name: Python System Tests
       env:
-        PYTHONPATH: ${{ github.workspace }}/build/temp.linux-x86_64-cpython-38/cpp/simulator/
         QT_QPA_PLATFORM: offscreen  # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
       run: |
         xvfb-run --server-args="-core -noreset -screen 0 640x480x24" --server-num=101 pytest tests/system_tests/python/
