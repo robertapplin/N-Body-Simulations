@@ -30,4 +30,7 @@ jobs:
         cd conda && conda build .
     - name: Install Project
       run: |
-        conda install --use-local n-body-simulations
+        conda install -c file://${CONDA_PREFIX}/conda-bld/ n-body-simulations
+    - name: Import test
+      run: |
+        python -c "from n_body_simulations import startup"
