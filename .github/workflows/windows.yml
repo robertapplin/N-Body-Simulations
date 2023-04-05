@@ -1,4 +1,4 @@
-name: Test & Build - Windows
+name: Testing - Windows
 
 on:
   pull_request:
@@ -52,8 +52,6 @@ jobs:
       run: |
         $TESTPATH/NBodySimulationsSystemTests.exe
     - name: Python Unit Tests
-      env:
-        PYTHONPATH: ${{ github.workspace }}/build/cpp/simulator/Release/
       run: |
         coverage run -m pytest tests/unit_tests/python/
     - name: Report Unit Test Coverage
@@ -63,7 +61,5 @@ jobs:
         coveralls --service=github
         coverage report
     - name: Python System Tests
-      env:
-        PYTHONPATH: ${{ github.workspace }}/build/cpp/simulator/Release/
       run: |
         pytest tests/system_tests/python/

@@ -1,4 +1,4 @@
-name: Test & Build - Ubuntu
+name: Testing - Ubuntu
 
 on:
   pull_request:
@@ -53,13 +53,11 @@ jobs:
         $TESTPATH/NBodySimulationsSystemTests
     - name: Python Unit Tests
       env:
-        PYTHONPATH: ${{ github.workspace }}/build/cpp/simulator/
         QT_QPA_PLATFORM: offscreen  # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
       run: |
         xvfb-run --server-args="-core -noreset -screen 0 640x480x24" --server-num=101 pytest tests/unit_tests/python/
     - name: Python System Tests
       env:
-        PYTHONPATH: ${{ github.workspace }}/build/cpp/simulator/
         QT_QPA_PLATFORM: offscreen  # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
       run: |
         xvfb-run --server-args="-core -noreset -screen 0 640x480x24" --server-num=101 pytest tests/system_tests/python/
