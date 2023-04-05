@@ -1,4 +1,4 @@
-name: Ubuntu
+name: Test & Build - Ubuntu
 
 on:
   pull_request:
@@ -21,16 +21,13 @@ jobs:
       with:
         miniforge-version: latest
         miniforge-variant: Mambaforge
-        activate-environment: n-body-env
+        activate-environment: test-env
+        environment-file: conda/testing.yml
         python-version: 3.8
         auto-activate-base: false
-    - name: Build Project
+    - name: Build & Install Project
       run: |
-        conda install conda-build
-        cd conda && conda build .
-    - name: Install Project
-      run: |
-        conda install --use-local n-body-simulations
+        ./conda/build.sh
     - name: Cpp Unit Tests
       env:
         TESTPATH: ${{ github.workspace }}/build/temp.linux-x86_64-cpython-38/tests/unit_tests/cpp

@@ -1,4 +1,4 @@
-name: n-body-env
+name: test-env
 
 channels:
   - anaconda
@@ -11,7 +11,13 @@ dependencies:
   - coveralls
   - flake8
   - gtest
+  - matplotlib
   - ninja
+  - pybind11
+  - pyside2
+  - pyqt
   - pre-commit
   - pytest
   - pytest-mock
+  - qtawesome
+  - qt-main=5.15.4

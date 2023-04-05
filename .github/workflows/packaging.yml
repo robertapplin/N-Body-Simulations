@@ -1,0 +1,33 @@
+name: Packaging
+
+on:
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron:  '0 12 * * FRI'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2.2.0
+      with:
+        miniforge-version: latest
+        miniforge-variant: Mambaforge
+        activate-environment: n-body-env
+        python-version: 3.8
+        auto-activate-base: false
+    - name: Build Project
+      run: |
+        conda install conda-build
+        cd conda && conda build .
+    - name: Install Project
+      run: |
+        conda install --use-local n-body-simulations
