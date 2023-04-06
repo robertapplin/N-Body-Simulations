@@ -32,23 +32,20 @@ jobs:
         PYTHON: C:/Miniconda3/envs/test-env/python.exe
         SITE_PACKAGE_DIR: C:/Miniconda3/envs/test-env/Lib/site-packages
       run: |
-        mkdir build && cd build
+        cmake --preset=vs-release -DPYTHON_EXECUTABLE=$PYTHON -Dpybind11_DIR=$PYBIND11_DIR -DCMAKE_INSTALL_PREFIX=$LIBRARY_DIR -DCMAKE_INSTALL_LIBDIR=$SITE_PACKAGE_DIR .
 
-        cmake -DPYTHON_EXECUTABLE=$PYTHON -Dpybind11_DIR=$PYBIND11_DIR -DCMAKE_INSTALL_PREFIX=$LIBRARY_DIR -DCMAKE_INSTALL_LIBDIR=$SITE_PACKAGE_DIR -G "Visual Studio 17 2022" -A x64 ..
+        cmake --build ../build
+        cmake --build ../build --target install
 
-        cmake --build . --config Release
-        cmake --build . --config Release --target install
-
-        cd ../
         $PYTHON -m pip install --ignore-installed .
     - name: Cpp Unit Tests
       env:
-        TESTPATH: ${{ github.workspace }}/build/tests/unit_tests/cpp/Release
+        TESTPATH: ${{ github.workspace }}/../build/tests/unit_tests/cpp/Release
       run: |
         $TESTPATH/NBodySimulationsUnitTests.exe
     - name: Cpp System Tests
       env:
-        TESTPATH: ${{ github.workspace }}/build/tests/system_tests/cpp/Release
+        TESTPATH: ${{ github.workspace }}/../build/tests/system_tests/cpp/Release
       run: |
         $TESTPATH/NBodySimulationsSystemTests.exe
     - name: Python Unit Tests

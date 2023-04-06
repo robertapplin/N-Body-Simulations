@@ -1,5 +1,5 @@
 {
-    "version": 1,
+    "version": 2,
     "cmakeMinimumRequired": {
         "major": 3,
         "minor": 12,
@@ -9,19 +9,22 @@
         {
             "name": "base",
             "description": "Inherited by all other presets",
-            "binaryDir": "${sourceDir}/../build"
+            "binaryDir": "${sourceDir}/../build",
+            "hidden": true
         },
         {
-            "name": "vs",
+            "name": "vs-base",
             "description": "Inherited by all presets using a Visual Studio generator",
             "generator": "Visual Studio 16 2019",
-            "architecture": "x64"
+            "architecture": "x64",
+            "hidden": true
         },
         {
             "name": "vs-debug",
+            "description": "Build options for a Visual Studio generator in Debug mode",
             "inherits": [
                 "base",
-                "vs"
+                "vs-base"
             ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
@@ -29,9 +32,10 @@
         },
         {
             "name": "vs-release",
+            "description": "Build options for a Visual Studio generator in Release mode",
             "inherits": [
                 "base",
-                "vs"
+                "vs-base"
             ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
@@ -39,10 +43,11 @@
         },
         {
             "name": "ninja",
+            "description": "Build options for a Ninja generator",
             "inherits": [
                 "base"
             ],
-            "generator": "Ninja",
+            "generator": "Ninja"
         }
     ]
 }

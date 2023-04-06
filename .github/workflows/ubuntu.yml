@@ -32,23 +32,21 @@ jobs:
         PYTHON: /usr/share/miniconda3/envs/test-env/bin/python
         SITE_PACKAGE_DIR: /usr/share/miniconda3/envs/test-env/lib/python3.8/site-packages
       run: |
-        mkdir build && cd build
+        cmake --preset=ninja -DPYTHON_EXECUTABLE=$PYTHON -Dpybind11_DIR=$PYBIND11_DIR -DCMAKE_INSTALL_PREFIX=$ENV_DIR -DCMAKE_INSTALL_LIBDIR=$SITE_PACKAGE_DIR .
 
-        cmake -DPYTHON_EXECUTABLE=$PYTHON -Dpybind11_DIR=$PYBIND11_DIR -DCMAKE_INSTALL_PREFIX=$ENV_DIR -DCMAKE_INSTALL_LIBDIR=$SITE_PACKAGE_DIR -G Ninja ..
+        cd ../build
+        ninja
+        ninja install
 
-        cmake --build . --config Release
-        cmake --build . --config Release --target install
-
-        cd ../
-        $PYTHON -m pip install --ignore-installed .
+        $PYTHON -m pip install --ignore-installed ../N-Body-Simulations
     - name: Cpp Unit Tests
       env:
-        TESTPATH: ${{ github.workspace }}/build/tests/unit_tests/cpp
+        TESTPATH: ${{ github.workspace }}/../build/tests/unit_tests/cpp
       run: |
         $TESTPATH/NBodySimulationsUnitTests
     - name: Cpp System Tests
       env:
-        TESTPATH: ${{ github.workspace }}/build/tests/system_tests/cpp
+        TESTPATH: ${{ github.workspace }}/../build/tests/system_tests/cpp
       run: |
         $TESTPATH/NBodySimulationsSystemTests
     - name: Python Unit Tests
