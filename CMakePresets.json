@@ -42,6 +42,18 @@
             }
         },
         {
+            "name": "vs-release-ci",
+            "description": "Build options for a Visual Studio generator in Release mode",
+            "inherits": [
+                "base"
+            ],
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
             "name": "ninja",
             "description": "Build options for a Ninja generator",
             "inherits": [
