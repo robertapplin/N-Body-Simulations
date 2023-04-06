@@ -2,6 +2,7 @@
 # Authored by Robert Applin, 2020
 import pytest
 
+from n_body_simulations.qt.error_catcher import ErrorReporter
 from n_body_simulations.test_helpers.dummy_class_helper import DummyErrorProneClass
 from n_body_simulations.test_helpers.setup_test_helper import enable_test_mode
 
@@ -39,3 +40,7 @@ def test_that_a_function_returning_nothing_will_not_cause_an_error_when_decorate
 
 def test_that_a_function_will_return_the_correct_value_when_decorated_by_the_error_catcher(dummy_class):
     assert dummy_class.function_that_returns_a_value() == 1.0
+
+
+def test_ErrorReporter_can_be_instantiated_without_an_error():
+    _ = ErrorReporter()
