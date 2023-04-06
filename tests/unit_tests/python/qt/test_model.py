@@ -188,3 +188,11 @@ def test_that_set_y_velocity_fails_silently_if_an_invalid_body_name_is_provided(
 def test_that_running_a_simulation_does_not_raise_when_a_successful_simulation_is_run(model):
     model.start()
     model.wait()
+
+
+def test_that_simulation_results_returns_the_expected_masses_positions_and_velocities(model):
+    masses, positions, velocities = model.simulation_results()
+
+    assert len(masses) == 2
+    assert len(positions) == 2
+    assert len(velocities) == 2

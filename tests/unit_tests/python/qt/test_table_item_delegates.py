@@ -19,6 +19,16 @@ def test_that_creating_a_DoubleItemDelegate_does_not_raise_an_exception():
     _ = DoubleItemDelegate(table, DoubleItemDelegate.Mass)
 
 
+def test_DoubleItemDelegate_handle_item_exited_sets_hovered_row_to_minus_one():
+    table = DummyBodyTable()
+    delegate = DoubleItemDelegate(table, DoubleItemDelegate.Mass)
+
+    delegate.hovered_row = 0
+    delegate.handle_item_exited(None)
+
+    assert delegate.hovered_row == -1
+
+
 def test_that_creating_a_StringItemDelegate_does_not_raise_an_exception():
     table = DummyBodyTable()
     _ = StringItemDelegate(table)
