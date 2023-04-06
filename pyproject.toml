@@ -21,3 +21,21 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/robertapplin/N-Body-Simulations"
+
+[tool.pytest.ini_options]
+filterwarnings = ["error"]
+
+[tool.coverage.report]
+include = [
+    "*/n_body_simulations/plotting/*",
+    "*/n_body_simulations/qt/*"
+]
+
+omit = [
+    "*/n_body_simulations/plotting/interactive_plot.py",
+    "*/n_body_simulations/qt/ui/*",
+    "*/n_body_simulations/qt/view.py"
+]
+
+fail_under = 85
+show_missing = "true"
