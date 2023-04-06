@@ -1,10 +1,10 @@
 name: n-body-env
 
 channels:
-  - anaconda
   - conda-forge
 
 dependencies:
+  - ccache
   - cmake
   - cppcheck
   - coverage<5
