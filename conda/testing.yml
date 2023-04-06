@@ -9,6 +9,7 @@ dependencies:
   - coverage<5
   - coveralls
   - flake8
+  - gmock  # Required due to gtest referring to a missing gmock library
   - gtest
   - matplotlib
   - ninja
