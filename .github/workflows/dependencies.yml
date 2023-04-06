@@ -27,24 +27,12 @@ jobs:
         python-version: 3.8
         auto-activate-base: false
 
-    - name: Download previous dependency file
-      uses: actions/download-artifact@v3
-      with:
-        name: dependencies-artifact
-
     - name: Rename downloaded file
       run: |
-        ls
-        mv dependencies.txt previous.txt
+        source $PWD/rename.sh
 
-    - name: Create Dependency file
-      run: |
-        ls
-        conda list > dependencies.txt
-
-    - name: Upload dependency list
+    - name: Archive code coverage results
       uses: actions/upload-artifact@v3
       with:
-        name: dependencies-artifact
-        path: dependencies.txt
-        retention-days: 14
+        name: code-coverage-report
+        path: uploads/dependencies.txt
