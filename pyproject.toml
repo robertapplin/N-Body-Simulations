@@ -22,6 +22,9 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/robertapplin/N-Body-Simulations"
 
+[tool.setuptools.packages.find]
+include = ["n_body_simulations*"]
+
 [tool.pytest.ini_options]
 filterwarnings = ["error"]
 
