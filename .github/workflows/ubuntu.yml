@@ -55,7 +55,13 @@ jobs:
       env:
         QT_QPA_PLATFORM: offscreen  # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
       run: |
-        xvfb-run --server-args="-core -noreset -screen 0 640x480x24" --server-num=101 pytest tests/unit_tests/python/
+        xvfb-run --server-args="-core -noreset -screen 0 640x480x24" --server-num=101 coverage run -m pytest tests/unit_tests/python/
+    - name: Report Unit Test Coverage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        coveralls --service=github
+        coverage report
     - name: Python System Tests
       env:
         QT_QPA_PLATFORM: offscreen  # Prevent 'DISPLAY is undefined' and 'Fatal Python error' errors related to instantiating xcb plugin.
