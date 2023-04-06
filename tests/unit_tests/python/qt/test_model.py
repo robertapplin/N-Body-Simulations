@@ -190,6 +190,10 @@ def test_that_running_a_simulation_does_not_raise_when_a_successful_simulation_i
     model.wait()
 
 
+def test_that_running_a_simulation_does_not_raise_an_error(model):
+    model.run()
+
+
 def test_that_simulation_results_returns_the_expected_masses_positions_and_velocities(model):
     masses, positions, velocities = model.simulation_results()
 
