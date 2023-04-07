@@ -41,14 +41,13 @@ The n-body-simulations package can now be found in the site-packages of your vir
 
 ## Building Locally
 
-You can also build the code locally from git bash, from your source directory and with your virtual environment activated:
+You can also build the code locally from git bash, from your source directory and with your virtual environment activated. Pass the following
+flags to the first cmake command below: ``-DPYTHON_EXECUTABLE``, ``Dpybind11_DIR``, ``DCMAKE_INSTALL_PREFIX``, ``DCMAKE_INSTALL_LIBDIR``
 
 ```sh
-cmake --preset=win .
+cmake --preset=vs-debug .
 cmake --build ../build
 ```
-
-Remember to update the `CONDA_ENV_PATH` found in the `CMakePresets.json` file before doing this.
 
 ## Usage
 

@@ -8,7 +8,7 @@ source:
 requirements:
   build:
     - cmake
-    - gmock  # Required due to gtest referring to a gmock library
+    - gmock  # Required due to gtest referring to a missing gmock library
     - gtest
     - ninja
     - pybind11

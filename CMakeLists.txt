@@ -8,6 +8,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(NBodySimulations)
 
+# Setup ccache if it can be found. Used only for the Ninja generator
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif()
+
 set(SOURCE_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/src/)
 set(HEADER_DIRECTORY ${CMAKE_SOURCE_DIR}/cpp/simulator/inc/)
 set(EXPORT_DIRECTORY ${CMAKE_SOURCE_DIR}/n_body_simulations/exports/)

@@ -1,15 +1,16 @@
 name: n-body-env
 
 channels:
-  - anaconda
   - conda-forge
 
 dependencies:
+  - ccache
   - cmake
   - cppcheck
   - coverage<5
   - coveralls
   - flake8
+  - gmock  # Required due to gtest referring to a missing gmock library
   - gtest
   - ninja
   - pre-commit

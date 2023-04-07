@@ -1,5 +1,5 @@
 {
-    "version": 1,
+    "version": 2,
     "cmakeMinimumRequired": {
         "major": 3,
         "minor": 12,
@@ -7,35 +7,59 @@
     },
     "configurePresets": [
         {
-            "name": "ubuntu",
-            "displayName": "ubuntu",
-            "description": "Default build options for an Ubuntu virtual environment build",
-            "generator": "Ninja",
+            "name": "base",
+            "description": "Inherited by all other presets",
             "binaryDir": "${sourceDir}/../build",
-            "environment": {
-                "CONDA_ENV_PATH": ""
-            },
+            "hidden": true
+        },
+        {
+            "name": "vs-base",
+            "description": "Inherited by all presets using a Visual Studio generator",
+            "generator": "Visual Studio 16 2019",
+            "architecture": "x64",
+            "hidden": true
+        },
+        {
+            "name": "vs-debug",
+            "description": "Build options for a Visual Studio generator in Debug mode",
+            "inherits": [
+                "base",
+                "vs-base"
+            ],
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "PYTHON_EXECUTABLE": "$env{CONDA_ENV_PATH}/python.exe",
-                "pybind11_DIR": "$env{CONDA_ENV_PATH}/Library/share/cmake/pybind11"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
-            "name": "win",
-            "displayName": "win",
-            "description": "Default build options for a Windows virtual environment build",
-            "generator": "Visual Studio 16 2019",
-            "architecture": "x64",
-            "binaryDir": "${sourceDir}/../build",
-            "environment": {
-                "CONDA_ENV_PATH": ""
-            },
+            "name": "vs-release",
+            "description": "Build options for a Visual Studio generator in Release mode",
+            "inherits": [
+                "base",
+                "vs-base"
+            ],
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "PYTHON_EXECUTABLE": "$env{CONDA_ENV_PATH}/python.exe",
-                "pybind11_DIR": "$env{CONDA_ENV_PATH}/Library/share/cmake/pybind11"
+                "CMAKE_BUILD_TYPE": "Release"
             }
+        },
+        {
+            "name": "vs-release-ci",
+            "description": "Build options for a Visual Studio generator in Release mode",
+            "inherits": [
+                "base"
+            ],
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "ninja",
+            "description": "Build options for a Ninja generator",
+            "inherits": [
+                "base"
+            ],
+            "generator": "Ninja"
         }
     ]
 }
