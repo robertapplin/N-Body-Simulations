@@ -2,16 +2,18 @@
 # Authored by Robert Applin, 2020
 set(SOURCE_FILES
     Body.cpp
-    BodyPositionsAndVelocities.cpp
+    BodyEvolution.cpp
     NBodySimulator.cpp
+    SimulatedBody.cpp
     SimulationConstants.cpp
     Vector2D.cpp
 )
 
 set(HEADER_FILES
     Body.h
-    BodyPositionsAndVelocities.h
+    BodyEvolution.h
     NBodySimulator.h
+    SimulatedBody.h
     SimulationConstants.h
     Vector2D.h
 )

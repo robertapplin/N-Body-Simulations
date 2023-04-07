@@ -6,6 +6,10 @@ from NBodySimulations import NBodySimulator, Vector2D
 
 from PyQt5.QtCore import pyqtSignal, QThread
 
+MASS_INDEX = 0
+POSITION_INDEX = 1
+VELOCITY_INDEX = 2
+
 
 class NBodySimulationsModel(QThread):
     """A class used as a model for the main GUI (MVP)."""
@@ -135,17 +139,21 @@ class NBodySimulationsModel(QThread):
         """Collect the simulation results from the simulator."""
         mass_data, position_data, velocity_data = dict(), dict(), dict()
         for body_name in self._simulator.bodyNames():
-            mass_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedMasses(body_name))
-            position_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedPositions(body_name))
-            velocity_data[body_name] = self._round_time_decimal_places(self._simulator.simulatedVelocities(body_name))
+            masses, positions, velocities = self._round_time(self._simulator.simulationResults(body_name))
+            mass_data[body_name] = masses
+            position_data[body_name] = positions
+            velocity_data[body_name] = velocities
         return mass_data, position_data, velocity_data
 
-    def _round_time_decimal_places(self, simulated_data: dict) -> dict:
+    def _round_time(self, simulated_data: dict) -> dict:
         """
         This is necessary to prevent a bug caused by the infinite-length representation of some decimal numbers. For
         instance, 0.2 is represented as 0.200000000000001 and this can cause certain 'time' dict keys to not be found.
         """
-        rounded_data = dict()
-        for time, position in simulated_data.items():
-            rounded_data[round(time, self.time_dp)] = position
-        return rounded_data
+        mass_data, position_data, velocity_data = {}, {}, {}
+        for time, data in simulated_data.items():
+            time_rounded = round(time, self.time_dp)
+            mass_data[time_rounded] = data[MASS_INDEX]
+            position_data[time_rounded] = data[POSITION_INDEX]
+            velocity_data[time_rounded] = data[VELOCITY_INDEX]
+        return mass_data, position_data, velocity_data

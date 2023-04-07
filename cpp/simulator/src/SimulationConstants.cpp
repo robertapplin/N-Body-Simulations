@@ -10,8 +10,8 @@ namespace Constants {
 
 double const gravitationalConstant(TimeUnit const &timeUnit) {
   switch (timeUnit) {
-  case TimeUnit::Days:
-    return G * M_SOLAR * pow(DAY, 2) * (1.0 / pow(AU, 3));
+    [[likely]] case TimeUnit::Days : return G * M_SOLAR * pow(DAY, 2) *
+                                     (1.0 / pow(AU, 3));
   }
 
   throw std::invalid_argument("An invalid time unit has been provided.");

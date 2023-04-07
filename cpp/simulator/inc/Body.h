@@ -1,7 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#ifndef Body_H
-#define Body_H
+#pragma once
 
 #include "Vector2D.h"
 
@@ -9,7 +8,7 @@
 
 namespace Simulator {
 
-// A class used to store data about a Body in a simulation.
+// A class used to store data about a Body.
 class Body {
 
 public:
@@ -54,7 +53,7 @@ public:
   [[nodiscard]] double const radius() const;
 
   // Reset the position and velocity of the body to the initial values.
-  void resetBody();
+  void reset();
 
   // Sets the body as having been engulfed by a larger body.
   void setAsMerged(bool const merged);
@@ -81,5 +80,3 @@ private:
 };
 
 } // namespace Simulator
-
-#endif // Body_H

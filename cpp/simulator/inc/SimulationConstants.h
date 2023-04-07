@@ -1,7 +1,6 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#ifndef SimulationConstants_H
-#define SimulationConstants_H
+#pragma once
 
 namespace Simulator {
 namespace Constants {
@@ -23,5 +22,3 @@ static double DAY(60.0 * 60.0 * 24.0); // Day (s)
 
 } // namespace Constants
 } // namespace Simulator
-
-#endif // SimulationConstants_H

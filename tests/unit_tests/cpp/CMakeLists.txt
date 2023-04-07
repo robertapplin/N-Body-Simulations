@@ -1,7 +1,7 @@
 # Project Repository : https://github.com/robertapplin/N-Body-Simulations
 # Authored by Robert Applin, 2020
 set(TEST_FILES
-    BodyPositionsAndVelocitiesTest.cpp
+    BodyEvolutionTest.cpp
     BodyTest.cpp
     NBodySimulatorTest.cpp
     SimulationConstantsTest.cpp

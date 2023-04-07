@@ -87,7 +87,7 @@ TEST_F(
   m_body->velocity() += {2.0, 2.0};
   m_body->setAsMerged(true);
 
-  m_body->resetBody();
+  m_body->reset();
 
   ASSERT_TRUE(Vector2D({1.0, 2.0}) == m_body->position());
   ASSERT_TRUE(Vector2D({3.0, 4.0}) == m_body->velocity());

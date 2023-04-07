@@ -1,18 +1,18 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#ifndef NBodySimulator_H
-#define NBodySimulator_H
+#pragma once
 
-#include "BodyPositionsAndVelocities.h"
+#include "SimulatedBody.h"
 
 #include <map>
 #include <memory>
 #include <string>
+#include <tuple>
+#include <utility>
 #include <vector>
 
 namespace Simulator {
 
-class Body;
 struct Vector2D;
 
 // A class which can be used to simulate an N-Body system.
@@ -78,15 +78,9 @@ public:
   // Run the simulation using the currently stored initial parameters.
   void runSimulation();
 
-  // Return the simulated masses of the specified body.
-  std::map<double, double> const
-  simulatedMasses(std::string const &bodyName) const;
-  // Return the simulated locations of the specified body.
-  std::map<double, Vector2D> const
-  simulatedPositions(std::string const &bodyName) const;
-  // Return the simulated velocities of the specified body.
-  std::map<double, Vector2D> const
-  simulatedVelocities(std::string const &bodyName) const;
+  // Return the simulated masses, positions and velocities of a specified body.
+  std::map<double, BodyState> const
+  simulationResults(std::string const &bodyName) const;
 
 private:
   // Checks that the provided parameters are valid, and throws if they are not.
@@ -95,45 +89,39 @@ private:
   // Calculates the new positions of the bodies at the next time step.
   void calculateNewPositions(std::size_t const &stepNumber);
   // Calculates the new positions of a target body at the next time step.
-  void calculateNewPositions(std::size_t const &stepNumber,
-                             std::size_t const &targetBodyIndex,
-                             Body &targetBody);
+  void calculateNewPositionForBody(std::size_t const &stepNumber,
+                                   std::size_t const &targetBodyIndex,
+                                   Body &targetBody);
   // Calculates the accelerations of the bodies at the next time step.
-  Vector2D calculateAcceleration(Body &targetBody);
-  // Calculates the acceleration of a target body at the next time step.
-  void calculateAcceleration(Vector2D &acceleration, Body &targetBody,
-                             Body &otherBody);
-
-  // Handles the merging of two bodies and applies the momentum transfer.
-  void mergeBodies(Body &largerBody, Body &smallerBody);
-
-  // Returns a reference to the body at a given index.
-  Body &body(std::size_t const &bodyIndex);
+  [[nodiscard]] Vector2D calculateAcceleration(Body &targetBody);
 
   // Removes the data calculated during previous simulations.
   void resetSimulation();
 
   // Returns the number of steps to take in the simulation.
-  [[nodiscard]] std::size_t numberOfSteps() const;
-
-  // Returns true if the simulator contains a body with the given name.
-  [[nodiscard]] bool hasBody(std::string const &name) const;
+  [[nodiscard]] std::size_t const numberOfSteps() const;
 
   // Finds the Body data object given a bodies name.
-  Body &findBody(std::string const &name) const;
+  Body &getBody(std::string const &name) const;
+  // Returns a reference to the body at a given index.
+  Body &getBody(std::size_t const &bodyIndex) const;
   // Finds the index of the specified body in m_bodyData.
-  std::size_t const findBodyIndex(std::string const &name) const;
+  [[nodiscard]] std::size_t const findBodyIndex(std::string const &name) const;
+
+  // Returns true and an iterator if the simulator contains the given body.
+  [[nodiscard]] std::tuple<
+      bool const,
+      std::vector<std::unique_ptr<SimulatedBody>>::const_iterator> const
+  hasBody(std::string const &name) const;
 
   double m_timeStep;
   double m_duration;
   double m_gravitationalConstant;
 
-  // The vector containing each body and their simulated positions.
-  std::vector<std::unique_ptr<BodyPositionsAndVelocities>> m_bodyData;
+  // The vector containing each body and their simulated evolution.
+  std::vector<std::unique_ptr<SimulatedBody>> m_simulatedBodies;
   // A flag to notify when the data changes in-between simulations.
   bool m_dataChanged;
 };
 
 } // namespace Simulator
-
-#endif // NBodySimulator_H

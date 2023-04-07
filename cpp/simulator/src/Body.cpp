@@ -1,10 +1,10 @@
 // Project Repository : https://github.com/robertapplin/N-Body-Simulations
 // Authored by Robert Applin, 2020
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 #include "Body.h"
 #include "SimulationConstants.h"
+
+#include <cmath>
+#include <numbers>
 
 
 namespace Simulator {
@@ -27,11 +27,12 @@ void Body::setInitialMass(double const mass) {
 void Body::setMass(double const mass) { m_mass = mass; }
 
 double const Body::radius() const {
-  return pow((3.0 * m_mass) / (4.0 * M_PI * Constants::density(m_mass)),
+  return pow((3.0 * m_mass) /
+                 (4.0 * std::numbers::pi * Constants::density(m_mass)),
              (1.0 / 3.0));
 }
 
-void Body::resetBody() {
+void Body::reset() {
   m_mass = m_initialMass;
   m_position = m_initialPosition;
   m_velocity = m_initialVelocity;
