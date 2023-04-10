@@ -27,12 +27,12 @@ jobs:
         python-version: 3.8
         auto-activate-base: false
 
-    - name: Rename downloaded file
+    - name: Create list of dependencies
       run: |
-        source $PWD/rename.sh
+        source $PWD/create-dependency-list.sh
 
-    - name: Archive code coverage results
+    - name: Archive dependency list
       uses: actions/upload-artifact@v3
       with:
-        name: code-coverage-report
-        path: uploads/dependencies.txt
+        name: conda-listed-packages
+        path: artifacts/*
