@@ -27,8 +27,15 @@ jobs:
         python-version: 3.8
         auto-activate-base: false
 
+    - name: Download previous artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: conda-listed-packages
+        run-number: 4659524340
+
     - name: Create list of dependencies
       run: |
+        ls $GITHUB_WORKSPACE
         source $PWD/create-dependency-list.sh
 
     - name: Archive dependency list
