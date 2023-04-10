@@ -27,10 +27,24 @@ jobs:
         python-version: 3.8
         auto-activate-base: false
 
+    - name: Create cache directory
+      run: |
+        mkdir cache
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        key: cached-dependencies
+        path: cache/
+
+    - name: Create cache directory
+      run: |
+        source $GITHUB_WORKSPACE/move-cache.sh
+
     - name: Create list of dependencies
       run: |
-        ls $GITHUB_WORKSPACE
-        source $PWD/create-dependency-list.sh
+        source $GITHUB_WORKSPACE/create-dependency-list.sh
+        ls $GITHUB_WORKSPACE/artifacts
 
     - name: Archive dependency list
       uses: actions/upload-artifact@v3
