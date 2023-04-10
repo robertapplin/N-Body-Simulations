@@ -23,13 +23,9 @@ jobs:
         miniforge-version: latest
         miniforge-variant: Mambaforge
         activate-environment: test-env
-        environment-file: conda/developer.yml
+        environment-file: conda/testing.yml
         python-version: 3.8
         auto-activate-base: false
-
-    - name: Create cache directory
-      run: |
-        mkdir cache
 
     - name: Cache node modules
       uses: actions/cache@v2
@@ -39,12 +35,20 @@ jobs:
 
     - name: Create cache directory
       run: |
+        ls
+        echo HERE
+        ls cache
         source $GITHUB_WORKSPACE/move-cache.sh
+        echo HELLO
+        echo "$(cat dependency-list.txt)"
 
     - name: Create list of dependencies
       run: |
         source $GITHUB_WORKSPACE/create-dependency-list.sh
-        ls $GITHUB_WORKSPACE/artifacts
+        echo HELLO
+        echo "$(cat dependency-list-2023-04-10.txt)"
+        echo HELLO
+        echo "$(cat cache/dependency-list.txt)"
 
     - name: Archive dependency list
       uses: actions/upload-artifact@v3
