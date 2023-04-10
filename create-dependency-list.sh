@@ -13,3 +13,6 @@ conda list > $filepath_list
 # Store a diff of the conda dependencies compared to the previous dependency list
 filepath_diff=${GITHUB_WORKSPACE}"/artifacts/dependency-diff-"${date}".txt"
 git diff dependency-list.txt $filepath_list > $filepath_diff
+
+# Copy dependency list into the cache
+cp -f $filepath_list ${GITHUB_WORKSPACE}"/cache/dependency-list.txt"
