@@ -1,0 +1,57 @@
+name: Check Dependencies
+
+on:
+  pull_request:  # Temporary
+    branches: [ main ]  # Temporary
+  schedule:
+    - cron:  '0 12 * * FRI'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2.2.0
+      with:
+        miniforge-version: latest
+        miniforge-variant: Mambaforge
+        activate-environment: test-env
+        environment-file: conda/testing.yml
+        python-version: 3.8
+        auto-activate-base: false
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        key: cached-dependencies
+        path: cache/
+
+    - name: Create cache directory
+      run: |
+        ls
+        echo HERE
+        ls cache
+        source $GITHUB_WORKSPACE/move-cache.sh
+        echo HELLO
+        echo "$(cat dependency-list.txt)"
+
+    - name: Create list of dependencies
+      run: |
+        source $GITHUB_WORKSPACE/create-dependency-list.sh
+        echo HELLO
+        echo "$(cat dependency-list-2023-04-10.txt)"
+        echo HELLO
+        echo "$(cat cache/dependency-list.txt)"
+
+    - name: Archive dependency list
+      uses: actions/upload-artifact@v3
+      with:
+        name: conda-listed-packages
+        path: artifacts/*
