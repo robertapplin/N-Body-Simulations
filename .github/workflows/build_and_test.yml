@@ -47,8 +47,8 @@ jobs:
         cmake --preset=ninja -DPYTHON_EXECUTABLE=$ENV_DIR/python.exe -Dpybind11_DIR=$ENV_DIR/Library/share/cmake/pybind11 -DCMAKE_INSTALL_PREFIX=$ENV_DIR/Library -DCMAKE_INSTALL_LIBDIR=$ENV_DIR/Lib/site-packages .
 
         cd ../build
-        ninja
-        ninja install
+        $ENV_DIR/Library/bin/ninja.exe
+        $ENV_DIR/Library/bin/ninja.exe install
 
         $ENV_DIR/python.exe -m pip install --ignore-installed ../N-Body-Simulations
     - name: Cpp Unit Tests
