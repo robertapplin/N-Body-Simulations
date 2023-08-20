@@ -44,12 +44,13 @@ jobs:
       env:
         ENV_DIR: C:/Miniconda3/envs/test-env/
       run: |
-        cmake --preset=vs-release-ci -DPYTHON_EXECUTABLE=$ENV_DIR/python.exe -Dpybind11_DIR=$ENV_DIR/Library/share/cmake/pybind11 -DCMAKE_INSTALL_PREFIX=$ENV_DIR/Library -DCMAKE_INSTALL_LIBDIR=$ENV_DIR/Lib/site-packages .
+        cmake --preset=ninja -DPYTHON_EXECUTABLE=$ENV_DIR/python.exe -Dpybind11_DIR=$ENV_DIR/Library/share/cmake/pybind11 -DCMAKE_INSTALL_PREFIX=$ENV_DIR/Library -DCMAKE_INSTALL_LIBDIR=$ENV_DIR/Lib/site-packages .
 
-        cmake --build ../build --config Release
-        cmake --build ../build --config Release --target install
+        cd ../build
+        ninja
+        ninja install
 
-        $ENV_DIR/python.exe -m pip install --ignore-installed .
+        $ENV_DIR/python.exe -m pip install --ignore-installed ../N-Body-Simulations
     - name: Cpp Unit Tests
       env:
         TESTPATH: ${{ github.workspace }}/../build/tests/unit_tests/cpp
