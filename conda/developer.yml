@@ -16,3 +16,4 @@ dependencies:
   - pre-commit
   - pytest
   - pytest-mock
+  - python=3.8.*

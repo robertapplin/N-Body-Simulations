@@ -15,6 +15,7 @@ dependencies:
   - ninja
   - pybind11
   - pyside2
+  - python=3.8.*
   - pyqt
   - pre-commit
   - pytest
