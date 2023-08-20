@@ -49,7 +49,7 @@ jobs:
         $TESTPATH/NBodySimulationsSystemTests
     - name: Python Unit Tests
       run: |
-        coverage run -m pytest tests/unit_tests/python/
+        pytest tests/unit_tests/python/
     - name: Report Unit Test Coverage
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
