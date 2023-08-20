@@ -11,7 +11,7 @@ dependencies:
   - coveralls
   - flake8
   - gmock  # Required due to gtest referring to a missing gmock library
-  - gtest
+  - gtest=1.14.*
   - ninja
   - pre-commit
   - pytest

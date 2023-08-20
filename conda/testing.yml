@@ -10,8 +10,7 @@ dependencies:
   - coveralls
   - flake8
   - gmock  # Required due to gtest referring to a missing gmock library
-  - gtest
-  - m2w64-gcc  # [win]
+  - gtest=1.14.*
   - matplotlib
   - ninja
   - pybind11
